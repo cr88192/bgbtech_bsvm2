@@ -322,6 +322,7 @@ Jx: Variable Pair
 *  00-7F, I (High  3), J (Low  4)
 *  80-BF, I (High  7), J (Low  7)
 *  C0-DF, I (High 10), J (Low 11)
+*  E0-EF, I (High 14), J (Low 14)
 
 Kx: Variable+Constant
 *  00-7F, I (High  3), C (Low  4)
@@ -336,6 +337,12 @@ Kx: Variable+Constant
 
 Ki: Variable+Constant(Signed Int)
 Kj: Variable+Constant(Unsigned Int)
+
+Lx: Variable Triple
+*  00-7F, I (High  3), J (Mid  2), K (Low  2)
+*  80-BF, I (High  5), J (Low  5), K (Low  4)
+*  C0-DF, I (High  7), J (Low  7), K (Low  7)
+*  E0-EF, I (High 10), J (Low  9), K (Low  9)
 
 
 Cx: Constant (Depends on Type)
@@ -428,6 +435,13 @@ NACHO2:
 * Not Abstract Core, High Overhead
 * These operations are implicitly high overhead.
 * However, they may be the only reasonable way to perform the operation.
+
+HTAC:
+* Hybrid TAC Extension
+* These operations are present to improve instruction density.
+** They add some TAC-like operations to the stack-machine.
+* However, they are not strictly part of the core instruction set.
+** It is concievable a VM could omit them.
 
 
 Instructions
@@ -704,7 +718,6 @@ Instructions
 * A7, DUPD				//Duplicate Double
 * A8, POPA				//Pop Address
 * A9, DUPA				//Dup Address
-* / AA, SWAPA				//Swap Address
 
 * AA, HTNULL			//(Hint) Trap Null
 ** LDOS/STOS
@@ -947,8 +960,8 @@ Instructions
 ** May be combined with compare operators.
 
 More Array ops:
-* E1 7E Zi Ix, LDIXZLL		//Store Index Local-Local (A, I; => V )
-* E1 7F Zi Ci, LDIXZLC		//Store Index Local-Const (A, C; => V )
+* E1 7E Zi Ix, LDIXZLL		//Load Index Local-Local (A, I; => V )
+* E1 7F Zi Ci, LDIXZLC		//Load Index Local-Const (A, C; => V )
 ** Load Index from Locals
 
 * E1 80, RSTIXI				//Store Index Int ( A I V => )
@@ -1036,46 +1049,66 @@ More Array ops:
 * E1 B2 Zi, LDDRPL				//Load Deref Pointer Local
 * E1 B3 Zi, STDRPL				//Store Deref Pointer Local
 
-* / E1 B4 Zo Jx, BINOP_LL		//d=S op T ( S, T; => d )
-* / E1 B5 Zo Kx, BINOP_LC		//d=S op C ( S, C; => d )
-* / E1 B6 Zo Jx, BINOP_LSL		//D=s op T ( D, T; s => )
-* / E1 B7 Zo Kx, BINOP_LSC		//D=s op C ( D, C; s => )
-** Binary operators operating on locals/stack.
-** These are an optional feature.
+* E1 B4 Zn, DIFFPTR				//Pointer|Array Difference
+** n: 0=Ptr-Ptr, 1=Ptr-Arr, 3=Arr-Arr
+*** 4&=Result as int/long: 0=int, 1=long
+** Produces an integer value giving the pointer difference.
+** The Z type gives the element type/size for the pointer/array diff.
 
-* E1 C0 Kj, ADDISLC		//S C; => S+C
-* E1 C1 Kj, SUBISLC		//S C; => S-C
-* E1 C2 Ki, MULISLC		//S C; => S*C
-* E1 C3 Ki, ANDISLC		//S C; => S&C
-* E1 C4 Ki, ORISLC		//S C; => S|C
-* E1 C5 Ki, XORISLC		//S C; => S^C
-* E1 C6 Ki, SHLISLC		//S C; => S<<C, S>>>(-C)
-* E1 C7 Ki, SARISLC		//S C; => S>>C
-* E1 C8 Jx, ADDISLL		//S T; => S+T
-* E1 C9 Jx, SUBISLL		//S T; => S-T
-* E1 CA Jx, MULISLL		//S T; => S*T
-* E1 CB Jx, ANDISLL		//S T; => S&T
-* E1 CC Jx, ORISLL		//S T; => S|T
-* E1 CD Jx, XORISLL		//S T; => S^T
-* E1 CE Jx, SHLISLL		//S T; => S<<T
-* E1 CF Jx, SARISLL		//S T; => S>>T
 
-* E1 D0 Kj, ADDILSC		//D C; D=s+C ( s => )
-* E1 D1 Kj, SUBILSC		//D C; D=s-C ( s => )
-* E1 D2 Ki, MULILSC		//D C; D=s*C ( s => )
-* E1 D3 Ki, ANDILSC		//D C; D=s&C ( s => )
-* E1 D4 Ki, ORILSC		//D C; D=s|C ( s => )
-* E1 D5 Ki, XORILSC		//D C; D=s^C ( s => )
-* E1 D6 Ki, SHLILSC		//D C; D=s<<C, A>>>(-C) ( s => )
-* E1 D7 Ki, SARILSC		//D C; D=s>>C ( s => )
-* E1 D8 Jx, ADDILSL		//D T; D=s+T ( s => )
-* E1 D9 Jx, SUBILSL		//D T; D=s-T ( s => )
-* E1 DA Jx, MULILSL		//D T; D=s*T ( s => )
-* E1 DB Jx, ANDILSL		//D T; D=s&T ( s => )
-* E1 DC Jx, ORILSL		//D T; D=s|T ( s => )
-* E1 DD Jx, XORILSL		//D T; D=s^T ( s => )
-* E1 DE Jx, SHLILSL		//D T; D=s<<T ( s => )
-* E1 DF Jx, SARILSL		//D T; D=s>>T ( s => )
+* E1 C0 Kj, ADDISLC			//S C; => S+C
+* E1 C1 Kj, SUBISLC			//S C; => S-C
+* E1 C2 Ki, MULISLC			//S C; => S*C
+* E1 C3 Ki, ANDISLC			//S C; => S&C
+* E1 C4 Ki, ORISLC			//S C; => S|C
+* E1 C5 Ki, XORISLC			//S C; => S^C
+* E1 C6 Ki, SHLISLC			//S C; => S<<C, S>>>(-C)
+* E1 C7 Ki, SARISLC			//S C; => S>>C
+* E1 C8 Jx, ADDISLL			//S T; => S+T
+* E1 C9 Jx, SUBISLL			//S T; => S-T
+* E1 CA Jx, MULISLL			//S T; => S*T
+* E1 CB Jx, ANDISLL			//S T; => S&T
+* E1 CC Jx, ORISLL			//S T; => S|T
+* E1 CD Jx, XORISLL			//S T; => S^T
+* E1 CE Jx, SHLISLL			//S T; => S<<T
+* E1 CF Jx, SARISLL			//S T; => S>>T
+** (HTAC Ext) Op with locals pushing result to stack.
+
+* E1 D0 Kj, ADDILSC			//D C; D=s+C ( s => )
+* E1 D1 Kj, SUBILSC			//D C; D=s-C ( s => )
+* E1 D2 Ki, MULILSC			//D C; D=s*C ( s => )
+* E1 D3 Ki, ANDILSC			//D C; D=s&C ( s => )
+* E1 D4 Ki, ORILSC			//D C; D=s|C ( s => )
+* E1 D5 Ki, XORILSC			//D C; D=s^C ( s => )
+* E1 D6 Ki, SHLILSC			//D C; D=s<<C, A>>>(-C) ( s => )
+* E1 D7 Ki, SARILSC			//D C; D=s>>C ( s => )
+* E1 D8 Jx, ADDILSL			//D T; D=s+T ( s => )
+* E1 D9 Jx, SUBILSL			//D T; D=s-T ( s => )
+* E1 DA Jx, MULILSL			//D T; D=s*T ( s => )
+* E1 DB Jx, ANDILSL			//D T; D=s&T ( s => )
+* E1 DC Jx, ORILSL			//D T; D=s|T ( s => )
+* E1 DD Jx, XORILSL			//D T; D=s^T ( s => )
+* E1 DE Jx, SHLILSL			//D T; D=s<<T ( s => )
+* E1 DF Jx, SARILSL			//D T; D=s>>T ( s => )
+** (HTAC Ext) operates on local and stack, storing result in local.
+
+* E1 E0 Jx Cj, ADDILLC		//D S C; D=S+C
+* E1 E1 Jx Cj, SUBILLC		//D S C; D=S-C
+* E1 E2 Jx Ci, MULILLC		//D S C; D=S*C
+* E1 E3 Jx Ci, ANDILLC		//D S C; D=S&C
+* E1 E4 Jx Ci, ORILLC		//D S C; D=S|C
+* E1 E5 Jx Ci, XORILLC		//D S C; D=S^C
+* E1 E6 Jx Ci, SHLILLC		//D S C; D=S<<C, A>>>(-C)
+* E1 E7 Jx Ci, SARILLC		//D S C; D=S>>C
+* E1 E8 Lx, ADDILLL			//D S T; D=S+T
+* E1 E9 Lx, SUBILLL			//D S T; D=S-T
+* E1 EA Lx, MULILLL			//D S T; D=S*T
+* E1 EB Lx, ANDILLL			//D S T; D=S&T
+* E1 EC Lx, ORILLL			//D S T; D=S|T
+* E1 ED Lx, XORILLL			//D S T; D=S^T
+* E1 EE Lx, SHLILLL			//D S T; D=S<<T
+* E1 EF Lx, SARILLL			//D S T; D=S>>T
+** (HTAC Ext) operates on locals, storing result in local.
 
 
 === Vector Block (0x400) ===

@@ -275,7 +275,7 @@ BS2CC_VarInfo *BS2C_LookupObjectFuncNameB(BS2CC_CompileContext *ctx,
 
 	if(obj->super)
 	{
-		vi=BS2C_LookupObjectFuncName(ctx, obj->super, name);
+		vi=BS2C_LookupObjectFuncNameB(ctx, obj->super, name);
 		if(vi)return(vi);
 	}
 

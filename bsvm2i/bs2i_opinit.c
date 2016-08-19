@@ -297,6 +297,60 @@ void BSVM2_Interp_DecodeOpUKx(BSVM2_CodeBlock *cblk,
 	}
 }
 
+void BSVM2_Interp_DecodeOpULxI(BSVM2_CodeBlock *cblk,
+	int *ri, int *rj, int *rk)
+{
+	int i, j;
+
+	i=*cblk->cs++;
+	if(i<0x80)
+	{
+		*ri=(i>>4)&7;
+		*rj=(i>>2)&3;
+		*rk=(i   )&3;
+		return;
+	}
+	if(i<0xC0)
+	{
+		i=((i&0x7F)<<8)|(*cblk->cs++);
+		*ri=(i>>9)&31;
+		*rj=(i>>4)&31;
+		*rk=(i   )&15;
+		return;
+	}
+	if(i<0xE0)
+	{
+		i=((i&0x3F)<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+		*ri=(i>>14)&127;
+		*rj=(i>> 7)&127;
+		*rk=(i    )&127;
+		return;
+	}
+
+	if(i<0xF0)
+	{
+		i=((i&0x1F)<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+		*ri=(i>>18)&1023;
+		*rj=(i>> 9)&511;
+		*rk=(i    )&511;
+		return;
+	}
+
+	if(i<0xF8)
+	{
+		i=((i&0x0F)<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+		i=(i<<8)|(*cblk->cs++);
+//		*ri=(i>>16)&65535;
+//		*rj=(i    )&65535;
+		return;
+	}
+}
+
 s32 bsvm2_interp_decsignfoldi(s32 i)
 	{ return((((u32)i)>>1)^((i<<31)>>31)); }
 
@@ -498,6 +552,23 @@ void BSVM2_Interp_DecodeOpJx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	BSVM2_Interp_DecodeOpUJxI(cblk, &i, &j);
 	op->i0=i;
 	op->i1=j;
+}
+
+void BSVM2_Interp_DecodeOpLx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
+{
+	int i, j, k;
+
+	BSVM2_Interp_DecodeOpULxI(cblk, &i, &j, &k);
+	op->i0=i;
+	op->i1=j;
+	op->i2=k;
+}
+
+void BSVM2_Interp_DecodeOpJxCx(BSVM2_CodeBlock *cblk,
+	BSVM2_Opcode *op, int zty)
+{
+	BSVM2_Interp_DecodeOpJx(cblk, op);
+	BSVM2_Interp_DecodeOpCx(cblk, op, zty);
 }
 
 void BSVM2_Interp_DecodeOpJx_SLL(BSVM2_CodeBlock *cblk,
@@ -750,7 +821,7 @@ void BSVM2_Interp_DecodeOpZiIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 
 void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 {
-	s64 li, lj;
+	s64 li, lj, lk;
 	int i, j;
 
 	li=BSVM2_Interp_DecodeOpUCxL(cblk);
@@ -758,7 +829,9 @@ void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	lj=li>>4;
 	op->i0=lj;
 //	BSVM2_Interp_DecodeOpCx(cblk, op, )
-	op->v.i=BSVM2_Interp_DecodeOpUCxI(cblk);
+	lk=BSVM2_Interp_DecodeOpSCxL(cblk);
+//	lk=bsvm2_interp_decsignfoldl(lk);
+	op->v.i=lk;
 }
 
 void BSVM2_Interp_DecodeOpFx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op,
@@ -1176,4 +1249,28 @@ void BSVM2_Interp_SetupOpUI_LSC(BSVM2_CodeBlock *cblk,
 {
 	op->Run=run;
 	BSVM2_Interp_DecodeOpKx_LSC(cblk, op, BSVM2_OPZ_UINT);
+}
+
+
+void BSVM2_Interp_SetupOpI_LLC(BSVM2_CodeBlock *cblk,
+	BSVM2_Opcode *op,
+	void (*run)(BSVM2_Frame *frm, BSVM2_Opcode *op))
+{
+	op->Run=run;
+	BSVM2_Interp_DecodeOpJxCx(cblk, op, BSVM2_OPZ_INT);
+}
+
+void BSVM2_Interp_SetupOpUI_LLC(BSVM2_CodeBlock *cblk,
+	BSVM2_Opcode *op,
+	void (*run)(BSVM2_Frame *frm, BSVM2_Opcode *op))
+{
+	op->Run=run;
+	BSVM2_Interp_DecodeOpJxCx(cblk, op, BSVM2_OPZ_UINT);
+}
+
+void BSVM2_Interp_SetupOpI_LLL(BSVM2_CodeBlock *cblk,
+	BSVM2_Opcode *op, void (*run)(BSVM2_Frame *frm, BSVM2_Opcode *op))
+{
+	op->Run=run;
+	BSVM2_Interp_DecodeOpLx(cblk, op);
 }

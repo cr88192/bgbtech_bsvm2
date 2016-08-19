@@ -1850,6 +1850,29 @@ void BS2C_CompileExprBinary(BS2CC_CompileContext *ctx,
 				return;
 			}
 		}
+		
+		if((BS2C_TypeArrayP(ctx, rt) ||
+			BS2C_TypePointerP(ctx, rt)) &&
+				!strcmp(op, "-"))
+		{
+			i=0;
+			if(BS2C_TypeArrayP(ctx, lt))i|=1;
+			if(BS2C_TypeArrayP(ctx, rt))i|=2;
+
+			BS2C_CompileExpr(ctx, ln, lt);
+			BS2C_CompileExpr(ctx, rn, rt);
+
+			ty=BS2C_TypeDerefType(ctx, lt);
+			z=BS2C_GetTypeBaseZ(ctx, ty);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_DIFFPTR);
+			BS2C_EmitOpcodeUZx(ctx, z, i);
+
+			BS2C_CompileExprPopType2(ctx);
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_INT);
+
+			return;
+		}
+
 	}
 
 	if(BS2C_TypeStringP(ctx, lt) &&

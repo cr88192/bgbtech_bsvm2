@@ -1363,6 +1363,20 @@ int BS2C_TypeBinarySuperType(
 		return(lty);
 	}
 
+	if(BS2C_TypeArrayP(ctx, lty) &&
+		BS2C_TypeArrayP(ctx, rty) &&
+		!strcmp(op, "-"))
+	{
+		return(BS2CC_TYZ_INT);
+	}
+
+	if(BS2C_TypePointerP(ctx, lty) &&
+		BS2C_TypePointerP(ctx, rty) &&
+		!strcmp(op, "-"))
+	{
+		return(BS2CC_TYZ_INT);
+	}
+
 	if(BS2C_TypeStringP(ctx, lty) &&
 		(!strcmp(op, "+") || !strcmp(op, "-") ||
 		!strcmp(op, "&")))

@@ -32,7 +32,7 @@ TLV Packaging:
 * EF HH HH HH: Sync Marker
 ** Followed by a hash of the following marker.
 
-Tags are stored with the length as the absolute length of the tag, not as the size of the payload.
+Tags are stored with the length as the absolute length of the tag + payload, not as the length of the payload by itself.
 ** Lengths less than the tag itself are reserved/invalid.
 
 Values:

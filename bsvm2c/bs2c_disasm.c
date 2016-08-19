@@ -546,6 +546,7 @@ char *name;
 {"E1B1",      "CVTPTR2A"},
 {"E1B2Zi",    "LDDRPL"},
 {"E1B3Zi",    "STDRPL"},
+{"E1B4Zn",    "DIFFPTR"},
 
 {"E1C0Kj",    "ADDISLC"},
 {"E1C1Kj",    "SUBISLC"},
@@ -579,6 +580,23 @@ char *name;
 {"E1DDJx",    "XORILSL"},
 {"E1DEJx",    "SHLILSL"},
 {"E1DFJx",    "SARILSL"},
+{"E1E0JxCj",  "ADDILLC"},
+{"E1E1JxCj",  "SUBILLC"},
+{"E1E2JxCi",  "MULILLC"},
+{"E1E3JxCi",  "ANDILLC"},
+{"E1E4JxCi",  "ORILLC"},
+{"E1E5JxCi",  "XORILLC"},
+{"E1E6JxCi",  "SHLILLC"},
+{"E1E7JxCi",  "SARILLC"},
+{"E1E8Lx",    "ADDILLL"},
+{"E1E9Lx",    "SUBILLL"},
+{"E1EALx",    "MULILLL"},
+{"E1EBLx",    "ANDILLL"},
+{"E1ECLx",    "ORILLL"},
+{"E1EDLx",    "XORILLL"},
+{"E1EELx",    "SHLILLL"},
+{"E1EFLx",    "SARILLL"},
+
 
 /* Vector Block (0x400) */
 {"E400",      "MKX4I"},
@@ -904,6 +922,63 @@ byte *bs2c_disasm_ReadSplitVLI(byte *cs, int *rvh, int *rvl)
 	return(cs);
 }
 
+byte *bs2c_disasm_ReadTripleVLI(byte *cs, int *rvh, int *rvm, int *rvl)
+{
+	int i;
+	
+	i=*cs++;
+
+	if(i<0x80)
+	{
+		*rvh=(i>>4)&7;
+		*rvm=(i>>2)&3;
+		*rvl=(i   )&3;
+		return(cs);
+	}
+
+	if(i<0xC0)
+	{
+		i=i&0x3F;
+		i=(i<<8)|(*cs++);
+		*rvh=(i>>9)&31;
+		*rvm=(i>>4)&31;
+		*rvl=(i   )&15;
+		return(cs);
+	}
+
+	if(i<0xE0)
+	{
+		i=i&0x1F;
+		i=(i<<8)|(*cs++);
+		i=(i<<8)|(*cs++);
+		*rvh=(i>>14)&127;
+		*rvm=(i>> 7)&127;
+		*rvl=(i    )&127;
+		return(cs);
+	}
+
+	if(i<0xF0)
+	{
+		i=i&0x0F;
+		i=(i<<8)|(*cs++);
+		i=(i<<8)|(*cs++);
+		i=(i<<8)|(*cs++);
+		*rvh=(i>>18)&1023;
+		*rvm=(i>> 9)& 511;
+		*rvl=(i    )& 511;
+		return(cs);
+	}
+
+	i=(i<<8)|(*cs++);
+	i=(i<<8)|(*cs++);
+	i=(i<<8)|(*cs++);
+	i=(i<<8)|(*cs++);
+//	*rvh=i>>16;
+//	*rvl=i&65535;
+	return(cs);
+}
+
+
 byte *bs2c_disasm_ReadSplit2VLI(byte *cs, int *rvh, s64 *rvl)
 {
 	u64 li;
@@ -1126,6 +1201,7 @@ int bs2c_disasm_matchItem(
 	ps=pat;
 	if(!strncmp(ps, "Ix", 2) ||
 		!strncmp(ps, "Jx", 2) ||
+		!strncmp(ps, "Lx", 2) ||
 		!strncmp(ps, "Gx", 2) ||
 		!strncmp(ps, "Gj", 2) ||
 		!strncmp(ps, "Ci", 2) ||
@@ -1405,6 +1481,20 @@ int bs2c_disasm_PrintItem(
 		cs=bs2c_disasm_ReadSplitVLI(cs, &i, &j);
 
 		BGBDT_MM_PrintPutPrintf(prn, "L%d, L%d", i, j);
+		if(*ps)
+			BGBDT_MM_PrintPutPrintf(prn, ", ");
+
+		*rcs1=cs;
+		*rpa1=ps;
+		return(1);
+	}
+
+	if(!strncmp(ps, "Lx", 2))
+	{
+		ps+=2;
+		cs=bs2c_disasm_ReadTripleVLI(cs, &i, &j, &k);
+
+		BGBDT_MM_PrintPutPrintf(prn, "L%d, L%d, L%d", i, j, k);
 		if(*ps)
 			BGBDT_MM_PrintPutPrintf(prn, ", ");
 

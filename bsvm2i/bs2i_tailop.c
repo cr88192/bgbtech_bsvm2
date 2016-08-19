@@ -701,6 +701,52 @@ BSVM2_Trace *BSVM2_TrOp_JCMP_GED(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->nexttrace);	}
 
 
+#if 1
+BSVM2_Trace *BSVM2_TrOp_JCMP_EQIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i==op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_NEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i!=op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_LTIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i<op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_GTIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i>op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_LEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i<=op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_GEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].i>=op->v.i)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+
+BSVM2_Trace *BSVM2_TrOp_JCMP_LTUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].ui<op->v.ui)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_GTUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].ui>op->v.ui)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_LEUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].ui<=op->v.ui)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+BSVM2_Trace *BSVM2_TrOp_JCMP_GEUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{	if(frm->stack[op->t0].ui>=op->v.ui)
+		return(op->jmptrace);
+	return(op->nexttrace);	}
+
+#endif
+
+
 
 BSVM2_Trace *BSVM2_TrOp_JCMPLL_EQI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i==frm->local[op->i1].i)

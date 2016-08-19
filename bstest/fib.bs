@@ -111,7 +111,7 @@ package bstest {
 			foo.z=foo.x+foo.y;
 		}
 
-		public int tst_switch(int i)
+		public static int tst_switch(int i)
 		{
 			int j;
 			switch(i)
@@ -134,13 +134,11 @@ package bstest {
 			return(j);
 		}
 
-/*
 		public static int tst_ref(&int i, &int j)
 		{
 			i=i+j;
 			return(j);
 		}
-*/
 	
 		public static void main(string[] argv)
 		{
@@ -150,6 +148,7 @@ package bstest {
 			vec2f v0, v1, v2;
 			vec3f w0, w1, w2;
 			int[] a1, a2;
+			*int p1, p2;
 			int i, j;
 			int t0, t1, t2;
 
@@ -170,15 +169,15 @@ package bstest {
 
 			t0=clock();
 //			sorttst(1<<16);
-//			sorttst(1<<13);
-			sorttst(1<<15);
+			sorttst(1<<13);
+//			sorttst(1<<15);
 			t1=clock();
 			printf("Bs SortTst Dt %d\n", t1-t0);
 
 			t0=clock();
 //			sorttst(1<<16);
-//			bsvm2_natsorttst(1<<13);
-			bsvm2_natsorttst(1<<15);
+			bsvm2_natsorttst(1<<13);
+//			bsvm2_natsorttst(1<<15);
 			t1=clock();
 			printf("Na SortTst Dt %d\n", t1-t0);
 
@@ -215,8 +214,17 @@ package bstest {
 			
 //			printf("w2.x=%f\n", w2.x);
 
-//			a1=new int[64];
-//			a2=a1+32;
+			a1=new int[64];
+			a2=a1+32;
+			
+			a2[0]=69;
+			printf("Oat %d\n", a1[32]);
+			p1=a1;
+			p2=p1+32;
+			printf("Opt %d\n", *p2);
+
+			i=p2-p1;
+			printf("Dptr %d\n", i);
 
 //			arr=new int[64];
 //			for(i=0; i<32; i++)
@@ -224,7 +232,14 @@ package bstest {
 			
 //			tfib=new Fib(2, 3);
 
-//			tst_ref(i, j);
+			i=3; j=4;
+
+			printf("RtA i=%d, j=%d\n", i, j);
+			tst_ref(i, j);
+			printf("RtB i=%d, j=%d\n", i, j);
+			
+			j=tst_switch(i);
+			printf("St i=%d, j=%d\n", i, j);
 		}
 	}
 }

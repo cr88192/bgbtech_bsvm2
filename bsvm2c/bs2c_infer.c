@@ -64,10 +64,19 @@ int BS2C_InferRetTypeName(BS2CC_CompileContext *ctx, char *name)
 
 	if(ctx->frm->func && ctx->frm->func->obj)
 	{
-		vari=BS2C_LookupObjectFieldName(ctx,
+//		vari=BS2C_LookupObjectFieldName(ctx,
+//			ctx->frm->func->obj, name);
+		vari=BS2C_LookupObjectFuncNameB(ctx,
 			ctx->frm->func->obj, name);
-		if(vari)
+
+		if(vari && (vari->vitype==BS2CC_VITYPE_STRFUNC) &&
+			(ctx->frm->func->vitype!=BS2CC_VITYPE_GBLFUNC))
+				{ return(vari->rty); }
+
+		if(vari && (vari->vitype==BS2CC_VITYPE_GBLFUNC))
 			{ return(vari->rty); }
+//		if(vari)
+//			{ return(vari->rty); }
 	}
 
 	i=BS2C_LookupFrameGlobal(ctx, name);
@@ -84,7 +93,9 @@ int BS2C_InferRetTypeName(BS2CC_CompileContext *ctx, char *name)
 
 int BS2C_InferExprLocalIndex(BS2CC_CompileContext *ctx, dtVal expr)
 {
+	BS2CC_VarInfo *vari;
 	char *tag, *fn, *op;
+	int bty;
 	int lt, rt, ty;
 	int i;
 
@@ -92,6 +103,15 @@ int BS2C_InferExprLocalIndex(BS2CC_CompileContext *ctx, dtVal expr)
 	{
 		fn=BGBDT_TagStr_GetUtf8(expr);
 		i=BS2C_LookupLocal(ctx, fn);
+		if(i<0)
+			return(-1);
+
+		vari=ctx->frm->locals[i];
+		bty=vari->bty;
+
+		if(BS2C_TypeVarRefP(ctx, bty))
+			return(-1);
+		
 		return(i);
 	}
 	return(-1);

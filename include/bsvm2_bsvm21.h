@@ -500,6 +500,9 @@
 #define BSVM2_OP_LDDRPL		0x01B2	//Load Deref Pointer Local
 #define BSVM2_OP_STDRPL		0x01B3	//Store Deref Pointer Local
 
+#define BSVM2_OP_DIFFPTR	0x01B4	//Store Deref Pointer Local
+#define BSVM2_OP_DIFFARR	0x01B5	//Store Deref Pointer Local
+
 #define BSVM2_OP_ADDISLC	0x01C0	//
 #define BSVM2_OP_SUBISLC	0x01C1	//
 #define BSVM2_OP_MULISLC	0x01C2	//
@@ -532,6 +535,23 @@
 #define BSVM2_OP_XORILSL	0x01DD	//
 #define BSVM2_OP_SHLILSL	0x01DE	//
 #define BSVM2_OP_SARILSL	0x01DF	//
+
+#define BSVM2_OP_ADDILLC	0x01E0	//
+#define BSVM2_OP_SUBILLC	0x01E1	//
+#define BSVM2_OP_MULILLC	0x01E2	//
+#define BSVM2_OP_ANDILLC	0x01E3	//
+#define BSVM2_OP_ORILLC		0x01E4	//
+#define BSVM2_OP_XORILLC	0x01E5	//
+#define BSVM2_OP_SHLILLC	0x01E6	//
+#define BSVM2_OP_SARILLC	0x01E7	//
+#define BSVM2_OP_ADDILLL	0x01E8	//
+#define BSVM2_OP_SUBILLL	0x01E9	//
+#define BSVM2_OP_MULILLL	0x01EA	//
+#define BSVM2_OP_ANDILLL	0x01EB	//
+#define BSVM2_OP_ORILLL		0x01EC	//
+#define BSVM2_OP_XORILLL	0x01ED	//
+#define BSVM2_OP_SHLILLL	0x01EE	//
+#define BSVM2_OP_SARILLL	0x01EF	//
 
 
 #define BSVM2_OP_MKX4I		0x0400

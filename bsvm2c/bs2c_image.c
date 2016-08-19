@@ -454,9 +454,9 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 		ct=BS2C_Image_EmitTagData(ct, BS2CC_I1CC_CODE,
 			frm->szt, frm->cts);
 		ct2=ct-frm->szt;
-		printf("%s %08X %08X\n", vari->name,
-			BS2C_Image_HashData(frm->cts, frm->szt),
-			BS2C_Image_HashData(ct2, frm->szt));
+//		printf("%s %08X %08X\n", vari->name,
+//			BS2C_Image_HashData(frm->cts, frm->szt),
+//			BS2C_Image_HashData(ct2, frm->szt));
 	}
 	
 	return(ct);
