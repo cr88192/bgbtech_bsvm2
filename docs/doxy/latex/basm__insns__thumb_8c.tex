@@ -1,0 +1,116 @@
+\hypertarget{basm__insns__thumb_8c}{\section{bgbasm3/asm/basm\-\_\-insns\-\_\-thumb.c File Reference}
+\label{basm__insns__thumb_8c}\index{bgbasm3/asm/basm\-\_\-insns\-\_\-thumb.\-c@{bgbasm3/asm/basm\-\_\-insns\-\_\-thumb.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{basm__insns__thumb_8c_ae9320cc22afae9f786b945b4cbc68e56}{basm\-\_\-ops\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns__thumb_8c_ad11370713e2db93526980ab6499d6f6f}{basm\-\_\-opidx\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns__thumb_8c_a7d0dae40a759bee7d02732b8096dabfd}{basm\-\_\-opnums\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+char \hyperlink{basm__insns__thumb_8c_addb62f7cb7e46918856ce6619ca92745}{basm\-\_\-opcat\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+char $\ast$ \hyperlink{basm__insns__thumb_8c_ab87806367ac9a472310134bd1b79ecf4}{basm\-\_\-opdecl\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+char $\ast$ \hyperlink{basm__insns__thumb_8c_a4a0a48959cb6fea5580f327b3f58a5c2}{basm\-\_\-regs\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns__thumb_8c_ae13f6c81ed35803e0f6eb6b78e23412e}{basm\-\_\-regidx\-\_\-thumb} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\hypertarget{basm__insns__thumb_8c_addb62f7cb7e46918856ce6619ca92745}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-opcat\-\_\-thumb@{basm\-\_\-opcat\-\_\-thumb}}
+\index{basm\-\_\-opcat\-\_\-thumb@{basm\-\_\-opcat\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-opcat\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}char basm\-\_\-opcat\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_addb62f7cb7e46918856ce6619ca92745}
+\hypertarget{basm__insns__thumb_8c_ab87806367ac9a472310134bd1b79ecf4}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-opdecl\-\_\-thumb@{basm\-\_\-opdecl\-\_\-thumb}}
+\index{basm\-\_\-opdecl\-\_\-thumb@{basm\-\_\-opdecl\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-opdecl\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-opdecl\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_ab87806367ac9a472310134bd1b79ecf4}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+\textcolor{stringliteral}{"Gt4140|rg|rh"}, \textcolor{stringliteral}{"Gt1C00|rg|rh|ji"}, \textcolor{stringliteral}{"Gt1C00|rj|jb"}, \textcolor{stringliteral}{"Gt1800|rg|rh|ri"}, 
+\textcolor{stringliteral}{"Gt4400|rg|rh"}, \textcolor{stringliteral}{"GtA000|rj|jb"}, \textcolor{stringliteral}{"GtA800|rj|jb"}, \textcolor{stringliteral}{"GtA800|jb"}, \textcolor{stringliteral}{"Gt4000|rg|rh"}, 
+\textcolor{stringliteral}{"Gt1000|rg|rh|jj"}, \textcolor{stringliteral}{"Gt4100|rg|rh"}, \textcolor{stringliteral}{"GtE000|jd"}, \textcolor{stringliteral}{"GtD000|ja"}, \textcolor{stringliteral}{"GtD100|ja"}, 
+\textcolor{stringliteral}{"GtD200|ja"}, \textcolor{stringliteral}{"GtD200|ja"}, \textcolor{stringliteral}{"GtD300|ja"}, \textcolor{stringliteral}{"GtD300|ja"}, \textcolor{stringliteral}{"GtD400|ja"}, 
+\textcolor{stringliteral}{"GtD500|ja"}, \textcolor{stringliteral}{"GtD600|ja"}, \textcolor{stringliteral}{"GtD700|ja"}, \textcolor{stringliteral}{"GtD800|ja"}, \textcolor{stringliteral}{"GtD900|ja"}, 
+\textcolor{stringliteral}{"GtDA00|ja"}, \textcolor{stringliteral}{"GtDB00|ja"}, \textcolor{stringliteral}{"GtDC00|ja"}, \textcolor{stringliteral}{"GtDD00|ja"}, \textcolor{stringliteral}{"GtDE00|ja"}, 
+\textcolor{stringliteral}{"Gt4380|rg|rh"}, \textcolor{stringliteral}{"GtDE00|jb"}, \textcolor{stringliteral}{"GtF000|je;GtF800|jf"}, \textcolor{stringliteral}{"GtF000|je;GtE800|jf"}, 
+\textcolor{stringliteral}{"Gt4780|jk"}, \textcolor{stringliteral}{"Gt4700|jk"}, \textcolor{stringliteral}{"Gt42C0|rg|rh"}, \textcolor{stringliteral}{"Gt2800|rj|jb"}, \textcolor{stringliteral}{"Gt4280|rg|rh"}, 
+\textcolor{stringliteral}{"Gt4500|rl|rk"}, \textcolor{stringliteral}{"GtD660|jk"}, \textcolor{stringliteral}{"GtD670|jk"}, \textcolor{stringliteral}{"Gt4600|rl|rk"}, \textcolor{stringliteral}{"Gt4040|rg|rh"}, 
+\textcolor{stringliteral}{"GtC800|rj|jb"}, \textcolor{stringliteral}{"Gt6800|rg|rh|jj"}, \textcolor{stringliteral}{"Gt5800|rg|rh|ri"}, \textcolor{stringliteral}{"Gt4800|rj|jb"}, 
+\textcolor{stringliteral}{"Gt9800|rj|jb"}, \textcolor{stringliteral}{"Gt4800|rj|jb"}, \textcolor{stringliteral}{"GtE002|rz,id;Gt48FE|rj"}, \textcolor{stringliteral}{"GtE003;GtBF00|rz,id;Gt48FE|rj"}, 
+\textcolor{stringliteral}{"Gt6800|rg|rh"}, \textcolor{stringliteral}{"Gt7800|rg|rh|jj"}, \textcolor{stringliteral}{"Gt5C00|rg|rh|ri"}, \textcolor{stringliteral}{"Gt8800|rg|rh|jj"}, 
+\textcolor{stringliteral}{"Gt5A00|rg|rh|ri"}, \textcolor{stringliteral}{"Gt5600|rg|rh|ri"}, \textcolor{stringliteral}{"Gt5E00|rg|rh|ri"}, \textcolor{stringliteral}{"Gt0000|rg|rh|jj"}, 
+\textcolor{stringliteral}{"Gt4080|rg|rh"}, \textcolor{stringliteral}{"Gt0800|rg|rh|jj"}, \textcolor{stringliteral}{"Gt40C0|rg|rh"}, \textcolor{stringliteral}{"Gt2000|rj|jb"}, 
+\textcolor{stringliteral}{"Gt1C00|rg|rh"}, \textcolor{stringliteral}{"Gt4600|rl|rk"}, \textcolor{stringliteral}{"GtF240;Gt0000|rj|jl"}, \textcolor{stringliteral}{"GtE002|rz,id;Gt48FE|rj"}, 
+\textcolor{stringliteral}{"GtE003;GtBF00|rz,id;Gt48FE|rj"}, \textcolor{stringliteral}{"GtF240;Gt0000|rj|jl"}, \textcolor{stringliteral}{"Gt4340|rg|rh"}, 
+\textcolor{stringliteral}{"Gt43C0|rg|rh"}, \textcolor{stringliteral}{"Gt4240|rg|rh"}, \textcolor{stringliteral}{"GtBF00"}, \textcolor{stringliteral}{"Gt4300|rg|rh"}, \textcolor{stringliteral}{"GtBC00|jb"}, 
+\textcolor{stringliteral}{"GtBD00|jb"}, \textcolor{stringliteral}{"GtB400|jb"}, \textcolor{stringliteral}{"GtB500|jb"}, \textcolor{stringliteral}{"GtBA00|rg|rh"}, \textcolor{stringliteral}{"GtBA40|rg|rh"}, 
+\textcolor{stringliteral}{"GtBAC0|rg|rh"}, \textcolor{stringliteral}{"Gt41C0|rg|rh"}, \textcolor{stringliteral}{"Gt4180|rg|rh"}, \textcolor{stringliteral}{"GtB658"}, \textcolor{stringliteral}{"GtB650"}, 
+\textcolor{stringliteral}{"GtC000|rj|jb"}, \textcolor{stringliteral}{"Gt6000|rg|rh|jj"}, \textcolor{stringliteral}{"Gt5000|rg|rh|ri"}, \textcolor{stringliteral}{"Gt9000|rj|jb"}, 
+\textcolor{stringliteral}{"Gt6000|rg|rh"}, \textcolor{stringliteral}{"Gt7000|rg|rh|jj"}, \textcolor{stringliteral}{"Gt5400|rg|rh|ri"}, \textcolor{stringliteral}{"Gt8000|rg|rh|jj"}, 
+\textcolor{stringliteral}{"Gt5200|rg|rh|ri"}, \textcolor{stringliteral}{"Gt1E00|rg|rh|ji"}, \textcolor{stringliteral}{"Gt3800|rj|jb"}, \textcolor{stringliteral}{"Gt1A00|rg|rh|ri"}, 
+\textcolor{stringliteral}{"GtB080|jc"}, \textcolor{stringliteral}{"Gt3800|rj|jb"}, \textcolor{stringliteral}{"GtBF00|jb"}, \textcolor{stringliteral}{"GtB240|rg|rh"}, \textcolor{stringliteral}{"GtB200|rg|rh"}, 
+\textcolor{stringliteral}{"Gt4200|rg|rh"}, \textcolor{stringliteral}{"GtB2C0|rg|rh"}, \textcolor{stringliteral}{"GtB280|rg|rh"}, NULL\}
+\end{DoxyCode}
+\hypertarget{basm__insns__thumb_8c_ad11370713e2db93526980ab6499d6f6f}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-opidx\-\_\-thumb@{basm\-\_\-opidx\-\_\-thumb}}
+\index{basm\-\_\-opidx\-\_\-thumb@{basm\-\_\-opidx\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-opidx\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-opidx\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_ad11370713e2db93526980ab6499d6f6f}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+0, 1, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 
+25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 39, 40, 41, 42, 43, 44, 
+52, 54, 56, 57, 58, 60, 62, 68, 69, 70, 71, 72, 73, 74, 76, 78, 79, 
+80, 81, 82, 83, 84, 85, 86, 90, 92, 94, 98, 99, 100, 101, 102, 103, 
+104, -1\}
+\end{DoxyCode}
+\hypertarget{basm__insns__thumb_8c_a7d0dae40a759bee7d02732b8096dabfd}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-opnums\-\_\-thumb@{basm\-\_\-opnums\-\_\-thumb}}
+\index{basm\-\_\-opnums\-\_\-thumb@{basm\-\_\-opnums\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-opnums\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-opnums\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_a7d0dae40a759bee7d02732b8096dabfd}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+0, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
+14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 25, 26, 27, 28, 28, 
+28, 29, 30, 31, 32, 33, 34, 34, 34, 34, 34, 34, 34, 34, 35, 35, 36, 
+36, 37, 38, 39, 39, 40, 40, 41, 41, 41, 41, 41, 41, 42, 43, 44, 45, 
+46, 47, 48, 48, 49, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 58, 58, 
+58, 59, 59, 60, 60, 61, 61, 61, 61, 62, 63, 64, 65, 66, 67, 68, -1\}
+\end{DoxyCode}
+\hypertarget{basm__insns__thumb_8c_ae9320cc22afae9f786b945b4cbc68e56}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-ops\-\_\-thumb@{basm\-\_\-ops\-\_\-thumb}}
+\index{basm\-\_\-ops\-\_\-thumb@{basm\-\_\-ops\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-ops\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-ops\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_ae9320cc22afae9f786b945b4cbc68e56}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+\textcolor{stringliteral}{"adc"}, \textcolor{stringliteral}{"add"}, \textcolor{stringliteral}{"and"}, \textcolor{stringliteral}{"asr"}, \textcolor{stringliteral}{"b"}, \textcolor{stringliteral}{"beq"}, \textcolor{stringliteral}{"bne"}, \textcolor{stringliteral}{"bcs"}, \textcolor{stringliteral}{"bhs"}, \textcolor{stringliteral}{"bcc"}, 
+\textcolor{stringliteral}{"blo"}, \textcolor{stringliteral}{"bmi"}, \textcolor{stringliteral}{"bpl"}, \textcolor{stringliteral}{"bvs"}, \textcolor{stringliteral}{"bvc"}, \textcolor{stringliteral}{"bhi"}, \textcolor{stringliteral}{"bls"}, \textcolor{stringliteral}{"bge"}, \textcolor{stringliteral}{"blt"}, \textcolor{stringliteral}{"bgt"}, 
+\textcolor{stringliteral}{"ble"}, \textcolor{stringliteral}{"bal"}, \textcolor{stringliteral}{"bic"}, \textcolor{stringliteral}{"bkpt"}, \textcolor{stringliteral}{"bl"}, \textcolor{stringliteral}{"blx"}, \textcolor{stringliteral}{"bx"}, \textcolor{stringliteral}{"cmn"}, \textcolor{stringliteral}{"cmp"}, \textcolor{stringliteral}{"cpsie"}, 
+\textcolor{stringliteral}{"cpsid"}, \textcolor{stringliteral}{"cpy"}, \textcolor{stringliteral}{"eor"}, \textcolor{stringliteral}{"ldmia"}, \textcolor{stringliteral}{"ldr"}, \textcolor{stringliteral}{"ldrb"}, \textcolor{stringliteral}{"ldrh"}, \textcolor{stringliteral}{"ldrsb"}, \textcolor{stringliteral}{"ldrsh"}, 
+\textcolor{stringliteral}{"lsl"}, \textcolor{stringliteral}{"lsr"}, \textcolor{stringliteral}{"mov"}, \textcolor{stringliteral}{"movw"}, \textcolor{stringliteral}{"mul"}, \textcolor{stringliteral}{"mvn"}, \textcolor{stringliteral}{"neg"}, \textcolor{stringliteral}{"nop"}, \textcolor{stringliteral}{"orr"}, \textcolor{stringliteral}{"pop"}, 
+\textcolor{stringliteral}{"push"}, \textcolor{stringliteral}{"rev"}, \textcolor{stringliteral}{"rev16"}, \textcolor{stringliteral}{"revsh"}, \textcolor{stringliteral}{"ror"}, \textcolor{stringliteral}{"sbc"}, \textcolor{stringliteral}{"setendbe"}, \textcolor{stringliteral}{"setendle"}, 
+\textcolor{stringliteral}{"stmia"}, \textcolor{stringliteral}{"str"}, \textcolor{stringliteral}{"strb"}, \textcolor{stringliteral}{"strh"}, \textcolor{stringliteral}{"sub"}, \textcolor{stringliteral}{"subs"}, \textcolor{stringliteral}{"swi"}, \textcolor{stringliteral}{"sxtb"}, \textcolor{stringliteral}{"sxth"}, 
+\textcolor{stringliteral}{"tst"}, \textcolor{stringliteral}{"uxtb"}, \textcolor{stringliteral}{"uxth"}, NULL\}
+\end{DoxyCode}
+\hypertarget{basm__insns__thumb_8c_ae13f6c81ed35803e0f6eb6b78e23412e}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-regidx\-\_\-thumb@{basm\-\_\-regidx\-\_\-thumb}}
+\index{basm\-\_\-regidx\-\_\-thumb@{basm\-\_\-regidx\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-regidx\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-regidx\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_ae13f6c81ed35803e0f6eb6b78e23412e}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 45, 
+46, 47, -1\}
+\end{DoxyCode}
+\hypertarget{basm__insns__thumb_8c_a4a0a48959cb6fea5580f327b3f58a5c2}{\index{basm\-\_\-insns\-\_\-thumb.\-c@{basm\-\_\-insns\-\_\-thumb.\-c}!basm\-\_\-regs\-\_\-thumb@{basm\-\_\-regs\-\_\-thumb}}
+\index{basm\-\_\-regs\-\_\-thumb@{basm\-\_\-regs\-\_\-thumb}!basm_insns_thumb.c@{basm\-\_\-insns\-\_\-thumb.\-c}}
+\subsubsection[{basm\-\_\-regs\-\_\-thumb}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-regs\-\_\-thumb\mbox{[}$\,$\mbox{]}}}\label{basm__insns__thumb_8c_a4a0a48959cb6fea5580f327b3f58a5c2}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+\textcolor{stringliteral}{"r0"}, \textcolor{stringliteral}{"r1"}, \textcolor{stringliteral}{"r2"}, \textcolor{stringliteral}{"r3"}, \textcolor{stringliteral}{"r4"}, \textcolor{stringliteral}{"r5"}, \textcolor{stringliteral}{"r6"}, \textcolor{stringliteral}{"r7"}, \textcolor{stringliteral}{"r8"}, \textcolor{stringliteral}{"r9"}, \textcolor{stringliteral}{"r10"}, 
+\textcolor{stringliteral}{"r11"}, \textcolor{stringliteral}{"r12"}, \textcolor{stringliteral}{"r13"}, \textcolor{stringliteral}{"r14"}, \textcolor{stringliteral}{"r15"}, \textcolor{stringliteral}{"sp"}, \textcolor{stringliteral}{"lr"}, \textcolor{stringliteral}{"pc"}, NULL\}
+\end{DoxyCode}

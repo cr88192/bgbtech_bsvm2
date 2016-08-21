@@ -361,6 +361,40 @@ void BS2C_EmitOpcodeJx(BS2CC_CompileContext *ctx, int vi, int vj)
 	}
 }
 
+void BS2C_EmitOpcodeLx(BS2CC_CompileContext *ctx,
+	int vi, int vj, int vk)
+{
+	int k;
+	
+	if((vi<8) && (vj<4) && (vk<4))
+	{
+		k=(vi<<4)|(vj<<2)|vk;
+		BS2C_EmitByte(ctx, k);
+		return;
+	}
+
+	if((vi<32) && (vj<32) && (vk<16))
+	{
+		k=(vi<<9)|(vj<<4)|vk;
+		BS2C_EmitOpcodeUCx(ctx, k);
+		return;
+	}
+
+	if((vi<128) && (vj<128) && (vk<128))
+	{
+		k=(vi<<14)|(vj<<7)|vk;
+		BS2C_EmitOpcodeUCx(ctx, k);
+		return;
+	}
+
+	if((vi<1024) && (vj<512) && (vk<512))
+	{
+		k=(vi<<18)|(vj<<9)|vk;
+		BS2C_EmitOpcodeUCx(ctx, k);
+		return;
+	}
+}
+
 void BS2C_EmitOpcodeUKx(BS2CC_CompileContext *ctx, int vi, u64 vj)
 {
 	u64 lk;

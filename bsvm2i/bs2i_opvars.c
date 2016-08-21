@@ -89,5 +89,89 @@ void BSVM2_Op_STGSA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	vi->gvalue->a=frm->stack[op->t0].a;		}
 
+#if 1
+void BSVM2_Op_LDGS_DY(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	
+	if(!frm->ctx->dynenv)
+	{
+		frm->stack[op->t0].l=0;
+		return;
+	}
+	
+	vi=op->v.p;
+	if((vi->nargs<=0) || (vi->nargs>=frm->ctx->szdynenv))
+	{
+		frm->stack[op->t0].l=0;
+		return;
+	}
+	
+	switch(op->i1)
+	{
+	case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+	case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+	case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+		frm->stack[op->t0].i=frm->ctx->dynenv[vi->nargs].i;
+		break;
+	case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+		frm->stack[op->t0].l=frm->ctx->dynenv[vi->nargs].l;
+		break;
+	case BSVM2_OPZ_FLOAT:
+		frm->stack[op->t0].f=frm->ctx->dynenv[vi->nargs].f;
+		break;
+	case BSVM2_OPZ_DOUBLE:
+		frm->stack[op->t0].d=frm->ctx->dynenv[vi->nargs].d;
+		break;
+	case BSVM2_OPZ_ADDRESS:
+		frm->stack[op->t0].a=frm->ctx->dynenv[vi->nargs].a;
+		break;
+	}
+}
+
+void BSVM2_Op_STGS_DY(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	
+	if(!frm->ctx->dynenv)
+	{
+		frm->ctx->dynenv=dtmAlloc("bs2i_dynenv_t",
+			bs2i_img_dynvlim*sizeof(BSVM2_Value));
+		frm->ctx->szdynenv=bs2i_img_dynvlim;
+	}
+
+	vi=op->v.p;
+	if((vi->nargs<=0) || (vi->nargs>=bs2i_img_dynvlim))
+		return;
+	if((vi->nargs>=frm->ctx->szdynenv))
+	{
+		frm->ctx->dynenv=dtmRealloc(frm->ctx->dynenv,
+			bs2i_img_dynvlim*sizeof(BSVM2_Value));
+		frm->ctx->szdynenv=bs2i_img_dynvlim;
+	}
+	
+	switch(op->i1)
+	{
+	case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+	case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+	case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+		frm->ctx->dynenv[vi->nargs].i=frm->stack[op->t0].i;
+		break;
+	case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+		frm->ctx->dynenv[vi->nargs].l=frm->stack[op->t0].l;
+		break;
+	case BSVM2_OPZ_FLOAT:
+		frm->ctx->dynenv[vi->nargs].f=frm->stack[op->t0].f;
+		break;
+	case BSVM2_OPZ_DOUBLE:
+		frm->ctx->dynenv[vi->nargs].d=frm->stack[op->t0].d;
+		break;
+	case BSVM2_OPZ_ADDRESS:
+		frm->ctx->dynenv[vi->nargs].a=frm->stack[op->t0].a;
+		break;
+	}
+}
+#endif
+
 void BSVM2_Op_LDCTH(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=frm->self; }

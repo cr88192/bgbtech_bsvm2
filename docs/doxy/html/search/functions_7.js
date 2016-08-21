@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['kralloc',['kralloc',['../gen__x86_8c.html#a9f5f062e4f3a3583b311df9a61d7481f',1,'kralloc(int sz):&#160;gen_x86.c'],['../gen__x86__1_8c.html#a9f5f062e4f3a3583b311df9a61d7481f',1,'kralloc(int sz):&#160;gen_x86_1.c'],['../gen__x86__2_8c.html#a9f5f062e4f3a3583b311df9a61d7481f',1,'kralloc(int sz):&#160;gen_x86_2.c'],['../gen__x86__3_8c.html#a9f5f062e4f3a3583b311df9a61d7481f',1,'kralloc(int sz):&#160;gen_x86_3.c'],['../gen__x86__4_8c.html#a9f5f062e4f3a3583b311df9a61d7481f',1,'kralloc(int sz):&#160;gen_x86_4.c']]],
+  ['ksplit',['ksplit',['../gen__x86_8c.html#a959dacacbcf285a235527fe277d178ee',1,'ksplit(char *s):&#160;gen_x86.c'],['../gen__x86__1_8c.html#a959dacacbcf285a235527fe277d178ee',1,'ksplit(char *s):&#160;gen_x86_1.c'],['../gen__x86__2_8c.html#a959dacacbcf285a235527fe277d178ee',1,'ksplit(char *s):&#160;gen_x86_2.c'],['../gen__x86__3_8c.html#a959dacacbcf285a235527fe277d178ee',1,'ksplit(char *s):&#160;gen_x86_3.c'],['../gen__x86__4_8c.html#a959dacacbcf285a235527fe277d178ee',1,'ksplit(char *s):&#160;gen_x86_4.c']]]
+];

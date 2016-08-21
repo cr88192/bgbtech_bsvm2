@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['default_5finline',['default_inline',['../bsvm2__conf_8h.html#a8b993e6fbd3eadb69c0c492599b64f8a',1,'bsvm2_conf.h']]],
+  ['dtc_5fcachename_5fpfx',['DTC_CACHENAME_PFX',['../mm__clsobj_8c.html#a5d49fc9935934a573d988d75b1e162f9',1,'mm_clsobj.c']]],
+  ['dtmalloc',['dtmAlloc',['../bsvm2__mm_8h.html#a3c8c5bc783ca23ea548cbb5fa051637b',1,'bsvm2_mm.h']]],
+  ['dtmalloclln',['dtmAllocLLn',['../bsvm2__mm_8h.html#a4175b0413f3d4ac6512860c7e4a5cc7d',1,'bsvm2_mm.h']]],
+  ['dtmfree',['dtmFree',['../bsvm2__mm_8h.html#a7e8eaa35a39e0696eca6951f39d111fd',1,'bsvm2_mm.h']]],
+  ['dtmfreeany',['dtmFreeAny',['../bsvm2__mm_8h.html#ac6ee072ca777bcbc6146cf4e8c80b899',1,'bsvm2_mm.h']]],
+  ['dtmgetbase',['dtmGetBase',['../bsvm2__mm_8h.html#a56b073f418d4b3ff3f0dcc01c6f4c088',1,'bsvm2_mm.h']]],
+  ['dtmgetsize',['dtmGetSize',['../bsvm2__mm_8h.html#ab374c72df03d55e21d6bc88d174cd374',1,'bsvm2_mm.h']]],
+  ['dtmgettype',['dtmGetType',['../bsvm2__mm_8h.html#aa31671e902df06ea08bacea97df7c31e',1,'bsvm2_mm.h']]],
+  ['dtmgettypeid',['dtmGetTypeID',['../bsvm2__mm_8h.html#af5f39c13a6aca59983609cd6ce2bb1eb',1,'bsvm2_mm.h']]],
+  ['dtmmalloc',['dtmMalloc',['../bsvm2__mm_8h.html#a15d3cf2b2fafea87992d1e32ea066a4c',1,'bsvm2_mm.h']]],
+  ['dtmrealloc',['dtmRealloc',['../bsvm2__mm_8h.html#a7ced1baeb107c98f858c63ddc831519b',1,'bsvm2_mm.h']]],
+  ['dtmrealloclln',['dtmReallocLLn',['../bsvm2__mm_8h.html#a388a21ccb0d2994c6c9c7319b65115ea',1,'bsvm2_mm.h']]],
+  ['dtv_5femptylist',['DTV_EMPTYLIST',['../bsvm2__tagval_8h.html#a8332ed44405875f8ff8520ee274834d6',1,'bsvm2_tagval.h']]],
+  ['dtv_5ffalse',['DTV_FALSE',['../bsvm2__tagval_8h.html#a8bfbd69d81a8231fe01b0e9638d0954f',1,'bsvm2_tagval.h']]],
+  ['dtv_5fnull',['DTV_NULL',['../bsvm2__tagval_8h.html#a390cd5d06d2e45f74106a228e20ddd40',1,'bsvm2_tagval.h']]],
+  ['dtv_5ftrue',['DTV_TRUE',['../bsvm2__tagval_8h.html#a0f5823e322a03d4fab9e067c1dfb9cc7',1,'bsvm2_tagval.h']]],
+  ['dtv_5fundefined',['DTV_UNDEFINED',['../bsvm2__tagval_8h.html#a0a51680ce3f27ca8e293349bf2362c81',1,'bsvm2_tagval.h']]]
+];

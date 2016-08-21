@@ -938,8 +938,8 @@ Instructions
 ** 0=Array Length, 1=Array Offset, ...
 ** Gets a built-in integer property from an address-type value.
 
-* E1 6C Gj, LDOSL				//Load Instance Variable, ( O => A )
-* E1 6D Gj, STOSL				//Store Instance Variable ( V O => )
+* E1 6C Gj, LDOSL				//Load Instance Variable Local, ( => A )
+* E1 6D Gj, STOSL				//Store Instance Variable Local ( V => )
 
 * E1 70, DIVI				//Divide Int
 * E1 71, DIVL				//Divide Long
@@ -1055,6 +1055,28 @@ More Array ops:
 ** Produces an integer value giving the pointer difference.
 ** The Z type gives the element type/size for the pointer/array diff.
 
+* E1 B5 Zn, BSWAP			//Byte Swap
+** Swaps the bytes as needed for values stored with an explicit endianess.
+** This is no-op if no conversions are needed.
+** n: 0=To Big-Endian, 1=To Little-Endian, 2=From BE, 3=From LE
+*** Integer types assume are to assume twos complement.
+*** Floating point types are to assume IEEE754.
+
+* E1 B6 Zn, LDDRBSW			//Load Deref Byte Swap
+* E1 B7 Zn, STDRBSW			//Store Deref Byte Swap
+** n&1: 0=BE, 1=LE
+** n&2: 0=Pointer, 1=Array
+
+* E1 B8 Gj, IFXDYV			//Init Dynamic Var
+* E1 B9 Gj, DFXDYV			//Deinit Dynamic Var
+
+* E1 BA Gx, MKLFUNC			//Make Lambda Function (A => C)
+** Global gives the function body.
+** An array given on the stack holds any captured bindings.
+** The array is of type address and holds untyped bindings.
+
+* E1 BB Zn, DSTIXUZ			//DUPA+CVTZ2U+STIXAC
+** Convert value to untyped and store in array.
 
 * E1 C0 Kj, ADDISLC			//S C; => S+C
 * E1 C1 Kj, SUBISLC			//S C; => S-C

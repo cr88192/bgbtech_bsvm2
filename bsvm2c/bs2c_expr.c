@@ -2585,15 +2585,15 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 	dtVal expr, int dty)
 {
 	dtVal n0, n1, n2;
-	dtVal ln, rn, cn;
+	dtVal ln, rn, cn, ln2, rn2;
 	s64 li, lj, lk;
 	BGBDTC_X128 xa, xb, xc;
 	BS2CC_VarInfo *vi, *vi2;
 	double f, g;
-	char *tag;
+	char *tag, *tag2;
 	char *op, *fn;
 	int t0, t1, t2, t3;
-	int lt, rt, cty, bty;
+	int lt, rt, lt2, rt2, cty, bty;
 	int z, o, u;
 	int i, j, k, l;
 
@@ -3233,10 +3233,8 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 			BGBDT_TagStr_IsSymbolP(ln) &&
 			BGBDT_TagStr_IsSymbolP(rn))
 		{
-			i=BS2C_LookupLocal(ctx,
-				BGBDT_TagStr_GetUtf8(ln));
-			j=BS2C_LookupLocal(ctx,
-				BGBDT_TagStr_GetUtf8(rn));
+			i=BS2C_InferExprLocalIndex(ctx, ln);
+			j=BS2C_InferExprLocalIndex(ctx, rn);
 
 			if((i>=0) && (j>=0))
 			{
@@ -3267,8 +3265,7 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 			BGBDT_TagStr_IsSymbolP(ln) &&
 			dtvIsFixIntP(rn))
 		{
-			i=BS2C_LookupLocal(ctx,
-				BGBDT_TagStr_GetUtf8(ln));
+			i=BS2C_InferExprLocalIndex(ctx, ln);
 			li=dtvUnwrapLong(rn);
 
 			if(i>=0)
@@ -3289,6 +3286,103 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 				{
 					BS2C_EmitOpcode(ctx, o);
 					BS2C_EmitOpcodeSuKx(ctx, lt, i, li);
+					return;
+				}
+			}
+		}
+
+		tag2=BS2P_GetAstNodeTag(rn);
+		if(BS2C_TypeVoidP(ctx, dty) &&
+			BS2C_TypeSmallIntP(ctx, cty) &&
+			BGBDT_TagStr_IsSymbolP(ln) &&
+			tag2 && !strcmp(tag2, "binary"))
+		{
+			ln2=BS2P_GetAstNodeAttr(rn, "lhs");
+			rn2=BS2P_GetAstNodeAttr(rn, "rhs");
+			op=BS2P_GetAstNodeAttrS(rn, "op");
+
+			lt2=BS2C_InferExpr(ctx, ln2);
+			rt2=BS2C_InferExpr(ctx, rn2);
+			
+			if(BGBDT_TagStr_IsSymbolP(ln2) &&
+				BGBDT_TagStr_IsSymbolP(rn2) &&
+				BS2C_TypeSmallIntP(ctx, lt2) &&
+				BS2C_TypeSmallIntP(ctx, rt2))
+			{
+				t0=BS2C_InferExprLocalIndex(ctx, ln);
+				t1=BS2C_InferExprLocalIndex(ctx, ln2);
+				t2=BS2C_InferExprLocalIndex(ctx, rn2);
+
+				o=-1;
+				if(!strcmp(op, "+"))
+					o=BSVM2_OP_ADDILLL;
+				if(!strcmp(op, "-"))
+					o=BSVM2_OP_SUBILLL;
+				if(!strcmp(op, "*"))
+					o=BSVM2_OP_MULILLL;
+				if(!strcmp(op, "&"))
+					o=BSVM2_OP_ANDILLL;
+				if(!strcmp(op, "|"))
+					o=BSVM2_OP_ORILLL;
+				if(!strcmp(op, "^"))
+					o=BSVM2_OP_XORILLL;
+				if(!strcmp(op, "<<"))
+					o=BSVM2_OP_SHLILLL;
+				if(!BS2C_TypeUnsignedP(ctx, lt))
+				{
+					if(!strcmp(op, ">>"))
+						o=BSVM2_OP_SARILLL;
+				}
+
+				if((o>=0) && (t0>=0) && (t1>=0) && (t2>=0))
+				{
+					BS2C_EmitOpcode(ctx, o);
+					BS2C_EmitOpcodeLx(ctx, t0, t1, t2);
+					return;
+				}
+			}
+
+			if(BGBDT_TagStr_IsSymbolP(ln2) &&
+				BS2C_TypeSmallIntP(ctx, lt2) &&
+				dtvIsFixIntP(rn2))
+			{
+				t0=BS2C_InferExprLocalIndex(ctx, ln);
+				t1=BS2C_InferExprLocalIndex(ctx, ln2);
+				li=dtvUnwrapLong(rn2);
+
+				o=-1; u=0;
+				if(!strcmp(op, "+"))
+				{
+					o=BSVM2_OP_ADDILLC; u=1;
+					if(li<0) { o=BSVM2_OP_SUBILLC; li=-li; }
+				}
+				if(!strcmp(op, "-"))
+				{
+					o=BSVM2_OP_SUBILLC; u=1;
+					if(li<0) { o=BSVM2_OP_ADDILLC; li=-li; }
+				}
+				if(!strcmp(op, "*"))
+					o=BSVM2_OP_MULILLC;
+				if(!strcmp(op, "&"))
+					o=BSVM2_OP_ANDILLC;
+				if(!strcmp(op, "|"))
+					o=BSVM2_OP_ORILLC;
+				if(!strcmp(op, "^"))
+					o=BSVM2_OP_XORILLC;
+				if(!strcmp(op, "<<"))
+					o=BSVM2_OP_SHLILLC;
+				if(!BS2C_TypeUnsignedP(ctx, lt))
+				{
+					if(!strcmp(op, ">>"))
+						o=BSVM2_OP_SARILLC;
+				}
+
+				if((o>=0) && (t0>=0) && (t1>=0))
+				{
+					BS2C_EmitOpcode(ctx, o);
+					BS2C_EmitOpcodeJx(ctx, t0, t1);
+					if(u)	{ BS2C_EmitOpcodeUCx(ctx, li); }
+					else	{ BS2C_EmitOpcodeSCx(ctx, li); }
 					return;
 				}
 			}
@@ -3320,6 +3414,135 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 //		cty=BS2C_InferSuperType(ctx, lt, rt);
 		cty=BS2C_TypeBinarySuperType(ctx, op, lt, rt);
 
+		if(BS2C_TypeVoidP(ctx, dty) && (lt==rt) &&
+			BS2C_TypeSmallIntP(ctx, lt) &&
+			BS2C_TypeSmallIntP(ctx, cty) &&
+			BGBDT_TagStr_IsSymbolP(ln) &&
+			BGBDT_TagStr_IsSymbolP(rn))
+		{
+			i=BS2C_InferExprLocalIndex(ctx, ln);
+			j=BS2C_InferExprLocalIndex(ctx, rn);
+
+			if((i>=0) && (j>=0))
+			{
+				o=-1;
+//				if(BS2C_TypeSmallIntP(ctx, lt))
+//					{ o=BSVM2_OP_MVI; }
+				if(!strcmp(op, "+"))
+					o=BSVM2_OP_ADDILLL;
+				if(!strcmp(op, "-"))
+					o=BSVM2_OP_SUBILLL;
+				if(!strcmp(op, "*"))
+					o=BSVM2_OP_MULILLL;
+				if(!strcmp(op, "&"))
+					o=BSVM2_OP_ANDILLL;
+				if(!strcmp(op, "|"))
+					o=BSVM2_OP_ORILLL;
+				if(!strcmp(op, "^"))
+					o=BSVM2_OP_XORILLL;
+				if(!strcmp(op, "<<"))
+					o=BSVM2_OP_SHLILLL;
+				if(!BS2C_TypeUnsignedP(ctx, lt))
+				{
+					if(!strcmp(op, ">>"))
+						o=BSVM2_OP_SARILLL;
+				}
+
+				if(o>=0)
+				{
+					BS2C_EmitOpcode(ctx, o);
+//					BS2C_EmitOpcodeJx(ctx, i, j);
+					BS2C_EmitOpcodeLx(ctx, i, i, j);
+					return;
+				}
+			}
+		}
+
+		if(BS2C_TypeVoidP(ctx, dty) &&
+			BS2C_TypeSmallIntP(ctx, lt) &&
+			BS2C_TypeSmallIntP(ctx, cty) &&
+			BGBDT_TagStr_IsSymbolP(ln) &&
+			dtvIsFixIntP(rn))
+		{
+			i=BS2C_InferExprLocalIndex(ctx, ln);
+			li=dtvUnwrapLong(rn);
+
+			if(i>=0)
+			{
+				o=-1; u=0;
+
+				if(!strcmp(op, "+"))
+				{
+					o=BSVM2_OP_ADDILLC; u=1;
+					if(li<0)
+						{ o=BSVM2_OP_SUBILLC; li=-li; }
+				}
+				if(!strcmp(op, "-"))
+				{
+					o=BSVM2_OP_SUBILLC; u=1;
+					if(li<0)
+						{ o=BSVM2_OP_ADDILLC; li=-li; }
+				}
+				if(!strcmp(op, "*"))
+					o=BSVM2_OP_MULILLC;
+				if(!strcmp(op, "&"))
+					o=BSVM2_OP_ANDILLC;
+				if(!strcmp(op, "|"))
+					o=BSVM2_OP_ORILLC;
+				if(!strcmp(op, "^"))
+					o=BSVM2_OP_XORILLC;
+				if(!strcmp(op, "<<"))
+					o=BSVM2_OP_SHLILLC;
+				if(!BS2C_TypeUnsignedP(ctx, lt))
+				{
+					if(!strcmp(op, ">>"))
+						o=BSVM2_OP_SARILLC;
+				}
+
+				if(o>=0)
+				{
+					BS2C_EmitOpcode(ctx, o);
+					BS2C_EmitOpcodeJx(ctx, i, i);
+					if(u)	{ BS2C_EmitOpcodeUCx(ctx, li); }
+					else	{ BS2C_EmitOpcodeSCx(ctx, li); }
+					return;
+				}
+			}
+		}
+
+		if(BS2C_TypeVoidP(ctx, dty) &&
+			BS2C_TypeSmallIntP(ctx, lt) &&
+			BS2C_TypeSmallIntP(ctx, cty) &&
+			BGBDT_TagStr_IsSymbolP(ln))
+		{
+			i=BS2C_InferExprLocalIndex(ctx, ln);
+			if(i>=0)
+			{
+				o=-1; u=0;
+
+				if(!strcmp(op, "+"))
+					o=BSVM2_OP_ADDILSL;
+				if(!strcmp(op, "*"))
+					o=BSVM2_OP_MULILSL;
+				if(!strcmp(op, "&"))
+					o=BSVM2_OP_ANDILSL;
+				if(!strcmp(op, "|"))
+					o=BSVM2_OP_ORILSL;
+				if(!strcmp(op, "^"))
+					o=BSVM2_OP_XORILSL;
+
+				if(o>=0)
+				{
+					BS2C_CompileExpr(ctx, rn, lt);
+					BS2C_EmitOpcode(ctx, o);
+					BS2C_EmitOpcodeJx(ctx, i, i);
+					BS2C_CompileExprPopType1(ctx);
+					return;
+				}
+			}
+		}
+
+
 		BS2C_CompileExprBinary(ctx, op, ln, rn, cty);
 
 //		BS2C_CompileExpr(ctx, ln, cty);
@@ -3330,29 +3553,7 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 //		BS2C_CompileConvType(ctx, lt);
 		
 		if(!BS2C_TypeVoidP(ctx, dty))
-		{
-			BS2C_CompileDup(ctx);
-
-#if 0
-			if(BS2C_TypeSmallIntP(ctx, lt))
-				{ BS2C_EmitOpcode(ctx, BSVM2_OP_DUPI); }
-			else if(BS2C_TypeSmallLongP(ctx, lt))
-				{ BS2C_EmitOpcode(ctx, BSVM2_OP_DUPL); }
-			else if(BS2C_TypeSmallFloatP(ctx, lt))
-				{ BS2C_EmitOpcode(ctx, BSVM2_OP_DUPF); }
-			else if(BS2C_TypeSmallDoubleP(ctx, lt))
-				{ BS2C_EmitOpcode(ctx, BSVM2_OP_DUPD); }
-			else if(BS2C_TypeAddressP(ctx, lt))
-				{ BS2C_EmitOpcode(ctx, BSVM2_OP_DUPA); }
-			else
-			{
-//				z=lt&15;
-//				BS2C_EmitOpcode(ctx, BSVM2_OP_DUPN);
-//				BS2C_EmitByte(ctx, (z<<4)|1);
-				BS2C_CaseError(ctx);
-			}
-#endif
-		}
+			{ BS2C_CompileDup(ctx); }
 		
 		BS2C_CompileStoreExpr(ctx, ln);
 		

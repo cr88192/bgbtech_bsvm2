@@ -1,0 +1,212 @@
+\hypertarget{basm__disasm_8c}{\section{bgbasm3/asm/basm\-\_\-disasm.c File Reference}
+\label{basm__disasm_8c}\index{bgbasm3/asm/basm\-\_\-disasm.\-c@{bgbasm3/asm/basm\-\_\-disasm.\-c}}
+}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{basm__disasm_8c_aad43511611fd9083b9ebd7892b1c4e88}{B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} char $\ast$ \hyperlink{basm__disasm_8c_ae86779c94d162319742bd370dacef778}{B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name} (void $\ast$ptr)
+\item 
+int \hyperlink{basm__disasm_8c_a84e11338946d4b3ad2cbdeb0c42560cf}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$$\ast$rip, char $\ast$$\ast$str, int $\ast$rfl, int op)
+\item 
+\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a78bdfd42e2131d7e25f975998b292c65}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int op, int fl, int w, int ar)
+\item 
+\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a2ab84bca37868eda23b3698c9ebef3c2}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int op, int fl, int w, int ar)
+\item 
+\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a03b5920c46b4a05a9414bc70bf2c40a2}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int op, int fl, int w)
+\item 
+\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a1a921d4cbba180b659952f5330f081f4}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int op, int fl, int w)
+\item 
+\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a2eeefbae2eb692f674dad06b5111111d}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int fl)
+\item 
+int \hyperlink{basm__disasm_8c_a4e255816ddebb033b35e871b4db09cf6}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$oip, char $\ast$str, int fl)
+\item 
+char $\ast$ \hyperlink{basm__disasm_8c_a41fb36f0f4c1e0c28495fff015f54971}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg} (int i, int j)
+\item 
+void \hyperlink{basm__disasm_8c_a1bca7941fddd1a32b56ca27828cd9dcd}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F} (int i)
+\item 
+void \hyperlink{basm__disasm_8c_a395a091bc3c6984153867da77fd94ee2}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F} (int i)
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} \hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ \hyperlink{basm__disasm_8c_a214dee862332f3f1f3b4dc946b2c4400}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int $\ast$rfl)
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} int \hyperlink{basm__disasm_8c_ac6186e21f06e75212b84726a748573b8}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int fl, int sz)
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} int \hyperlink{basm__disasm_8c_ad84e0ef6443388ce339244ff65397467}{B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$ip, int sz)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$$\ast$ \hyperlink{basm__disasm_8c_a0b09d85749ee185b30587d5595881187}{basm\-\_\-ops}
+\item 
+int $\ast$ \hyperlink{basm__disasm_8c_ab6a4b3a049bc58269148289480f9cf79}{basm\-\_\-opidx}
+\item 
+int $\ast$ \hyperlink{basm__disasm_8c_a6f4240973723f17565027b6b0336e408}{basm\-\_\-opnums}
+\item 
+char $\ast$ \hyperlink{basm__disasm_8c_a25b310dd845c89e8b6c35d6146efb71a}{basm\-\_\-opcat}
+\item 
+char $\ast$$\ast$ \hyperlink{basm__disasm_8c_a59ddfd47373570d210977f7b9cf589ea}{basm\-\_\-opdecl}
+\item 
+char $\ast$$\ast$ \hyperlink{basm__disasm_8c_ad84b71a084729642467d5bfe7437d250}{basm\-\_\-regs}
+\item 
+int $\ast$ \hyperlink{basm__disasm_8c_a9a07bfd52d0d3d87815c6867b60f4f35}{basm\-\_\-regidx}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{basm__disasm_8c_aad43511611fd9083b9ebd7892b1c4e88}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F@{B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F}}
+\index{B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F@{B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\-A\-S\-M\-\_\-\-H\-E\-X\-V\-A\-L\-\_\-\-D\-E\-F}}\label{basm__disasm_8c_aad43511611fd9083b9ebd7892b1c4e88}
+
+
+\subsection{Function Documentation}
+\hypertarget{basm__disasm_8c_ae86779c94d162319742bd370dacef778}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name@{B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name}}
+\index{B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name@{B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} char$\ast$ B\-A\-S\-M\-\_\-\-Get\-Ptr\-Name (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_ae86779c94d162319742bd370dacef778}
+\hypertarget{basm__disasm_8c_a84e11338946d4b3ad2cbdeb0c42560cf}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str}]{\setlength{\rightskip}{0pt plus 5cm}int B\-D\-I\-S\-A\-S\-M\-\_\-\-Check\-Op\-Str (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$$\ast$}]{rip, }
+\item[{char $\ast$$\ast$}]{str, }
+\item[{int $\ast$}]{rfl, }
+\item[{int}]{op}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a84e11338946d4b3ad2cbdeb0c42560cf}
+\hypertarget{basm__disasm_8c_a41fb36f0f4c1e0c28495fff015f54971}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Get\-Fix\-Reg (
+\begin{DoxyParamCaption}
+\item[{int}]{i, }
+\item[{int}]{j}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a41fb36f0f4c1e0c28495fff015f54971}
+\hypertarget{basm__disasm_8c_ad84e0ef6443388ce339244ff65397467}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} int B\-D\-I\-S\-A\-S\-M\-\_\-\-Hex\-Dump (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{sz}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_ad84e0ef6443388ce339244ff65397467}
+\hypertarget{basm__disasm_8c_a1bca7941fddd1a32b56ca27828cd9dcd}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F}]{\setlength{\rightskip}{0pt plus 5cm}void B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-P\-F (
+\begin{DoxyParamCaption}
+\item[{int}]{i}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a1bca7941fddd1a32b56ca27828cd9dcd}
+\hypertarget{basm__disasm_8c_a395a091bc3c6984153867da77fd94ee2}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F}]{\setlength{\rightskip}{0pt plus 5cm}void B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Fix\-Reg\-S\-F (
+\begin{DoxyParamCaption}
+\item[{int}]{i}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a395a091bc3c6984153867da77fd94ee2}
+\hypertarget{basm__disasm_8c_a03b5920c46b4a05a9414bc70bf2c40a2}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}{\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-Reg\-R\-M (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{op, }
+\item[{int}]{fl, }
+\item[{int}]{w}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a03b5920c46b4a05a9414bc70bf2c40a2}
+\hypertarget{basm__disasm_8c_a2ab84bca37868eda23b3698c9ebef3c2}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}{\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{op, }
+\item[{int}]{fl, }
+\item[{int}]{w, }
+\item[{int}]{ar}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a2ab84bca37868eda23b3698c9ebef3c2}
+\hypertarget{basm__disasm_8c_a78bdfd42e2131d7e25f975998b292c65}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16}]{\setlength{\rightskip}{0pt plus 5cm}{\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M16 (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{op, }
+\item[{int}]{fl, }
+\item[{int}]{w, }
+\item[{int}]{ar}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a78bdfd42e2131d7e25f975998b292c65}
+\hypertarget{basm__disasm_8c_a1a921d4cbba180b659952f5330f081f4}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg}]{\setlength{\rightskip}{0pt plus 5cm}{\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Mod\-R\-M\-\_\-\-R\-M\-Reg (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{op, }
+\item[{int}]{fl, }
+\item[{int}]{w}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a1a921d4cbba180b659952f5330f081f4}
+\hypertarget{basm__disasm_8c_a214dee862332f3f1f3b4dc946b2c4400}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} {\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcode (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int $\ast$}]{rfl}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a214dee862332f3f1f3b4dc946b2c4400}
+\hypertarget{basm__disasm_8c_ac6186e21f06e75212b84726a748573b8}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} int B\-D\-I\-S\-A\-S\-M\-\_\-\-Print\-Opcodes (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{fl, }
+\item[{int}]{sz}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_ac6186e21f06e75212b84726a748573b8}
+\hypertarget{basm__disasm_8c_a4e255816ddebb033b35e871b4db09cf6}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str}]{\setlength{\rightskip}{0pt plus 5cm}int B\-D\-I\-S\-A\-S\-M\-\_\-\-Size\-Op\-Str (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{oip, }
+\item[{char $\ast$}]{str, }
+\item[{int}]{fl}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a4e255816ddebb033b35e871b4db09cf6}
+\hypertarget{basm__disasm_8c_a2eeefbae2eb692f674dad06b5111111d}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M}}
+\index{B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M@{B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}{\bf byte}$\ast$ B\-D\-I\-S\-A\-S\-M\-\_\-\-Skip\-Mod\-R\-M (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{ip, }
+\item[{int}]{fl}
+\end{DoxyParamCaption}
+)}}\label{basm__disasm_8c_a2eeefbae2eb692f674dad06b5111111d}
+
+
+\subsection{Variable Documentation}
+\hypertarget{basm__disasm_8c_a25b310dd845c89e8b6c35d6146efb71a}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-opcat@{basm\-\_\-opcat}}
+\index{basm\-\_\-opcat@{basm\-\_\-opcat}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-opcat}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-opcat}}\label{basm__disasm_8c_a25b310dd845c89e8b6c35d6146efb71a}
+\hypertarget{basm__disasm_8c_a59ddfd47373570d210977f7b9cf589ea}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-opdecl@{basm\-\_\-opdecl}}
+\index{basm\-\_\-opdecl@{basm\-\_\-opdecl}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-opdecl}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ basm\-\_\-opdecl}}\label{basm__disasm_8c_a59ddfd47373570d210977f7b9cf589ea}
+\hypertarget{basm__disasm_8c_ab6a4b3a049bc58269148289480f9cf79}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-opidx@{basm\-\_\-opidx}}
+\index{basm\-\_\-opidx@{basm\-\_\-opidx}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-opidx}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ basm\-\_\-opidx}}\label{basm__disasm_8c_ab6a4b3a049bc58269148289480f9cf79}
+\hypertarget{basm__disasm_8c_a6f4240973723f17565027b6b0336e408}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-opnums@{basm\-\_\-opnums}}
+\index{basm\-\_\-opnums@{basm\-\_\-opnums}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-opnums}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ basm\-\_\-opnums}}\label{basm__disasm_8c_a6f4240973723f17565027b6b0336e408}
+\hypertarget{basm__disasm_8c_a0b09d85749ee185b30587d5595881187}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-ops@{basm\-\_\-ops}}
+\index{basm\-\_\-ops@{basm\-\_\-ops}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-ops}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ basm\-\_\-ops}}\label{basm__disasm_8c_a0b09d85749ee185b30587d5595881187}
+\hypertarget{basm__disasm_8c_a9a07bfd52d0d3d87815c6867b60f4f35}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-regidx@{basm\-\_\-regidx}}
+\index{basm\-\_\-regidx@{basm\-\_\-regidx}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-regidx}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ basm\-\_\-regidx}}\label{basm__disasm_8c_a9a07bfd52d0d3d87815c6867b60f4f35}
+\hypertarget{basm__disasm_8c_ad84b71a084729642467d5bfe7437d250}{\index{basm\-\_\-disasm.\-c@{basm\-\_\-disasm.\-c}!basm\-\_\-regs@{basm\-\_\-regs}}
+\index{basm\-\_\-regs@{basm\-\_\-regs}!basm_disasm.c@{basm\-\_\-disasm.\-c}}
+\subsubsection[{basm\-\_\-regs}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ basm\-\_\-regs}}\label{basm__disasm_8c_ad84b71a084729642467d5bfe7437d250}

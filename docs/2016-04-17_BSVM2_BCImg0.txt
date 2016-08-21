@@ -271,6 +271,33 @@ QHash:
 * They may be used for imports and exports.
 ** The means for assigning them are left up to the compiler.
 
+Flags String:
+* a, abstract
+* b, big_endian
+* c, const
+* d, dynamic
+* e, extern
+* f, final
+* g, getter
+* h, setter
+* i, inline
+* j, async
+* k, delegate
+* l, little_endian
+* m, transient
+* n, native
+* o, strict
+* p, public
+* q, private
+* r, protected
+* s, static
+* t, thread
+* u, synchronized
+* v, volatile
+
+* A*, B*, C*, D*
+** Extended Flags
+* "U(name);", Extended named flag.
 
 == Image Startup ==
 

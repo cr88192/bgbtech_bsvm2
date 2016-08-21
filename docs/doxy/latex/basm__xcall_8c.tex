@@ -1,0 +1,66 @@
+\hypertarget{basm__xcall_8c}{\section{bgbasm3/front/basm\-\_\-xcall.c File Reference}
+\label{basm__xcall_8c}\index{bgbasm3/front/basm\-\_\-xcall.\-c@{bgbasm3/front/basm\-\_\-xcall.\-c}}
+}
+{\ttfamily \#include $<$bgbasm.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} int \hyperlink{basm__xcall_8c_a44fde99ca7cd3d3c73fe4f43ddd5940e}{B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call} (char $\ast$str, char $\ast$buf)
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} char $\ast$$\ast$ \hyperlink{basm__xcall_8c_a72b5e56150400d3129640cc060e192af}{B\-A\-S\-M\-\_\-\-Unmangle\-Split} (char $\ast$str)
+\item 
+\hyperlink{bgbasm__conf_8h_a3912df6e9ea8760b45b3adaa2bfbf0df}{B\-A\-S\-M\-\_\-\-A\-P\-I} int \hyperlink{basm__xcall_8c_a16d9fe01a9690079faff960c7e0f188a}{B\-A\-S\-M\-\_\-\-Mangle\-X\-Call} (char $\ast$str, char $\ast$buf)
+\item 
+void $\ast$ \hyperlink{basm__xcall_8c_af90bce0aa1c1c793f19d80e4bbc145ad}{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\item 
+void $\ast$ \hyperlink{basm__xcall_8c_a4f3e7f2cd3570fc06e48a9e72b81be7f}{B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\item 
+void $\ast$ \hyperlink{basm__xcall_8c_a74ee4e2747d5ada443b8099443de091f}{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{basm__xcall_8c_a4f3e7f2cd3570fc06e48a9e72b81be7f}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call@{B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call}}
+\index{B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call@{B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ B\-A\-S\-M\-\_\-\-Get\-Label\-Native\-X\-Call (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_a4f3e7f2cd3570fc06e48a9e72b81be7f}
+\hypertarget{basm__xcall_8c_af90bce0aa1c1c793f19d80e4bbc145ad}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call@{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call}}
+\index{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call@{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Call (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_af90bce0aa1c1c793f19d80e4bbc145ad}
+\hypertarget{basm__xcall_8c_a74ee4e2747d5ada443b8099443de091f}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls@{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls}}
+\index{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls@{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ B\-A\-S\-M\-\_\-\-Get\-Label\-X\-Tls (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_a74ee4e2747d5ada443b8099443de091f}
+\hypertarget{basm__xcall_8c_a16d9fe01a9690079faff960c7e0f188a}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Mangle\-X\-Call@{B\-A\-S\-M\-\_\-\-Mangle\-X\-Call}}
+\index{B\-A\-S\-M\-\_\-\-Mangle\-X\-Call@{B\-A\-S\-M\-\_\-\-Mangle\-X\-Call}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Mangle\-X\-Call}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} int B\-A\-S\-M\-\_\-\-Mangle\-X\-Call (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str, }
+\item[{char $\ast$}]{buf}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_a16d9fe01a9690079faff960c7e0f188a}
+\hypertarget{basm__xcall_8c_a72b5e56150400d3129640cc060e192af}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Unmangle\-Split@{B\-A\-S\-M\-\_\-\-Unmangle\-Split}}
+\index{B\-A\-S\-M\-\_\-\-Unmangle\-Split@{B\-A\-S\-M\-\_\-\-Unmangle\-Split}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Unmangle\-Split}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} char$\ast$$\ast$ B\-A\-S\-M\-\_\-\-Unmangle\-Split (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_a72b5e56150400d3129640cc060e192af}
+\hypertarget{basm__xcall_8c_a44fde99ca7cd3d3c73fe4f43ddd5940e}{\index{basm\-\_\-xcall.\-c@{basm\-\_\-xcall.\-c}!B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call@{B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call}}
+\index{B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call@{B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call}!basm_xcall.c@{basm\-\_\-xcall.\-c}}
+\subsubsection[{B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-A\-S\-M\-\_\-\-A\-P\-I} int B\-A\-S\-M\-\_\-\-Unmangle\-X\-Call (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str, }
+\item[{char $\ast$}]{buf}
+\end{DoxyParamCaption}
+)}}\label{basm__xcall_8c_a44fde99ca7cd3d3c73fe4f43ddd5940e}

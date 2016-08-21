@@ -1,0 +1,312 @@
+\hypertarget{bs2i__load_8c}{\section{bsvm2i/bs2i\-\_\-load.c File Reference}
+\label{bs2i__load_8c}\index{bsvm2i/bs2i\-\_\-load.\-c@{bsvm2i/bs2i\-\_\-load.\-c}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_a4188762e5cc99914a2175284dba8b0fe}{B\-S2\-I\-\_\-\-Read\-Tag} (byte $\ast$cs, u64 $\ast$rtag, s64 $\ast$rlen)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_a1059678f4d9b41f3b854d2563376e800}{B\-S2\-I\-\_\-\-Read\-Tag2} (byte $\ast$cs, u32 $\ast$rtag, int $\ast$rlen)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_ae91805a13f4d8c47c6116ca50e004efc}{B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I} (byte $\ast$cs, u64 $\ast$rv, int $\ast$rl)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_ae4b14072d80b9ef231eb07a2720020f5}{B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I} (byte $\ast$cs, s64 $\ast$rv)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_aefd6178a1a205bb543f0e0162ce966e5}{B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I} (byte $\ast$cs, s64 $\ast$rv)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_a3a5f354edf66e86d5a725dae88273019}{B\-S2\-I\-\_\-\-Read\-Opcode\-Number} (byte $\ast$cs, int $\ast$rv)
+\item 
+\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$ \hyperlink{bs2i__load_8c_a29311676f6311cfd9464dee36c067f25}{B\-S2\-I\-\_\-\-Alloc\-Image} (void)
+\item 
+\hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_a55834bfaea54ea64ac21e4163dfc91a5}{B\-S2\-I\-\_\-\-Alloc\-Image\-Global} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img)
+\item 
+\hyperlink{structBSVM2__CodeBlock__s}{B\-S\-V\-M2\-\_\-\-Code\-Block} $\ast$ \hyperlink{bs2i__load_8c_a81e1c42719ab61f7eaee2bb8ea42864c}{B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img)
+\item 
+int \hyperlink{bs2i__load_8c_a7796bc5eeb5eb51214b31fb0dee0ed08}{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, byte tagh)
+\item 
+int \hyperlink{bs2i__load_8c_a8e68bc4ae92769605ea540c79e64df3f}{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, byte tagh)
+\item 
+int \hyperlink{bs2i__load_8c_aeeb71b03e7b7607e9c0a2b519abc6aca}{B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, u64 tag)
+\item 
+\hypertarget{bs2i__load_8c_a1c23056e9ec605f204f58e0411c4fc71}{void {\bfseries B\-S2\-I\-\_\-\-Image\-Error\-Corrupt\-Tag} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img)}\label{bs2i__load_8c_a1c23056e9ec605f204f58e0411c4fc71}
+
+\item 
+\hypertarget{bs2i__load_8c_a11d9bd66281fa53cb1d1079f6563d849}{void {\bfseries B\-S2\-I\-\_\-\-Image\-Check\-Unknown\-Tag} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, u64 tag)}\label{bs2i__load_8c_a11d9bd66281fa53cb1d1079f6563d849}
+
+\item 
+int \hyperlink{bs2i__load_8c_a8dde8876d1bdebbdafa2146c1d1d41bc}{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, int gix)
+\item 
+byte $\ast$ \hyperlink{bs2i__load_8c_a149a9e1f82d55d86db861ed1cc0fb76b}{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, int gix)
+\item 
+int \hyperlink{bs2i__load_8c_ab4b59310f5ca92c26ee67de7aac0f3d6}{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$gbl, u32 dtag, byte $\ast$data, byte $\ast$edata)
+\item 
+char $\ast$ \hyperlink{bs2i__load_8c_a78637b77eaf7325efc7496da89003d88}{B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$gbl)
+\item 
+s64 \hyperlink{bs2i__load_8c_a3205556179268f1094f53e5667da8e9a}{B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name} (char $\ast$str)
+\item 
+int \hyperlink{bs2i__load_8c_ab6e7cb4450f05268811095eb1201ac03}{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$gbl, u32 dtag, byte $\ast$data, byte $\ast$edata)
+\item 
+int \hyperlink{bs2i__load_8c_a96ca2fc69edc42cc8b74a7d0500c10a9}{B\-S2\-I\-\_\-\-Image\-Decode\-Global} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$gbl, byte $\ast$gdat)
+\item 
+\hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_ae98a41ed9b95ae8f987441f344245a1d}{B\-S2\-I\-\_\-\-Image\-Get\-Global} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, int gix)
+\item 
+\hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_a30b0e566b81c5529a2bcb8e214f72495}{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, int gix)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_a8b950d46b80708cec1e552e45873e0c9}{B\-S2\-I\-\_\-\-Image\-Lookup\-Func} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, char $\ast$qname)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_a788b944bc4ca70cb74433b9e14587841}{B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, char $\ast$qname)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_af95bccdf30e796df8903a1fa356989f0}{B\-S2\-I\-\_\-\-Image\-Get\-Main} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, char $\ast$qnpkg)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__Trace__s}{B\-S\-V\-M2\-\_\-\-Trace} $\ast$ \hyperlink{bs2i__load_8c_a12d7cc591cedce7d465587b71bd25086}{B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace} (\hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$vi)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__Trace__s}{B\-S\-V\-M2\-\_\-\-Trace} $\ast$ \hyperlink{bs2i__load_8c_ad92be7fd1d3e7a6f898727c75bd797ae}{B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace} (\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$img, char $\ast$qnpkg)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$ \hyperlink{bs2i__load_8c_a252805658ad1e5c1b05fb05baed5ae35}{B\-S2\-I\-\_\-\-Decode\-Image\-Buffer} (byte $\ast$ibuf, int isz)
+\item 
+B\-S2\-V\-M\-\_\-\-A\-P\-I \hyperlink{structBSVM2__ImageGlobal__s}{B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$ \hyperlink{bs2i__load_8c_a7eba1b6e863e8cb5d1a01d20762277ec}{B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var} (char $\ast$qname)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{bs2i__load_8c_a67ee1857213df15e543bee4be6ad094f}{int {\bfseries bs2i\-\_\-img\-\_\-seqid} =1}\label{bs2i__load_8c_a67ee1857213df15e543bee4be6ad094f}
+
+\item 
+\hypertarget{bs2i__load_8c_a8524b8d6b1b5fb7cfe15fdf498080807}{\hyperlink{structBSVM2__CodeImage__s}{B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$ {\bfseries bs2i\-\_\-liveimg} =N\-U\-L\-L}\label{bs2i__load_8c_a8524b8d6b1b5fb7cfe15fdf498080807}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+B\-S2 Image Loader 
+
+\subsection{Function Documentation}
+\hypertarget{bs2i__load_8c_a29311676f6311cfd9464dee36c067f25}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Alloc\-Image@{B\-S2\-I\-\_\-\-Alloc\-Image}}
+\index{B\-S2\-I\-\_\-\-Alloc\-Image@{B\-S2\-I\-\_\-\-Alloc\-Image}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Alloc\-Image}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S\-V\-M2\-\_\-\-Code\-Image}$\ast$ B\-S2\-I\-\_\-\-Alloc\-Image (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a29311676f6311cfd9464dee36c067f25}
+Allocate image \hypertarget{bs2i__load_8c_a81e1c42719ab61f7eaee2bb8ea42864c}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block@{B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block}}
+\index{B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block@{B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S\-V\-M2\-\_\-\-Code\-Block}$\ast$ B\-S2\-I\-\_\-\-Alloc\-Image\-Code\-Block (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a81e1c42719ab61f7eaee2bb8ea42864c}
+Allocate code block \hypertarget{bs2i__load_8c_a55834bfaea54ea64ac21e4163dfc91a5}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Alloc\-Image\-Global@{B\-S2\-I\-\_\-\-Alloc\-Image\-Global}}
+\index{B\-S2\-I\-\_\-\-Alloc\-Image\-Global@{B\-S2\-I\-\_\-\-Alloc\-Image\-Global}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Alloc\-Image\-Global}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Alloc\-Image\-Global (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a55834bfaea54ea64ac21e4163dfc91a5}
+Allocate global \hypertarget{bs2i__load_8c_a252805658ad1e5c1b05fb05baed5ae35}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Decode\-Image\-Buffer@{B\-S2\-I\-\_\-\-Decode\-Image\-Buffer}}
+\index{B\-S2\-I\-\_\-\-Decode\-Image\-Buffer@{B\-S2\-I\-\_\-\-Decode\-Image\-Buffer}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Decode\-Image\-Buffer}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Code\-Image}$\ast$ B\-S2\-I\-\_\-\-Decode\-Image\-Buffer (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{ibuf, }
+\item[{int}]{isz}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a252805658ad1e5c1b05fb05baed5ae35}
+Load a bytecode image into the V\-M. \hypertarget{bs2i__load_8c_a7eba1b6e863e8cb5d1a01d20762277ec}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var@{B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var}}
+\index{B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var@{B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Global\-Lookup\-Global\-Var (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{qname}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a7eba1b6e863e8cb5d1a01d20762277ec}
+Lookup a global variable. \hypertarget{bs2i__load_8c_a3205556179268f1094f53e5667da8e9a}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name@{B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name}}
+\index{B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name@{B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name}]{\setlength{\rightskip}{0pt plus 5cm}s64 B\-S2\-I\-\_\-\-Image\-\_\-\-Q\-Hash\-Name (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a3205556179268f1094f53e5667da8e9a}
+Calculate the hash-\/value for a name. \hypertarget{bs2i__load_8c_a96ca2fc69edc42cc8b74a7d0500c10a9}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Decode\-Global@{B\-S2\-I\-\_\-\-Image\-Decode\-Global}}
+\index{B\-S2\-I\-\_\-\-Image\-Decode\-Global@{B\-S2\-I\-\_\-\-Image\-Decode\-Global}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Decode\-Global}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Decode\-Global (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$}]{gbl, }
+\item[{byte $\ast$}]{gdat}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a96ca2fc69edc42cc8b74a7d0500c10a9}
+Decode the information about a given global. \hypertarget{bs2i__load_8c_ab4b59310f5ca92c26ee67de7aac0f3d6}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func@{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func}}
+\index{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func@{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Func (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$}]{gbl, }
+\item[{u32}]{dtag, }
+\item[{byte $\ast$}]{data, }
+\item[{byte $\ast$}]{edata}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ab4b59310f5ca92c26ee67de7aac0f3d6}
+Decode the information about a given global (Function or Method). \hypertarget{bs2i__load_8c_ab6e7cb4450f05268811095eb1201ac03}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var@{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var}}
+\index{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var@{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Decode\-Global\-Var (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$}]{gbl, }
+\item[{u32}]{dtag, }
+\item[{byte $\ast$}]{data, }
+\item[{byte $\ast$}]{edata}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ab6e7cb4450f05268811095eb1201ac03}
+Decode the information about a given global (variable or object). \hypertarget{bs2i__load_8c_a12d7cc591cedce7d465587b71bd25086}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace@{B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace@{B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Trace}$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Func\-Trace (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$}]{vi}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a12d7cc591cedce7d465587b71bd25086}
+Get the entry-\/point trace for a given function. \hypertarget{bs2i__load_8c_ae98a41ed9b95ae8f987441f344245a1d}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Global@{B\-S2\-I\-\_\-\-Image\-Get\-Global}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Global@{B\-S2\-I\-\_\-\-Image\-Get\-Global}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Global}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Global (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{int}]{gix}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ae98a41ed9b95ae8f987441f344245a1d}
+Get the global associated with a given index from an image. \hypertarget{bs2i__load_8c_a30b0e566b81c5529a2bcb8e214f72495}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Global\-Initial (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{int}]{gix}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a30b0e566b81c5529a2bcb8e214f72495}
+Preload a global for a given index when loading an image. \hypertarget{bs2i__load_8c_a149a9e1f82d55d86db861ed1cc0fb76b}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Global\-Lump (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{int}]{gix}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a149a9e1f82d55d86db861ed1cc0fb76b}
+Get a pointer to the lump for a given global index. \hypertarget{bs2i__load_8c_a8dde8876d1bdebbdafa2146c1d1d41bc}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs@{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Get\-Global\-Ofs (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{int}]{gix}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a8dde8876d1bdebbdafa2146c1d1d41bc}
+Get an offset to the lump for a given global index. \hypertarget{bs2i__load_8c_af95bccdf30e796df8903a1fa356989f0}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Main@{B\-S2\-I\-\_\-\-Image\-Get\-Main}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Main@{B\-S2\-I\-\_\-\-Image\-Get\-Main}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Main}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Main (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{char $\ast$}]{qnpkg}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_af95bccdf30e796df8903a1fa356989f0}
+Get the main function for an image. \hypertarget{bs2i__load_8c_ad92be7fd1d3e7a6f898727c75bd797ae}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace@{B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace}}
+\index{B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace@{B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Trace}$\ast$ B\-S2\-I\-\_\-\-Image\-Get\-Main\-Trace (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{char $\ast$}]{qnpkg}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ad92be7fd1d3e7a6f898727c75bd797ae}
+Get the trace associated with the entry point for an image. \hypertarget{bs2i__load_8c_a8b950d46b80708cec1e552e45873e0c9}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Lookup\-Func@{B\-S2\-I\-\_\-\-Image\-Lookup\-Func}}
+\index{B\-S2\-I\-\_\-\-Image\-Lookup\-Func@{B\-S2\-I\-\_\-\-Image\-Lookup\-Func}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Lookup\-Func}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Image\-Lookup\-Func (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{char $\ast$}]{qname}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a8b950d46b80708cec1e552e45873e0c9}
+Lookup a function within an image. \hypertarget{bs2i__load_8c_a788b944bc4ca70cb74433b9e14587841}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var@{B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var}}
+\index{B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var@{B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var}]{\setlength{\rightskip}{0pt plus 5cm}B\-S2\-V\-M\-\_\-\-A\-P\-I {\bf B\-S\-V\-M2\-\_\-\-Image\-Global}$\ast$ B\-S2\-I\-\_\-\-Image\-Lookup\-Global\-Var (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{char $\ast$}]{qname}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a788b944bc4ca70cb74433b9e14587841}
+Lookup a global variable within an image. \hypertarget{bs2i__load_8c_a7796bc5eeb5eb51214b31fb0dee0ed08}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P}}
+\index{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand2\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{byte}]{tagh}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a7796bc5eeb5eb51214b31fb0dee0ed08}
+Check if the initial tag character is 'must understand' (O\-N\-E\-C\-C) \hypertarget{bs2i__load_8c_a8e68bc4ae92769605ea540c79e64df3f}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P}}
+\index{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Tag\-Char\-Must\-Understand\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{byte}]{tagh}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a8e68bc4ae92769605ea540c79e64df3f}
+Check if the initial tag character is 'must understand' \hypertarget{bs2i__load_8c_aeeb71b03e7b7607e9c0a2b519abc6aca}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P}}
+\index{B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P@{B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-I\-\_\-\-Image\-Tag\-Must\-Understand\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{u64}]{tag}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_aeeb71b03e7b7607e9c0a2b519abc6aca}
+Check if a lump tag represents a \char`\"{}\-Must Understand\char`\"{} value. \hypertarget{bs2i__load_8c_a78637b77eaf7325efc7496da89003d88}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name@{B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name}}
+\index{B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name@{B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-I\-\_\-\-Image\-Try\-Get\-Global\-Q\-Name (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Code\-Image} $\ast$}]{img, }
+\item[{{\bf B\-S\-V\-M2\-\_\-\-Image\-Global} $\ast$}]{gbl}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a78637b77eaf7325efc7496da89003d88}
+Try to get the Q\-Name for a given global. \hypertarget{bs2i__load_8c_a3a5f354edf66e86d5a725dae88273019}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-Opcode\-Number@{B\-S2\-I\-\_\-\-Read\-Opcode\-Number}}
+\index{B\-S2\-I\-\_\-\-Read\-Opcode\-Number@{B\-S2\-I\-\_\-\-Read\-Opcode\-Number}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-Opcode\-Number}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-Opcode\-Number (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{int $\ast$}]{rv}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a3a5f354edf66e86d5a725dae88273019}
+Decode opcode V\-L\-I from buffer \hypertarget{bs2i__load_8c_aefd6178a1a205bb543f0e0162ce966e5}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I@{B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I}}
+\index{B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I@{B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-S\-V\-L\-I (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{s64 $\ast$}]{rv}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_aefd6178a1a205bb543f0e0162ce966e5}
+Read S\-V\-L\-I from buffer \hypertarget{bs2i__load_8c_a4188762e5cc99914a2175284dba8b0fe}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-Tag@{B\-S2\-I\-\_\-\-Read\-Tag}}
+\index{B\-S2\-I\-\_\-\-Read\-Tag@{B\-S2\-I\-\_\-\-Read\-Tag}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-Tag}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-Tag (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{u64 $\ast$}]{rtag, }
+\item[{s64 $\ast$}]{rlen}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a4188762e5cc99914a2175284dba8b0fe}
+Read T\-L\-V Tag from buffer \hypertarget{bs2i__load_8c_a1059678f4d9b41f3b854d2563376e800}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-Tag2@{B\-S2\-I\-\_\-\-Read\-Tag2}}
+\index{B\-S2\-I\-\_\-\-Read\-Tag2@{B\-S2\-I\-\_\-\-Read\-Tag2}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-Tag2}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-Tag2 (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{u32 $\ast$}]{rtag, }
+\item[{int $\ast$}]{rlen}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_a1059678f4d9b41f3b854d2563376e800}
+Read T\-L\-V Tag from buffer, limited to 4\-G\-B F\-O\-U\-R\-C\-C \hypertarget{bs2i__load_8c_ae4b14072d80b9ef231eb07a2720020f5}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I@{B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I}}
+\index{B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I@{B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-U\-V\-L\-I (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{s64 $\ast$}]{rv}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ae4b14072d80b9ef231eb07a2720020f5}
+Read U\-V\-L\-I from buffer \hypertarget{bs2i__load_8c_ae91805a13f4d8c47c6116ca50e004efc}{\index{bs2i\-\_\-load.\-c@{bs2i\-\_\-load.\-c}!B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I@{B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I}}
+\index{B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I@{B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I}!bs2i_load.c@{bs2i\-\_\-load.\-c}}
+\subsubsection[{B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I}]{\setlength{\rightskip}{0pt plus 5cm}byte$\ast$ B\-S2\-I\-\_\-\-Read\-V\-L\-I\-\_\-\-I (
+\begin{DoxyParamCaption}
+\item[{byte $\ast$}]{cs, }
+\item[{u64 $\ast$}]{rv, }
+\item[{int $\ast$}]{rl}
+\end{DoxyParamCaption}
+)}}\label{bs2i__load_8c_ae91805a13f4d8c47c6116ca50e004efc}
+Read V\-L\-I from buffer 

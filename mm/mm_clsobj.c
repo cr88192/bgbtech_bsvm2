@@ -128,7 +128,56 @@ dtVal BGBDTC_SlotI_GetA_DflA(dtcObject obj, dtcField fi)
 	{ return(*(dtVal *)(((byte *)obj)+fi->offs)); }
 dtVal BGBDTC_SlotI_GetA_DflP(dtcObject obj, dtcField fi)
 	{ return(dtvWrapPtr(*(void **)(((byte *)obj)+fi->offs))); }
-	
+
+u16 bgbdtc_bswap_us(u16 v)
+{
+	return(((v>>8)&0x00FF)|((v<<8)&0xFF00));
+}
+
+u32 bgbdtc_bswap_ui(u32 v)
+{
+	return(((v>>24)&0x000000FF)|
+			((v>> 8)&0x0000FF00)|
+			((v<< 8)&0x00FF0000)|
+			((v<<24)&0xFF000000));
+}
+
+u64 bgbdtc_bswap_ul(u64 v)
+{
+	return( ((u64)bgbdtc_bswap_ui(v>>32))|
+			(((u64)bgbdtc_bswap_ui(v))<<32));
+}
+
+s16 bgbdtc_bswap_ss(s16 v)
+	{ return((s16)(bgbdtc_bswap_us((u16)v))); }
+s32 bgbdtc_bswap_si(s32 v)
+	{ return((s32)(bgbdtc_bswap_ui((u32)v))); }
+s64 bgbdtc_bswap_sl(s64 v)
+	{ return((s64)(bgbdtc_bswap_ul((u64)v))); }
+
+s32 BGBDTC_SlotI_GetI_DflSwSS(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_ss(*(s16 *)(((byte *)obj)+fi->offs))); }
+s32 BGBDTC_SlotI_GetI_DflSwUS(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_us(*(u16 *)(((byte *)obj)+fi->offs))); }
+s32 BGBDTC_SlotI_GetI_DflSwI(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_si(*(s32 *)(((byte *)obj)+fi->offs))); }
+
+s64 BGBDTC_SlotI_GetL_DflSwSI(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_si(*(s32 *)(((byte *)obj)+fi->offs))); }
+s64 BGBDTC_SlotI_GetL_DflSwUI(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_ui(*(u32 *)(((byte *)obj)+fi->offs))); }
+s64 BGBDTC_SlotI_GetL_DflSwL(dtcObject obj, dtcField fi)
+	{ return(bgbdtc_bswap_sl(*(s64 *)(((byte *)obj)+fi->offs))); }
+
+
+void BGBDTC_SlotI_SetI_DflSwS(dtcObject obj, dtcField fi, s32 v)
+	{ *(s16 *)(((byte *)obj)+fi->offs)=bgbdtc_bswap_ss(v); }
+void BGBDTC_SlotI_SetI_DflSwI(dtcObject obj, dtcField fi, s32 v)
+	{ *(s32 *)(((byte *)obj)+fi->offs)=bgbdtc_bswap_si(v); }
+void BGBDTC_SlotI_SetL_DflSwL(dtcObject obj, dtcField fi, s64 v)
+	{ *(s64 *)(((byte *)obj)+fi->offs)=bgbdtc_bswap_sl(v); }
+
+
 dtVal BGBDTC_SlotI_GetA_DeI(dtcObject obj, dtcField fi)
 	{ return(dtvWrapInt(fi->GetI(obj, fi))); }
 dtVal BGBDTC_SlotI_GetA_DeUI(dtcObject obj, dtcField fi)
@@ -299,6 +348,12 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeI;
 		vi->SetD=BGBDTC_SlotI_SetD_DeI;
 		vi->SetA=BGBDTC_SlotI_SetA_DeI;
+
+		if(vi->slotfl&BGBDTC_SFL_ENBSW)
+		{
+			vi->GetI=BGBDTC_SlotI_GetI_DflSwSS;
+			vi->SetI=BGBDTC_SlotI_SetI_DflSwS;
+		}
 		break;
 	case 't':	case 'w':
 		vi->GetI=BGBDTC_SlotI_GetI_DflUS;
@@ -311,6 +366,12 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeI;
 		vi->SetD=BGBDTC_SlotI_SetD_DeI;
 		vi->SetA=BGBDTC_SlotI_SetA_DeI;
+
+		if(vi->slotfl&BGBDTC_SFL_ENBSW)
+		{
+			vi->GetI=BGBDTC_SlotI_GetI_DflSwUS;
+			vi->SetI=BGBDTC_SlotI_SetI_DflSwS;
+		}
 		break;
 	case 'i':
 		vi->GetI=BGBDTC_SlotI_GetI_DflI;
@@ -323,6 +384,13 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeI;
 		vi->SetD=BGBDTC_SlotI_SetD_DeI;
 		vi->SetA=BGBDTC_SlotI_SetA_DeI;
+
+		if(vi->slotfl&BGBDTC_SFL_ENBSW)
+		{
+			vi->GetI=BGBDTC_SlotI_GetI_DflSwI;
+			vi->GetL=BGBDTC_SlotI_GetL_DflSwSI;
+			vi->SetI=BGBDTC_SlotI_SetI_DflSwI;
+		}
 		break;
 	case 'j':
 		vi->GetI=BGBDTC_SlotI_GetI_DflI;
@@ -335,6 +403,13 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeI;
 		vi->SetD=BGBDTC_SlotI_SetD_DeI;
 		vi->SetA=BGBDTC_SlotI_SetA_DeI;
+
+		if(vi->slotfl&BGBDTC_SFL_ENBSW)
+		{
+			vi->GetI=BGBDTC_SlotI_GetI_DflSwI;
+			vi->GetL=BGBDTC_SlotI_GetL_DflSwUI;
+			vi->SetI=BGBDTC_SlotI_SetI_DflSwI;
+		}
 		break;
 
 	case 'l':
@@ -389,6 +464,12 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeL;
 		vi->SetD=BGBDTC_SlotI_SetD_DeL;
 		vi->SetA=BGBDTC_SlotI_SetA_DeL;
+
+		if(vi->slotfl&BGBDTC_SFL_ENBSW)
+		{
+			vi->GetL=BGBDTC_SlotI_GetL_DflSwL;
+			vi->SetL=BGBDTC_SlotI_SetL_DflSwL;
+		}
 		break;
 
 	case 'f':

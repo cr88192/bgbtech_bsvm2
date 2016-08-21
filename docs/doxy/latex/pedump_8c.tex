@@ -1,0 +1,89 @@
+\hypertarget{pedump_8c}{\section{bgbasm3/test/pedump.c File Reference}
+\label{pedump_8c}\index{bgbasm3/test/pedump.\-c@{bgbasm3/test/pedump.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef unsigned char \hyperlink{pedump_8c_a0c8186d9b9b7880309c27230bbb5e69d}{byte}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{pedump_8c_a1c0b7b5b00840b0e881047e142d9fce4}{add\-\_\-sym} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name}, void $\ast$addr)
+\item 
+void $\ast$ \hyperlink{pedump_8c_a895987343c9ed6ae8b04ed95173384ef}{fetch\-\_\-sym} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\item 
+void \hyperlink{pedump_8c_a22ab705be916dc41a05816981534109e}{dump\-\_\-relocs} (\hyperlink{bgbasm__conf_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte} $\ast$buf, int offs, int cnt)
+\item 
+int \hyperlink{pedump_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$$\ast$ \hyperlink{pedump_8c_afdc989f411587bf116035c731f78a39a}{basm\-\_\-sym\-\_\-name}
+\item 
+void $\ast$$\ast$ \hyperlink{pedump_8c_a2631c67387fe12228829b0e0c7f9220b}{basm\-\_\-sym\-\_\-addr}
+\item 
+int \hyperlink{pedump_8c_a8c70e9430141d2217d2f54c10f9b27fb}{basm\-\_\-sym\-\_\-nsym}
+\item 
+int \hyperlink{pedump_8c_a0289bf104cd24741ee8575bed793f545}{basm\-\_\-sym\-\_\-msym}
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{pedump_8c_a0c8186d9b9b7880309c27230bbb5e69d}{\index{pedump.\-c@{pedump.\-c}!byte@{byte}}
+\index{byte@{byte}!pedump.c@{pedump.\-c}}
+\subsubsection[{byte}]{\setlength{\rightskip}{0pt plus 5cm}typedef unsigned char {\bf byte}}}\label{pedump_8c_a0c8186d9b9b7880309c27230bbb5e69d}
+
+
+\subsection{Function Documentation}
+\hypertarget{pedump_8c_a1c0b7b5b00840b0e881047e142d9fce4}{\index{pedump.\-c@{pedump.\-c}!add\-\_\-sym@{add\-\_\-sym}}
+\index{add\-\_\-sym@{add\-\_\-sym}!pedump.c@{pedump.\-c}}
+\subsubsection[{add\-\_\-sym}]{\setlength{\rightskip}{0pt plus 5cm}void add\-\_\-sym (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name, }
+\item[{void $\ast$}]{addr}
+\end{DoxyParamCaption}
+)}}\label{pedump_8c_a1c0b7b5b00840b0e881047e142d9fce4}
+\hypertarget{pedump_8c_a22ab705be916dc41a05816981534109e}{\index{pedump.\-c@{pedump.\-c}!dump\-\_\-relocs@{dump\-\_\-relocs}}
+\index{dump\-\_\-relocs@{dump\-\_\-relocs}!pedump.c@{pedump.\-c}}
+\subsubsection[{dump\-\_\-relocs}]{\setlength{\rightskip}{0pt plus 5cm}void dump\-\_\-relocs (
+\begin{DoxyParamCaption}
+\item[{{\bf byte} $\ast$}]{buf, }
+\item[{int}]{offs, }
+\item[{int}]{cnt}
+\end{DoxyParamCaption}
+)}}\label{pedump_8c_a22ab705be916dc41a05816981534109e}
+\hypertarget{pedump_8c_a895987343c9ed6ae8b04ed95173384ef}{\index{pedump.\-c@{pedump.\-c}!fetch\-\_\-sym@{fetch\-\_\-sym}}
+\index{fetch\-\_\-sym@{fetch\-\_\-sym}!pedump.c@{pedump.\-c}}
+\subsubsection[{fetch\-\_\-sym}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ fetch\-\_\-sym (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{pedump_8c_a895987343c9ed6ae8b04ed95173384ef}
+\hypertarget{pedump_8c_a0ddf1224851353fc92bfbff6f499fa97}{\index{pedump.\-c@{pedump.\-c}!main@{main}}
+\index{main@{main}!pedump.c@{pedump.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{pedump_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+\subsection{Variable Documentation}
+\hypertarget{pedump_8c_a2631c67387fe12228829b0e0c7f9220b}{\index{pedump.\-c@{pedump.\-c}!basm\-\_\-sym\-\_\-addr@{basm\-\_\-sym\-\_\-addr}}
+\index{basm\-\_\-sym\-\_\-addr@{basm\-\_\-sym\-\_\-addr}!pedump.c@{pedump.\-c}}
+\subsubsection[{basm\-\_\-sym\-\_\-addr}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$$\ast$ basm\-\_\-sym\-\_\-addr}}\label{pedump_8c_a2631c67387fe12228829b0e0c7f9220b}
+\hypertarget{pedump_8c_a0289bf104cd24741ee8575bed793f545}{\index{pedump.\-c@{pedump.\-c}!basm\-\_\-sym\-\_\-msym@{basm\-\_\-sym\-\_\-msym}}
+\index{basm\-\_\-sym\-\_\-msym@{basm\-\_\-sym\-\_\-msym}!pedump.c@{pedump.\-c}}
+\subsubsection[{basm\-\_\-sym\-\_\-msym}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-sym\-\_\-msym}}\label{pedump_8c_a0289bf104cd24741ee8575bed793f545}
+\hypertarget{pedump_8c_afdc989f411587bf116035c731f78a39a}{\index{pedump.\-c@{pedump.\-c}!basm\-\_\-sym\-\_\-name@{basm\-\_\-sym\-\_\-name}}
+\index{basm\-\_\-sym\-\_\-name@{basm\-\_\-sym\-\_\-name}!pedump.c@{pedump.\-c}}
+\subsubsection[{basm\-\_\-sym\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ basm\-\_\-sym\-\_\-name}}\label{pedump_8c_afdc989f411587bf116035c731f78a39a}
+\hypertarget{pedump_8c_a8c70e9430141d2217d2f54c10f9b27fb}{\index{pedump.\-c@{pedump.\-c}!basm\-\_\-sym\-\_\-nsym@{basm\-\_\-sym\-\_\-nsym}}
+\index{basm\-\_\-sym\-\_\-nsym@{basm\-\_\-sym\-\_\-nsym}!pedump.c@{pedump.\-c}}
+\subsubsection[{basm\-\_\-sym\-\_\-nsym}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-sym\-\_\-nsym}}\label{pedump_8c_a8c70e9430141d2217d2f54c10f9b27fb}

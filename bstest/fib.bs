@@ -240,6 +240,10 @@ package bstest {
 			
 			j=tst_switch(i);
 			printf("St i=%d, j=%d\n", i, j);
+			
+			i+=2;
+			j=i*j;
+			printf("St2 i=%d, j=%d\n", i, j);
 		}
 	}
 }

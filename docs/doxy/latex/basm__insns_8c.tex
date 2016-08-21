@@ -1,0 +1,90 @@
+\hypertarget{basm__insns_8c}{\section{bgbasm3/asm/basm\-\_\-insns.c File Reference}
+\label{basm__insns_8c}\index{bgbasm3/asm/basm\-\_\-insns.\-c@{bgbasm3/asm/basm\-\_\-insns.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{basm__insns_8c_ad6bd76d1e281d2771361102635dc6e29}{basm\-\_\-ops} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns_8c_a6b823fcc319867094ffbcd100144ed92}{basm\-\_\-opidx} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns_8c_aa00a2595061ef58f119488ee722f992a}{basm\-\_\-opnums} \mbox{[}$\,$\mbox{]}
+\item 
+char \hyperlink{basm__insns_8c_ae6248e5837ddf5da8b8dcbfb7e2eccbb}{basm\-\_\-opcat} \mbox{[}$\,$\mbox{]}
+\item 
+char $\ast$ \hyperlink{basm__insns_8c_a617927b5324bb2bd3abc39cb7b94fa74}{basm\-\_\-opdecl} \mbox{[}$\,$\mbox{]}
+\item 
+char $\ast$ \hyperlink{basm__insns_8c_a032adcf723e68a4f6fc1a69c3be5f685}{basm\-\_\-regs} \mbox{[}$\,$\mbox{]}
+\item 
+int \hyperlink{basm__insns_8c_a7059d27dc5bbc0fb4e028ffcd8d53d3f}{basm\-\_\-regidx} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\hypertarget{basm__insns_8c_ae6248e5837ddf5da8b8dcbfb7e2eccbb}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-opcat@{basm\-\_\-opcat}}
+\index{basm\-\_\-opcat@{basm\-\_\-opcat}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-opcat}]{\setlength{\rightskip}{0pt plus 5cm}char basm\-\_\-opcat\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_ae6248e5837ddf5da8b8dcbfb7e2eccbb}
+\hypertarget{basm__insns_8c_a617927b5324bb2bd3abc39cb7b94fa74}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-opdecl@{basm\-\_\-opdecl}}
+\index{basm\-\_\-opdecl@{basm\-\_\-opdecl}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-opdecl}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-opdecl\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_a617927b5324bb2bd3abc39cb7b94fa74}
+\hypertarget{basm__insns_8c_a6b823fcc319867094ffbcd100144ed92}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-opidx@{basm\-\_\-opidx}}
+\index{basm\-\_\-opidx@{basm\-\_\-opidx}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-opidx}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-opidx\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_a6b823fcc319867094ffbcd100144ed92}
+\hypertarget{basm__insns_8c_aa00a2595061ef58f119488ee722f992a}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-opnums@{basm\-\_\-opnums}}
+\index{basm\-\_\-opnums@{basm\-\_\-opnums}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-opnums}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-opnums\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_aa00a2595061ef58f119488ee722f992a}
+\hypertarget{basm__insns_8c_ad6bd76d1e281d2771361102635dc6e29}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-ops@{basm\-\_\-ops}}
+\index{basm\-\_\-ops@{basm\-\_\-ops}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-ops}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-ops\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_ad6bd76d1e281d2771361102635dc6e29}
+\hypertarget{basm__insns_8c_a7059d27dc5bbc0fb4e028ffcd8d53d3f}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-regidx@{basm\-\_\-regidx}}
+\index{basm\-\_\-regidx@{basm\-\_\-regidx}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-regidx}]{\setlength{\rightskip}{0pt plus 5cm}int basm\-\_\-regidx\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_a7059d27dc5bbc0fb4e028ffcd8d53d3f}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+0, 1, 2, 3, 4, 5, 6, 7, 260, 261, 262, 263, 0, 1, 2, 3, 260, 261, 
+262, 263, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
+23, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
+32, 33, 34, 35, 36, 37, 38, 39, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 48, 49, 
+50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 48, 49, 50, 
+51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 
+68, 69, 70, 71, 80, 81, 82, 83, 84, 85, 86, 87, 80, 81, 82, 83, 84, 
+85, 86, 87, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 
+108, 109, 110, 111, 128, 129, 130, 131, 132, 133, 134, 144, 145, 
+146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 
+159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 
+172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 
+185, 186, 187, 188, 189, 190, 191, -1\}
+\end{DoxyCode}
+\hypertarget{basm__insns_8c_a032adcf723e68a4f6fc1a69c3be5f685}{\index{basm\-\_\-insns.\-c@{basm\-\_\-insns.\-c}!basm\-\_\-regs@{basm\-\_\-regs}}
+\index{basm\-\_\-regs@{basm\-\_\-regs}!basm_insns.c@{basm\-\_\-insns.\-c}}
+\subsubsection[{basm\-\_\-regs}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ basm\-\_\-regs\mbox{[}$\,$\mbox{]}}}\label{basm__insns_8c_a032adcf723e68a4f6fc1a69c3be5f685}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=\{
+\textcolor{stringliteral}{"al"}, \textcolor{stringliteral}{"cl"}, \textcolor{stringliteral}{"dl"}, \textcolor{stringliteral}{"bl"}, \textcolor{stringliteral}{"ah"}, \textcolor{stringliteral}{"ch"}, \textcolor{stringliteral}{"dh"}, \textcolor{stringliteral}{"bh"}, \textcolor{stringliteral}{"spl"}, \textcolor{stringliteral}{"bpl"}, \textcolor{stringliteral}{"sil"}, 
+\textcolor{stringliteral}{"dil"}, \textcolor{stringliteral}{"r0b"}, \textcolor{stringliteral}{"r1b"}, \textcolor{stringliteral}{"r2b"}, \textcolor{stringliteral}{"r3b"}, \textcolor{stringliteral}{"r4b"}, \textcolor{stringliteral}{"r5b"}, \textcolor{stringliteral}{"r6b"}, \textcolor{stringliteral}{"r7b"}, \textcolor{stringliteral}{"r8b"}, 
+\textcolor{stringliteral}{"r9b"}, \textcolor{stringliteral}{"r10b"}, \textcolor{stringliteral}{"r11b"}, \textcolor{stringliteral}{"r12b"}, \textcolor{stringliteral}{"r13b"}, \textcolor{stringliteral}{"r14b"}, \textcolor{stringliteral}{"r15b"}, \textcolor{stringliteral}{"ax"}, \textcolor{stringliteral}{"cx"}, 
+\textcolor{stringliteral}{"dx"}, \textcolor{stringliteral}{"bx"}, \textcolor{stringliteral}{"sp"}, \textcolor{stringliteral}{"bp"}, \textcolor{stringliteral}{"si"}, \textcolor{stringliteral}{"di"}, \textcolor{stringliteral}{"r0w"}, \textcolor{stringliteral}{"r1w"}, \textcolor{stringliteral}{"r2w"}, \textcolor{stringliteral}{"r3w"}, \textcolor{stringliteral}{"r4w"}, 
+\textcolor{stringliteral}{"r5w"}, \textcolor{stringliteral}{"r6w"}, \textcolor{stringliteral}{"r7w"}, \textcolor{stringliteral}{"r8w"}, \textcolor{stringliteral}{"r9w"}, \textcolor{stringliteral}{"r10w"}, \textcolor{stringliteral}{"r11w"}, \textcolor{stringliteral}{"r12w"}, \textcolor{stringliteral}{"r13w"}, 
+\textcolor{stringliteral}{"r14w"}, \textcolor{stringliteral}{"r15w"}, \textcolor{stringliteral}{"eax"}, \textcolor{stringliteral}{"ecx"}, \textcolor{stringliteral}{"edx"}, \textcolor{stringliteral}{"ebx"}, \textcolor{stringliteral}{"esp"}, \textcolor{stringliteral}{"ebp"}, \textcolor{stringliteral}{"esi"}, 
+\textcolor{stringliteral}{"edi"}, \textcolor{stringliteral}{"r0d"}, \textcolor{stringliteral}{"r1d"}, \textcolor{stringliteral}{"r2d"}, \textcolor{stringliteral}{"r3d"}, \textcolor{stringliteral}{"r4d"}, \textcolor{stringliteral}{"r5d"}, \textcolor{stringliteral}{"r6d"}, \textcolor{stringliteral}{"r7d"}, \textcolor{stringliteral}{"r8d"}, 
+\textcolor{stringliteral}{"r9d"}, \textcolor{stringliteral}{"r10d"}, \textcolor{stringliteral}{"r11d"}, \textcolor{stringliteral}{"r12d"}, \textcolor{stringliteral}{"r13d"}, \textcolor{stringliteral}{"r14d"}, \textcolor{stringliteral}{"r15d"}, \textcolor{stringliteral}{"rax"}, \textcolor{stringliteral}{"rcx"}, 
+\textcolor{stringliteral}{"rdx"}, \textcolor{stringliteral}{"rbx"}, \textcolor{stringliteral}{"rsp"}, \textcolor{stringliteral}{"rbp"}, \textcolor{stringliteral}{"rsi"}, \textcolor{stringliteral}{"rdi"}, \textcolor{stringliteral}{"r0"}, \textcolor{stringliteral}{"r1"}, \textcolor{stringliteral}{"r2"}, \textcolor{stringliteral}{"r3"}, 
+\textcolor{stringliteral}{"r4"}, \textcolor{stringliteral}{"r5"}, \textcolor{stringliteral}{"r6"}, \textcolor{stringliteral}{"r7"}, \textcolor{stringliteral}{"r8"}, \textcolor{stringliteral}{"r9"}, \textcolor{stringliteral}{"r10"}, \textcolor{stringliteral}{"r11"}, \textcolor{stringliteral}{"r12"}, \textcolor{stringliteral}{"r13"}, \textcolor{stringliteral}{"r14"}, 
+\textcolor{stringliteral}{"r15"}, \textcolor{stringliteral}{"r0q"}, \textcolor{stringliteral}{"r1q"}, \textcolor{stringliteral}{"r2q"}, \textcolor{stringliteral}{"r3q"}, \textcolor{stringliteral}{"r4q"}, \textcolor{stringliteral}{"r5q"}, \textcolor{stringliteral}{"r6q"}, \textcolor{stringliteral}{"r7q"}, \textcolor{stringliteral}{"r8q"}, 
+\textcolor{stringliteral}{"r9q"}, \textcolor{stringliteral}{"r10q"}, \textcolor{stringliteral}{"r11q"}, \textcolor{stringliteral}{"r12q"}, \textcolor{stringliteral}{"r13q"}, \textcolor{stringliteral}{"r14q"}, \textcolor{stringliteral}{"r15q"}, \textcolor{stringliteral}{"op0"}, \textcolor{stringliteral}{"op1"}, 
+\textcolor{stringliteral}{"op2"}, \textcolor{stringliteral}{"op3"}, \textcolor{stringliteral}{"op4"}, \textcolor{stringliteral}{"op5"}, \textcolor{stringliteral}{"op6"}, \textcolor{stringliteral}{"op7"}, \textcolor{stringliteral}{"mm0"}, \textcolor{stringliteral}{"mm1"}, \textcolor{stringliteral}{"mm2"}, \textcolor{stringliteral}{"mm3"}, 
+\textcolor{stringliteral}{"mm4"}, \textcolor{stringliteral}{"mm5"}, \textcolor{stringliteral}{"mm6"}, \textcolor{stringliteral}{"mm7"}, \textcolor{stringliteral}{"st0"}, \textcolor{stringliteral}{"st1"}, \textcolor{stringliteral}{"st2"}, \textcolor{stringliteral}{"st3"}, \textcolor{stringliteral}{"st4"}, \textcolor{stringliteral}{"st5"}, 
+\textcolor{stringliteral}{"st6"}, \textcolor{stringliteral}{"st7"}, \textcolor{stringliteral}{"xmm0"}, \textcolor{stringliteral}{"xmm1"}, \textcolor{stringliteral}{"xmm2"}, \textcolor{stringliteral}{"xmm3"}, \textcolor{stringliteral}{"xmm4"}, \textcolor{stringliteral}{"xmm5"}, \textcolor{stringliteral}{"xmm6"}, 
+\textcolor{stringliteral}{"xmm7"}, \textcolor{stringliteral}{"xmm8"}, \textcolor{stringliteral}{"xmm9"}, \textcolor{stringliteral}{"xmm10"}, \textcolor{stringliteral}{"xmm11"}, \textcolor{stringliteral}{"xmm12"}, \textcolor{stringliteral}{"xmm13"}, \textcolor{stringliteral}{"xmm14"}, 
+\textcolor{stringliteral}{"xmm15"}, \textcolor{stringliteral}{"cs"}, \textcolor{stringliteral}{"ss"}, \textcolor{stringliteral}{"ds"}, \textcolor{stringliteral}{"es"}, \textcolor{stringliteral}{"fs"}, \textcolor{stringliteral}{"gs"}, \textcolor{stringliteral}{"rip"}, \textcolor{stringliteral}{"cr0"}, \textcolor{stringliteral}{"cr1"}, 
+\textcolor{stringliteral}{"cr2"}, \textcolor{stringliteral}{"cr3"}, \textcolor{stringliteral}{"cr4"}, \textcolor{stringliteral}{"cr5"}, \textcolor{stringliteral}{"cr6"}, \textcolor{stringliteral}{"cr7"}, \textcolor{stringliteral}{"cr8"}, \textcolor{stringliteral}{"cr9"}, \textcolor{stringliteral}{"cr10"}, \textcolor{stringliteral}{"cr11"}, 
+\textcolor{stringliteral}{"cr12"}, \textcolor{stringliteral}{"cr13"}, \textcolor{stringliteral}{"cr14"}, \textcolor{stringliteral}{"cr15"}, \textcolor{stringliteral}{"dr0"}, \textcolor{stringliteral}{"dr1"}, \textcolor{stringliteral}{"dr2"}, \textcolor{stringliteral}{"dr3"}, \textcolor{stringliteral}{"dr4"}, 
+\textcolor{stringliteral}{"dr5"}, \textcolor{stringliteral}{"dr6"}, \textcolor{stringliteral}{"dr7"}, \textcolor{stringliteral}{"dr8"}, \textcolor{stringliteral}{"dr9"}, \textcolor{stringliteral}{"dr10"}, \textcolor{stringliteral}{"dr11"}, \textcolor{stringliteral}{"dr12"}, \textcolor{stringliteral}{"dr13"}, 
+\textcolor{stringliteral}{"dr14"}, \textcolor{stringliteral}{"dr15"}, \textcolor{stringliteral}{"tr0"}, \textcolor{stringliteral}{"tr1"}, \textcolor{stringliteral}{"tr2"}, \textcolor{stringliteral}{"tr3"}, \textcolor{stringliteral}{"tr4"}, \textcolor{stringliteral}{"tr5"}, \textcolor{stringliteral}{"tr6"}, 
+\textcolor{stringliteral}{"tr7"}, \textcolor{stringliteral}{"tr8"}, \textcolor{stringliteral}{"tr9"}, \textcolor{stringliteral}{"tr10"}, \textcolor{stringliteral}{"tr11"}, \textcolor{stringliteral}{"tr12"}, \textcolor{stringliteral}{"tr13"}, \textcolor{stringliteral}{"tr14"}, \textcolor{stringliteral}{"tr15"}, 
+NULL\}
+\end{DoxyCode}

@@ -36,11 +36,10 @@ dtVal BS2P_ParseModifierList(BS2CC_CompileContext *ctx)
 		{"volatile",		BS2CC_TYFL_VOLATILE},
 		{"transient",		BS2CC_TYFL_TRANSIENT},
 		{"native",			BS2CC_TYFL_NATIVE},
-//		{"interface",		BS2CC_TYFL_INTERFACE},
 		{"abstract",		BS2CC_TYFL_ABSTRACT},
 		{"strict",			BS2CC_TYFL_STRICT},
 
-		{"byref",			BS2CC_TYFL_BYREF},
+//		{"byref",			BS2CC_TYFL_BYREF},
 		{"delegate",		BS2CC_TYFL_DELEGATE},
 		{"extern",			BS2CC_TYFL_EXTERN},
 		{"const",			BS2CC_TYFL_CONST},

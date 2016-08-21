@@ -411,6 +411,42 @@ void BSVM2_Op_DFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		dtmFree(p);
 }
 
+void BSVM2_Op_IFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	void *p;
+
+	if(!frm->ctx->dynenv)
+	{
+		frm->ctx->dynenv=dtmAlloc("bs2i_dynenv_t",
+			bs2i_img_dynvlim*sizeof(BSVM2_Value));
+		frm->ctx->szdynenv=bs2i_img_dynvlim;
+	}
+
+	vi=op->v.p;
+	if((vi->nargs<=0) || (vi->nargs>=bs2i_img_dynvlim))
+		return;
+	if((vi->nargs>=frm->ctx->szdynenv))
+	{
+		frm->ctx->dynenv=dtmRealloc(frm->ctx->dynenv,
+			bs2i_img_dynvlim*sizeof(BSVM2_Value));
+		frm->ctx->szdynenv=bs2i_img_dynvlim;
+	}
+	
+	vi=op->v.p;
+	frm->local[op->i0]=frm->ctx->dynenv[vi->nargs];
+}
+
+void BSVM2_Op_DFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	dtVal a;
+	void *p;
+
+	vi=op->v.p;
+	frm->ctx->dynenv[vi->nargs]=frm->local[op->i0];
+}
+
 void BSVM2_Op_LDTHISI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].i=dtcVaGetI(frm->self, vi->objinf);		}

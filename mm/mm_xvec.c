@@ -1,4 +1,4 @@
-/*
+/**
  * Stuff for floating-point vector types.
  */
 

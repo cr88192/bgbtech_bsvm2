@@ -1,4 +1,7 @@
-// #include <bteifgl.h>
+/** \file
+ * BS2 Interpreter
+ *
+ */
 
 BSVM2_Context *bsvm2_interp_freectx;
 
@@ -33,6 +36,7 @@ BS2VM_API void bsvm2_natsorttst(int n)
 	bgbdt_mm_free(arr);
 }
 
+/** Allocate VM Context. */
 BS2VM_API BSVM2_Context *BSVM2_Interp_AllocContext(void)
 {
 	BSVM2_Context *tmp;
@@ -49,6 +53,7 @@ BS2VM_API BSVM2_Context *BSVM2_Interp_AllocContext(void)
 	return(tmp);
 }
 
+/** Allocate VM context from a pool. */
 BS2VM_API BSVM2_Context *BSVM2_Interp_AllocPoolContext(void)
 {
 	BSVM2_Context *tmp;
@@ -64,6 +69,7 @@ BS2VM_API BSVM2_Context *BSVM2_Interp_AllocPoolContext(void)
 	return(tmp);
 }
 
+/** Free VM Context to the pool. */
 BS2VM_API void BSVM2_Interp_FreePoolContext(BSVM2_Context *ctx)
 {
 //	if(ctx->tstackref!=0)
@@ -74,6 +80,7 @@ BS2VM_API void BSVM2_Interp_FreePoolContext(BSVM2_Context *ctx)
 	bsvm2_interp_freepoolctx=ctx;
 }
 
+/** Allocate a call frame */
 BS2VM_API BSVM2_Frame *BSVM2_Interp_AllocFrame(BSVM2_Context *ctx)
 {
 	BSVM2_Frame *tmp;
@@ -92,6 +99,7 @@ BS2VM_API BSVM2_Frame *BSVM2_Interp_AllocFrame(BSVM2_Context *ctx)
 	return(tmp);
 }
 
+/** Setup VM context for calling a function. */
 BS2VM_API BSVM2_Trace *BSVM2_Interp_SetupCallVM(
 	BSVM2_Context *ctx, BSVM2_ImageGlobal *vi,
 	BSVM2_Value *args)
@@ -141,6 +149,7 @@ BS2VM_API BSVM2_Trace *BSVM2_Interp_SetupCallVM(
 	return(tr);
 }
 
+/** Setup VM context for calling a method. */
 BS2VM_API BSVM2_Trace *BSVM2_Interp_SetupMethodCallVM(
 	BSVM2_Context *ctx, BSVM2_ImageGlobal *vi,
 	dtVal self, BSVM2_Value *args)
@@ -191,6 +200,7 @@ BS2VM_API BSVM2_Trace *BSVM2_Interp_SetupMethodCallVM(
 	return(tr);
 }
 
+/** Setup VM context for calling a method, caching the method handle. */
 BS2VM_API int BSVM2_Interp_SetupCacheMethodCallVM(
 	BSVM2_Context *ctx, dtVal self,
 	dtcMethod *rfi, BSVM2_Value *args,
@@ -223,6 +233,7 @@ BS2VM_API int BSVM2_Interp_SetupCacheMethodCallVM(
 	return(0);
 }
 
+/** Call a method while caching method handle for later use. */
 BS2VM_API int BSVM2_Interp_CallCacheMethodVM(dtVal self,
 	dtcMethod *rfi, BSVM2_Value *args,
 	char *qn, char *fn, char *sig, int lim)
@@ -245,11 +256,13 @@ BS2VM_API int BSVM2_Interp_CallCacheMethodVM(dtVal self,
 	return(i);
 }
 
+/** Get the value field for a global. */
 BS2VM_API BSVM2_Value *BSVM2_Interp_GetGlobalValue(BSVM2_ImageGlobal *vi)
 {
 	return(vi->gvalue);
 }
 
+/** Get the value of an int global. */
 BS2VM_API s32 BSVM2_Interp_GetGlobalI(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -258,6 +271,7 @@ BS2VM_API s32 BSVM2_Interp_GetGlobalI(BSVM2_ImageGlobal *vi)
 	return(gv->i);
 }
 
+/** Get the value of an long global. */
 BS2VM_API s64 BSVM2_Interp_GetGlobalL(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -266,6 +280,7 @@ BS2VM_API s64 BSVM2_Interp_GetGlobalL(BSVM2_ImageGlobal *vi)
 	return(gv->l);
 }
 
+/** Get the value of an float global. */
 BS2VM_API f32 BSVM2_Interp_GetGlobalF(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -274,6 +289,7 @@ BS2VM_API f32 BSVM2_Interp_GetGlobalF(BSVM2_ImageGlobal *vi)
 	return(gv->f);
 }
 
+/** Get the value of an double global. */
 BS2VM_API f64 BSVM2_Interp_GetGlobalD(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -282,6 +298,7 @@ BS2VM_API f64 BSVM2_Interp_GetGlobalD(BSVM2_ImageGlobal *vi)
 	return(gv->d);
 }
 
+/** Get the value of an address global. */
 BS2VM_API dtVal BSVM2_Interp_GetGlobalA(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -290,6 +307,7 @@ BS2VM_API dtVal BSVM2_Interp_GetGlobalA(BSVM2_ImageGlobal *vi)
 	return(gv->a);
 }
 
+/** Set the value of an int global. */
 BS2VM_API int BSVM2_Interp_SetGlobalI(BSVM2_ImageGlobal *vi, s32 v)
 {
 	BSVM2_Value *gv;
@@ -299,6 +317,7 @@ BS2VM_API int BSVM2_Interp_SetGlobalI(BSVM2_ImageGlobal *vi, s32 v)
 	return(0);
 }
 
+/** Set the value of an long global. */
 BS2VM_API int BSVM2_Interp_SetGlobalL(BSVM2_ImageGlobal *vi, s64 v)
 {
 	BSVM2_Value *gv;
@@ -308,6 +327,7 @@ BS2VM_API int BSVM2_Interp_SetGlobalL(BSVM2_ImageGlobal *vi, s64 v)
 	return(0);
 }
 
+/** Set the value of an float global. */
 BS2VM_API int BSVM2_Interp_SetGlobalF(BSVM2_ImageGlobal *vi, f32 v)
 {
 	BSVM2_Value *gv;
@@ -317,6 +337,7 @@ BS2VM_API int BSVM2_Interp_SetGlobalF(BSVM2_ImageGlobal *vi, f32 v)
 	return(0);
 }
 
+/** Set the value of an double global. */
 BS2VM_API int BSVM2_Interp_SetGlobalD(BSVM2_ImageGlobal *vi, f64 v)
 {
 	BSVM2_Value *gv;
@@ -326,6 +347,7 @@ BS2VM_API int BSVM2_Interp_SetGlobalD(BSVM2_ImageGlobal *vi, f64 v)
 	return(0);
 }
 
+/** Set the value of an address global. */
 BS2VM_API int BSVM2_Interp_SetGlobalA(BSVM2_ImageGlobal *vi, dtVal v)
 {
 	BSVM2_Value *gv;
@@ -335,6 +357,7 @@ BS2VM_API int BSVM2_Interp_SetGlobalA(BSVM2_ImageGlobal *vi, dtVal v)
 	return(0);
 }
 
+/** Get the value of a global as a dynamically-typed value. */
 BS2VM_API dtVal BSVM2_Interp_GetGlobalDy(BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Value *gv;
@@ -345,6 +368,7 @@ BS2VM_API dtVal BSVM2_Interp_GetGlobalDy(BSVM2_ImageGlobal *vi)
 	return(v);
 }
 
+/** Set the value of a global as a dynamically typed value. */
 BS2VM_API dtVal BSVM2_Interp_SetGlobalDy(BSVM2_ImageGlobal *vi, dtVal v)
 {
 	BSVM2_Value *gv;
@@ -354,6 +378,7 @@ BS2VM_API dtVal BSVM2_Interp_SetGlobalDy(BSVM2_ImageGlobal *vi, dtVal v)
 	return(v);
 }
 
+/** Run the context for a given number of iterations. */
 BS2VM_API int BSVM2_Interp_RunContext(BSVM2_Context *ctx, int lim)
 {
 	BSVM2_Trace *tr;

@@ -1,8 +1,14 @@
-// #include <bteifgl.h>
+/** \file
+ * BS2 Image Loader
+ *
+ */
 
 int bs2i_img_seqid=1;
 BSVM2_CodeImage *bs2i_liveimg=NULL;
+int bs2i_img_dynvseqid=1;
+int bs2i_img_dynvlim=512;
 
+/** Read TLV Tag from buffer */
 byte *BS2I_ReadTag(byte *cs, u64 *rtag, s64 *rlen)
 {
 	u64 li;
@@ -164,6 +170,7 @@ byte *BS2I_ReadTag(byte *cs, u64 *rtag, s64 *rlen)
 	return(NULL);
 }
 
+/** Read TLV Tag from buffer, limited to 4GB FOURCC */
 byte *BS2I_ReadTag2(byte *cs, u32 *rtag, int *rlen)
 {
 	u64 ttag;
@@ -175,6 +182,7 @@ byte *BS2I_ReadTag2(byte *cs, u32 *rtag, int *rlen)
 	return(cs);
 }
 
+/** Read VLI from buffer */
 byte *BS2I_ReadVLI_I(byte *cs, u64 *rv, int *rl)
 {
 	u64 li;
@@ -291,6 +299,7 @@ byte *BS2I_ReadVLI_I(byte *cs, u64 *rv, int *rl)
 	return(cs);
 }
 
+/** Read UVLI from buffer */
 byte *BS2I_ReadUVLI(byte *cs, s64 *rv)
 {
 	u64 uli;
@@ -302,6 +311,7 @@ byte *BS2I_ReadUVLI(byte *cs, s64 *rv)
 	return(cs);
 }
 
+/** Read SVLI from buffer */
 byte *BS2I_ReadSVLI(byte *cs, s64 *rv)
 {
 	u64 uli;
@@ -315,6 +325,7 @@ byte *BS2I_ReadSVLI(byte *cs, s64 *rv)
 	return(cs);
 }
 
+/** Decode opcode VLI from buffer */
 byte *BS2I_ReadOpcodeNumber(byte *cs, int *rv)
 {
 	int i;
@@ -347,6 +358,7 @@ byte *BS2I_ReadOpcodeNumber(byte *cs, int *rv)
 	return(cs);
 }
 
+/** Allocate image */
 BSVM2_CodeImage *BS2I_AllocImage(void)
 {
 	BSVM2_CodeImage *tmp;
@@ -355,6 +367,7 @@ BSVM2_CodeImage *BS2I_AllocImage(void)
 	return(tmp);
 }
 
+/** Allocate global */
 BSVM2_ImageGlobal *BS2I_AllocImageGlobal(BSVM2_CodeImage *img)
 {
 	BSVM2_ImageGlobal *tmp;
@@ -365,6 +378,7 @@ BSVM2_ImageGlobal *BS2I_AllocImageGlobal(BSVM2_CodeImage *img)
 	return(tmp);
 }
 
+/** Allocate code block */
 BSVM2_CodeBlock *BS2I_AllocImageCodeBlock(BSVM2_CodeImage *img)
 {
 	BSVM2_CodeBlock *tmp;
@@ -375,6 +389,7 @@ BSVM2_CodeBlock *BS2I_AllocImageCodeBlock(BSVM2_CodeImage *img)
 	return(tmp);
 }
 
+/** Check if the initial tag character is 'must understand' (ONECC) */
 int BS2I_ImageTagCharMustUnderstand2P(
 	BSVM2_CodeImage *img, byte tagh)
 {
@@ -388,6 +403,7 @@ int BS2I_ImageTagCharMustUnderstand2P(
 	return(1);
 }
 
+/** Check if the initial tag character is 'must understand' */
 int BS2I_ImageTagCharMustUnderstandP(
 	BSVM2_CodeImage *img, byte tagh)
 {
@@ -399,6 +415,7 @@ int BS2I_ImageTagCharMustUnderstandP(
 	return(1);
 }
 
+/** Check if a lump tag represents a "Must Understand" value. */
 int BS2I_ImageTagMustUnderstandP(BSVM2_CodeImage *img, u64 tag)
 {
 	if(tag<0x100)
@@ -420,6 +437,7 @@ void BS2I_ImageCheckUnknownTag(BSVM2_CodeImage *img, u64 tag)
 	BSVM2_DBGTRAP
 }
 
+/** Get an offset to the lump for a given global index. */
 int BS2I_ImageGetGlobalOfs(BSVM2_CodeImage *img, int gix)
 {
 	int i, j;
@@ -450,6 +468,7 @@ int BS2I_ImageGetGlobalOfs(BSVM2_CodeImage *img, int gix)
 	return(i);
 }
 
+/** Get a pointer to the lump for a given global index. */
 byte *BS2I_ImageGetGlobalLump(BSVM2_CodeImage *img, int gix)
 {
 	byte *ptr;
@@ -472,6 +491,7 @@ byte *BS2I_ImageGetGlobalLump(BSVM2_CodeImage *img, int gix)
 	return(ptr);
 }
 
+/** Decode the information about a given global (Function or Method). */
 int BS2I_ImageDecodeGlobalFunc(
 	BSVM2_CodeImage *img, BSVM2_ImageGlobal *gbl,
 	u32 dtag, byte *data, byte *edata)
@@ -654,6 +674,7 @@ int BS2I_ImageDecodeGlobalFunc(
 	return(0);
 }
 
+/** Try to get the QName for a given global. */
 char *BS2I_ImageTryGetGlobalQName(
 	BSVM2_CodeImage *img, BSVM2_ImageGlobal *gbl)
 {
@@ -677,6 +698,7 @@ char *BS2I_ImageTryGetGlobalQName(
 	return(gbl->name);
 }
 
+/** Calculate the hash-value for a name. */
 s64 BS2I_Image_QHashName(char *str)
 {
 	u64 h;
@@ -698,6 +720,61 @@ s64 BS2I_Image_QHashName(char *str)
 	return(h);
 }
 
+u64 BS2I_FlagsFromFlagstr(BSVM2_CodeImage *img, char *str)
+{
+	char *s;
+	u64 t;
+	
+	t=0; s=str;
+	while(*s)
+	{
+		if((*s>='a') && (*s<='z'))
+		{
+			switch(*s)
+			{
+			case 'a': t=t|BS2CC_TYFL_ABSTRACT; break;
+			case 'b': t=t|BS2CC_TYFL_BIGENDIAN; break;
+			case 'c': t=t|BS2CC_TYFL_CONST; break;
+			case 'd': t=t|BS2CC_TYFL_DYNAMIC; break;
+			case 'e': t=t|BS2CC_TYFL_EXTERN; break;
+			case 'f': t=t|BS2CC_TYFL_FINAL; break;
+			case 'g': t=t|BS2CC_TYFL_GETTER; break;
+			case 'h': t=t|BS2CC_TYFL_SETTER; break;
+			case 'i': t=t|BS2CC_TYFL_INLINE; break;
+			case 'j': t=t|BS2CC_TYFL_ASYNC; break;
+			case 'k': t=t|BS2CC_TYFL_DELEGATE; break;
+			case 'l': t=t|BS2CC_TYFL_LTLENDIAN; break;
+			case 'm': t=t|BS2CC_TYFL_TRANSIENT; break;
+			case 'n': t=t|BS2CC_TYFL_NATIVE; break;
+			case 'o': t=t|BS2CC_TYFL_STRICT; break;
+			case 'p': t=t|BS2CC_TYFL_PUBLIC; break;
+			case 'q': t=t|BS2CC_TYFL_PRIVATE; break;
+			case 'r': t=t|BS2CC_TYFL_PROTECTED; break;
+			case 's': t=t|BS2CC_TYFL_STATIC; break;
+			case 't': t=t|BS2CC_TYFL_THREAD; break;
+			case 'u': t=t|BS2CC_TYFL_SYNCHRONIZED; break;
+			case 'v': t=t|BS2CC_TYFL_VOLATILE; break;
+			default:
+				break;
+			}
+			s++;
+			continue;
+		}
+		if((*s>='A') && *s<='D')
+		{
+			if((s[1]>='a') && (s[1]<='z'))
+			{
+				s+=2;
+				continue;
+			}
+		}
+		break;
+	}
+	
+	return(t);
+}
+
+/** Decode the information about a given global (variable or object). */
 int BS2I_ImageDecodeGlobalVar(
 	BSVM2_CodeImage *img, BSVM2_ImageGlobal *gbl,
 	u32 dtag, byte *data, byte *edata)
@@ -761,6 +838,7 @@ int BS2I_ImageDecodeGlobalVar(
 			if(tag==BS2CC_I1CC_FLAGS)
 			{
 				gbl->flagstr=img->strtab+v;
+				gbl->flags=BS2I_FlagsFromFlagstr(img, gbl->flagstr);
 				continue;
 			}
 
@@ -924,6 +1002,10 @@ int BS2I_ImageDecodeGlobalVar(
 				if(vi->tag==BS2CC_ITCC_SV)
 					clsvi->slotty=BGBDTC_STY_FIELD;
 
+				if(vi->flags&BS2CC_TYFL_BIGENDIAN)
+					clsvi->slotfl|=BGBDTC_SFL_BE;
+				if(vi->flags&BS2CC_TYFL_LTLENDIAN)
+					clsvi->slotfl|=BGBDTC_SFL_LE;
 //#ifdef linux
 //				printf("IDGV C\n");
 //#endif
@@ -959,6 +1041,13 @@ int BS2I_ImageDecodeGlobalVar(
 	{
 		gbl->brty=BSVM2_NatCall_GetSigOpZ(gbl->sig);
 		gbl->gvalue=(BSVM2_Value *)(gbl->baty+16);
+		
+		if(gbl->flags&BS2CC_TYFL_DYNAMIC)
+		{
+			gbl->nargs=bs2i_img_dynvseqid++;
+			if(gbl->nargs>=bs2i_img_dynvlim)
+			bs2i_img_dynvlim=bs2i_img_dynvlim+(bs2i_img_dynvlim>>1);
+		}
 	}
 
 	if(dtag==BS2CC_ITCC_SV)
@@ -969,6 +1058,7 @@ int BS2I_ImageDecodeGlobalVar(
 	return(0);
 }
 
+/** Decode the information about a given global. */
 int BS2I_ImageDecodeGlobal(
 	BSVM2_CodeImage *img, BSVM2_ImageGlobal *gbl, byte *gdat)
 {
@@ -1016,6 +1106,7 @@ int BS2I_ImageDecodeGlobal(
 	return(-1);
 }
 
+/** Get the global associated with a given index from an image. */
 BSVM2_ImageGlobal *BS2I_ImageGetGlobal(BSVM2_CodeImage *img, int gix)
 {
 	BSVM2_ImageGlobal *gbl;
@@ -1070,6 +1161,7 @@ BSVM2_ImageGlobal *BS2I_ImageGetGlobal(BSVM2_CodeImage *img, int gix)
 	return(gbl);
 }
 
+/** Preload a global for a given index when loading an image. */
 BSVM2_ImageGlobal *BS2I_ImageGetGlobalInitial(BSVM2_CodeImage *img, int gix)
 {
 	BSVM2_ImageGlobal *gbl;
@@ -1113,6 +1205,7 @@ BSVM2_ImageGlobal *BS2I_ImageGetGlobalInitial(BSVM2_CodeImage *img, int gix)
 	return(gbl);
 }
 
+/** Lookup a function within an image. */
 BS2VM_API BSVM2_ImageGlobal *BS2I_ImageLookupFunc(
 	BSVM2_CodeImage *img, char *qname)
 {
@@ -1132,6 +1225,7 @@ BS2VM_API BSVM2_ImageGlobal *BS2I_ImageLookupFunc(
 	return(NULL);
 }
 
+/** Lookup a global variable within an image. */
 BS2VM_API BSVM2_ImageGlobal *BS2I_ImageLookupGlobalVar(
 	BSVM2_CodeImage *img, char *qname)
 {
@@ -1154,6 +1248,7 @@ BS2VM_API BSVM2_ImageGlobal *BS2I_ImageLookupGlobalVar(
 	return(NULL);
 }
 
+/** Get the main function for an image. */
 BS2VM_API BSVM2_ImageGlobal *BS2I_ImageGetMain(
 	BSVM2_CodeImage *img, char *qnpkg)
 {
@@ -1219,6 +1314,7 @@ BS2VM_API BSVM2_ImageGlobal *BS2I_ImageGetMain(
 	return(bvi);
 }
 
+/** Get the entry-point trace for a given function. */
 BS2VM_API BSVM2_Trace *BS2I_ImageGetFuncTrace(
 	BSVM2_ImageGlobal *vi)
 {
@@ -1232,6 +1328,7 @@ BS2VM_API BSVM2_Trace *BS2I_ImageGetFuncTrace(
 	return(tr);
 }
 
+/** Get the trace associated with the entry point for an image. */
 BS2VM_API BSVM2_Trace *BS2I_ImageGetMainTrace(
 	BSVM2_CodeImage *img, char *qnpkg)
 {
@@ -1246,6 +1343,7 @@ BS2VM_API BSVM2_Trace *BS2I_ImageGetMainTrace(
 	return(tr);
 }
 
+/** Load a bytecode image into the VM. */
 BS2VM_API BSVM2_CodeImage *BS2I_DecodeImageBuffer(byte *ibuf, int isz)
 {
 	byte tb[4096];
@@ -1447,7 +1545,7 @@ BS2VM_API BSVM2_CodeImage *BS2I_DecodeImageBuffer(byte *ibuf, int isz)
 	return(img);
 }
 
-
+/** Lookup a global variable. */
 BS2VM_API BSVM2_ImageGlobal *BS2I_GlobalLookupGlobalVar(char *qname)
 {
 	BSVM2_CodeImage *icur;

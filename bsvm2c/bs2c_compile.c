@@ -1,5 +1,9 @@
-// #include <bteifgl.h>
+/** \file
+ * BS2 Compiler
+ *
+ */
 
+/** Get index for current souce file and line number for error message. */
 int BS2C_CompileErrorGetSourceLine(BS2CC_CompileContext *ctx)
 {
 	int fi;
@@ -20,6 +24,7 @@ int BS2C_CompileErrorGetSourceLine(BS2CC_CompileContext *ctx)
 	return((fi<<20)|(ctx->srcln));
 }
 
+/** Get an index for a name to be used in an error message. */
 int BS2C_CompileErrorIndexName(
 	BS2CC_CompileContext *ctx, char *name)
 {
@@ -41,6 +46,7 @@ int BS2C_CompileErrorIndexName(
 	return(fi);
 }
 
+/** Emit an error given an error code. */
 int BS2C_CompileError(BS2CC_CompileContext *ctx, int errn)
 {
 	int i, j;
@@ -100,26 +106,31 @@ int BS2C_CompileError(BS2CC_CompileContext *ctx, int errn)
 	return(-1);
 }
 
+/** Error, we have stumbled onto an unimplemented/unsupported special case. */
 void BS2C_CaseError(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_CASEERROR);
 }
 
+/** Error, this compiler logic is merely a stub. */
 void BS2C_StubError(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_STUBERROR);
 }
 
+/** Warning, constant is out of range for a type. */
 void BS2C_WarnConstRange(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_CONSTRANGE);
 }
 
+/** Error, code tried to divide something by 0. */
 void BS2C_ErrDivZero(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_DIVZERROR);
 }
 
+/** Error, undeclared variable. */
 void BS2C_ErrNoDecl(BS2CC_CompileContext *ctx, char *name)
 {
 	int i, j, k;
@@ -128,26 +139,31 @@ void BS2C_ErrNoDecl(BS2CC_CompileContext *ctx, char *name)
 	ctx->cwparm[ctx->ncwparm++]=j;
 }
 
+/** Error, Too few arguments for a function. */
 void BS2C_ErrTooFewArgs(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_ERRTOOFEWARGS);
 }
 
+/** Error, too many arguments for a function. */
 void BS2C_ErrTooManyArgs(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_ERRTOOMANYARGS);
 }
 
+/** Generate error about compile-time stack being misaligned. */
 void BS2C_ErrStackMisalign(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_ERRSTACKMISAL);
 }
 
+/** Generate an error about compile-time stack underflowing. */
 void BS2C_ErrStackUnderflow(BS2CC_CompileContext *ctx)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_ERRSTACKUFLOW);
 }
 
+/** Warn about an implicit conversion. */
 void BS2C_WarnImplicitConv(BS2CC_CompileContext *ctx, int dty, int sty)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_CONVIMPLICIT);
@@ -155,6 +171,7 @@ void BS2C_WarnImplicitConv(BS2CC_CompileContext *ctx, int dty, int sty)
 	ctx->cwparm[ctx->ncwparm++]=sty;
 }
 
+/** Warn about a narrowing conversion. */
 void BS2C_WarnNarrowingConv(BS2CC_CompileContext *ctx, int dty, int sty)
 {
 	BS2C_CompileError(ctx, BS2CC_ERRN_CONVNARROW);
@@ -162,6 +179,7 @@ void BS2C_WarnNarrowingConv(BS2CC_CompileContext *ctx, int dty, int sty)
 	ctx->cwparm[ctx->ncwparm++]=sty;
 }
 
+/** Allocate memory for variable. */
 BS2CC_VarInfo *BS2C_AllocVarInfo(BS2CC_CompileContext *ctx)
 {
 	BS2CC_VarInfo *tmp;
@@ -173,6 +191,7 @@ BS2CC_VarInfo *BS2C_AllocVarInfo(BS2CC_CompileContext *ctx)
 	return(tmp);
 }
 
+/** Allocate memory for compile frame. */
 BS2CC_CcFrame *BS2C_AllocCcFrame(BS2CC_CompileContext *ctx)
 {
 	BS2CC_CcFrame *tmp;
@@ -184,6 +203,7 @@ BS2CC_CcFrame *BS2C_AllocCcFrame(BS2CC_CompileContext *ctx)
 	return(tmp);
 }
 
+/** Allocate memory for package frame. */
 BS2CC_PkgFrame *BS2C_AllocPkgFrame(BS2CC_CompileContext *ctx)
 {
 	BS2CC_PkgFrame *tmp;
@@ -193,12 +213,14 @@ BS2CC_PkgFrame *BS2C_AllocPkgFrame(BS2CC_CompileContext *ctx)
 	return(tmp);
 }
 
+/** Release memory associated with a variable definition. */
 int BS2C_CleanupFreeVarInfo(BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 {
 	dtmFree(vari);
 	return(0);
 }
 
+/** Release memory associated with a compiler frame. */
 int BS2C_CleanupFreeCcFrame(BS2CC_CompileContext *ctx, BS2CC_CcFrame *frm)
 {
 	if(frm->cts && (frm->cts!=frm->t_textbuf))
@@ -226,6 +248,7 @@ int BS2C_CleanupFreeCcFrame(BS2CC_CompileContext *ctx, BS2CC_CcFrame *frm)
 	return(0);
 }
 
+/** Lookup the package frame associated with a given package qname. */
 BS2CC_PkgFrame *BS2C_LookupPkgFrame(
 	BS2CC_CompileContext *ctx, char *qname)
 {
@@ -258,6 +281,7 @@ BS2CC_PkgFrame *BS2C_LookupPkgFrame(
 	return(NULL);
 }
 
+/** Get the package frame associated with a given package qname. */
 BS2CC_PkgFrame *BS2C_GetPkgFrame(
 	BS2CC_CompileContext *ctx, char *qname)
 {
@@ -286,6 +310,7 @@ BS2CC_PkgFrame *BS2C_GetPkgFrame(
 	return(pkg);
 }
 
+/** Enter into a package. */
 BS2CC_PkgFrame *BS2C_EnterPkgFrame(
 	BS2CC_CompileContext *ctx, char *name)
 {
@@ -308,6 +333,7 @@ BS2CC_PkgFrame *BS2C_EnterPkgFrame(
 	return(pkg);
 }
 
+/** Exit the current package. */
 void BS2C_ExitPkgFrame(
 	BS2CC_CompileContext *ctx)
 {
@@ -317,14 +343,23 @@ void BS2C_ExitPkgFrame(
 	ctx->pkg=ctx->pkgstk[i];
 }
 
+/** Generate code for cleaning up a variable. */
 void BS2C_CompileFuncBodyCleanupVar(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vi, int ix)
 {
 	BS2CC_VarInfo *vi2;
-	int bty, sz, z;
+	int bty, sz, z, ix2;
 	int i;
 
 	bty=vi->bty;
+
+	if(vi->bmfl&BS2CC_TYFL_DYNAMIC)
+	{
+		ix2=BS2C_LookupFrameGlobal(ctx, vi->name);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_DFXDYV);
+		BS2C_EmitOpcodeJx(ctx, ix, ix2);
+		return;
+	}
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{
@@ -339,8 +374,8 @@ void BS2C_CompileFuncBodyCleanupVar(
 //		BS2C_EmitOpcodeUZx(ctx, z, sz);
 //		BS2C_CompileStoreName(ctx, name);
 
-		if(ctx->frm->jcleanup<=0)
-			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
+//		if(ctx->frm->jcleanup<=0)
+//			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 
 		return;
 	}
@@ -365,6 +400,7 @@ void BS2C_CompileFuncBodyCleanupVar(
 	}
 }
 
+/** Emit cleanup and final return code for a function. */
 void BS2C_CompileFuncBodyCleanup(
 	BS2CC_CompileContext *ctx)
 {
@@ -395,6 +431,7 @@ void BS2C_CompileFuncBodyCleanup(
 	BS2C_EmitReturnVal(ctx);
 }
 
+/** Compile the body of a function. */
 void BS2C_CompileFuncBody(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
 {
 	BS2CC_CcFrame *frm;
@@ -457,6 +494,7 @@ void BS2C_CompileFuncBody(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
 	ctx->frmstackpos=i;
 }
 
+/** Rebuild types for a variable. */
 void BS2C_CompileRebuildVarType(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 {
@@ -473,6 +511,7 @@ void BS2C_CompileRebuildVarType(
 	vari->sig=BS2P_StrSym(ctx, s);
 }
 
+/** Rebuild types for a function. */
 void BS2C_CompileRebuildFuncType(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 {
@@ -508,6 +547,7 @@ void BS2C_CompileRebuildFuncType(
 	vari->sig=BS2P_StrSym(ctx, tb);
 }
 
+/** Rebuild the types for a structure. */
 void BS2C_CompileRebuildStructType(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 {
@@ -567,6 +607,7 @@ void BS2C_CompileRebuildStructType(
 	}
 }
 
+/** Compile the functions within a context. */
 BS2VM_API void BS2C_CompileFuncs(
 	BS2CC_CompileContext *ctx)
 {
@@ -628,6 +669,12 @@ BS2VM_API void BS2C_CompileFuncs(
 	}
 }
 
+/**
+  * Convert error message ID into a string description.
+  * /param ix Index for the error.
+  * /param cn Status code number for error.
+  * /param pix Offset of parameters for message.
+  */
 BS2VM_API char *BS2C_ErrStringForMsg(
 	BS2CC_CompileContext *ctx, int ix, int cn, int pix)
 {
@@ -726,6 +773,9 @@ BS2VM_API void BS2C_DumpErrors(
 	}
 }
 
+/**
+  * Compile a module given as a string buffer.
+  */
 BS2VM_API int BS2C_CompileModuleBuffer(
 	BS2CC_CompileContext *ctx, char *buf, int szbuf)
 {
@@ -748,6 +798,13 @@ BS2VM_API int BS2C_CompileModuleBuffer(
 	return(0);
 }
 
+/**
+  * Compile a list of modules within an existing compile context.
+  * Modules are given as dotted names or as paths (without extensions).
+  * /ctx Compiler context.
+  * /param base Base path used when trying to load modules.
+  * /param names List of names terminated with a NULL.
+  */
 BS2VM_API int BS2C_CompileModuleList(
 	BS2CC_CompileContext *ctx,
 	char *base, char **names)
@@ -811,6 +868,12 @@ BS2VM_API int BS2C_CompileModuleList(
 	return(0);
 }
 
+/**
+  * Compile an image based on a definition file.
+  * /param img Name of file used for the produced bytecode image.
+  * /param def Name of the definition file.
+  * /return Status code for compile, negative means didn't compile.
+  */
 BS2VM_API int BS2C_CompileImageDef(char *img, char *def)
 {
 	char tb[256];
@@ -884,7 +947,10 @@ BS2VM_API int BS2C_CompileImageDef(char *img, char *def)
 	return(0);
 }
 
-
+/** Evaluate Expression.
+  * This uses a special interpreter for evaluating expressions.
+  * This allows lower overhead, but its capabilities are limited.
+  */
 BS2VM_API dtVal BS2C_EvalExpr(char *str)
 {
 	BS2CC_CompileContext *ctx;

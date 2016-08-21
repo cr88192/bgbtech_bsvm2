@@ -501,7 +501,13 @@
 #define BSVM2_OP_STDRPL		0x01B3	//Store Deref Pointer Local
 
 #define BSVM2_OP_DIFFPTR	0x01B4	//Store Deref Pointer Local
-#define BSVM2_OP_DIFFARR	0x01B5	//Store Deref Pointer Local
+#define BSVM2_OP_BSWAP		0x01B5	//Byte Swap
+#define BSVM2_OP_LDDRBSW	0x01B6	//Load Deref Byte Swap
+#define BSVM2_OP_STDRBSW	0x01B7	//Store Deref Byte Swap
+
+#define BSVM2_OP_IFXDYV		0x01B8	//Init Dynamic Var
+#define BSVM2_OP_DFXDYV		0x01B9	//DeInit Dynamic Var
+
 
 #define BSVM2_OP_ADDISLC	0x01C0	//
 #define BSVM2_OP_SUBISLC	0x01C1	//
@@ -762,6 +768,8 @@ void *freex128;				//free X128 vectors
 
 BSVM2_Frame *frame;			//current frame
 BSVM2_Trace *trace;			//current trace
+BSVM2_Value *dynenv;		//dynamic environment
+int szdynenv;				//allocated size of dynamic environment
 int status;
 };
 
@@ -788,29 +796,30 @@ short szframe;		//size of locals+stack frame
 };
 
 struct BSVM2_ImageGlobal_s {
-char *name;
-char *qname;
-char *sig;
-char *flagstr;
+char *name;				//name of variable
+char *qname;			//qname of variable
+char *sig;				//signature string
+char *flagstr;			//flags string
 int *figix;				//field/package GIX
 int *ifgix;				//interface GIX
-int gix;
-short nargs;
-short nfigix;
-short nifgix;
+int gix;				//variable index
+short nargs;			//number of arguments
+short nfigix;			//number of fields
+short nifgix;			//number of interfaces
 // int sugix;			//superclass GIX
 int giobj;				//GIX of owner or superclass
-u32 tag;
+u32 tag;				//TLV type tag
 
-s64 nameh;
-s64 qnameh;
+s64 nameh;				//name hash
+s64 qnameh;				//qname hash
+u64 flags;				//variable flags (decoded from string)
 
 BSVM2_Trace *ctrace;	//call trace
 byte brty;				//base return type (functions)
 byte baty[32];			//base arg type (functions)
 
 BSVM2_Value *gvalue;	//global value
-void *objinf;
+void *objinf;			//object info
 
 BSVM2_CodeImage *img;
 BSVM2_ImageGlobal *pkg;

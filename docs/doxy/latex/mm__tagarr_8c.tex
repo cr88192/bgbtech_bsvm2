@@ -1,0 +1,86 @@
+\hypertarget{mm__tagarr_8c}{\section{mm/mm\-\_\-tagarr.c File Reference}
+\label{mm__tagarr_8c}\index{mm/mm\-\_\-tagarr.\-c@{mm/mm\-\_\-tagarr.\-c}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{mm__tagarr_8c_a192903a5969f215264177879d772519c}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size} (int bty)
+\item 
+\hyperlink{bsvm2__conf_8h_acaa7340bea4e79bdf24c1522aaecaa75}{B\-S2\-V\-M\-\_\-\-A\-P\-I} \hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} \hyperlink{mm__tagarr_8c_a2ce6a41cdea633c0be977040214dd5b2}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array} (int size, int bty)
+\item 
+int \hyperlink{mm__tagarr_8c_aba9752313d51059f34b2c44c461296bc}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P} (\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} objv)
+\item 
+int \hyperlink{mm__tagarr_8c_ab8876b98769587f90806eea0d6183227}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P} (\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} objv, int bty)
+\item 
+\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} \hyperlink{mm__tagarr_8c_af37d1c61b651931e5c4bed8acb8cea38}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant} (\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} arr, int idx)
+\item 
+void \hyperlink{mm__tagarr_8c_ab57365e77ca2ca8cd6a3ce3d90eaf15d}{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant} (\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} arr, int idx, \hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} val)
+\item 
+\hyperlink{bsvm2__conf_8h_acaa7340bea4e79bdf24c1522aaecaa75}{B\-S2\-V\-M\-\_\-\-A\-P\-I} \hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} \hyperlink{mm__tagarr_8c_a3b127f23c58e521dc7d6637231a9115a}{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long} (\hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} value)
+\item 
+\hyperlink{bsvm2__conf_8h_acaa7340bea4e79bdf24c1522aaecaa75}{B\-S2\-V\-M\-\_\-\-A\-P\-I} \hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} \hyperlink{mm__tagarr_8c_aeb01d4dda56a172f9d020e98daa91e38}{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long} (\hyperlink{bsvm2__tagval_8h_a2b88c3d8e7ffedeb52f2f5b322505b4c}{dt\-Val} val)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{mm__tagarr_8c_a192903a5969f215264177879d772519c}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size}]{\setlength{\rightskip}{0pt plus 5cm}int B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Base\-Type\-Size (
+\begin{DoxyParamCaption}
+\item[{int}]{bty}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_a192903a5969f215264177879d772519c}
+\hypertarget{mm__tagarr_8c_af37d1c61b651931e5c4bed8acb8cea38}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant}]{\setlength{\rightskip}{0pt plus 5cm}{\bf dt\-Val} B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Get\-Index\-Variant (
+\begin{DoxyParamCaption}
+\item[{{\bf dt\-Val}}]{arr, }
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_af37d1c61b651931e5c4bed8acb8cea38}
+\hypertarget{mm__tagarr_8c_ab8876b98769587f90806eea0d6183227}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P}]{\setlength{\rightskip}{0pt plus 5cm}int B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-Bty\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf dt\-Val}}]{objv, }
+\item[{int}]{bty}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_ab8876b98769587f90806eea0d6183227}
+\hypertarget{mm__tagarr_8c_aba9752313d51059f34b2c44c461296bc}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P}]{\setlength{\rightskip}{0pt plus 5cm}int B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Is\-Array\-P (
+\begin{DoxyParamCaption}
+\item[{{\bf dt\-Val}}]{objv}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_aba9752313d51059f34b2c44c461296bc}
+\hypertarget{mm__tagarr_8c_a2ce6a41cdea633c0be977040214dd5b2}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S2\-V\-M\-\_\-\-A\-P\-I} {\bf dt\-Val} B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-New\-Array (
+\begin{DoxyParamCaption}
+\item[{int}]{size, }
+\item[{int}]{bty}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_a2ce6a41cdea633c0be977040214dd5b2}
+\hypertarget{mm__tagarr_8c_ab57365e77ca2ca8cd6a3ce3d90eaf15d}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant@{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant}]{\setlength{\rightskip}{0pt plus 5cm}void B\-G\-B\-D\-T\-\_\-\-Tag\-Arr\-\_\-\-Set\-Index\-Variant (
+\begin{DoxyParamCaption}
+\item[{{\bf dt\-Val}}]{arr, }
+\item[{int}]{idx, }
+\item[{{\bf dt\-Val}}]{val}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_ab57365e77ca2ca8cd6a3ce3d90eaf15d}
+\hypertarget{mm__tagarr_8c_aeb01d4dda56a172f9d020e98daa91e38}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long@{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long@{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S2\-V\-M\-\_\-\-A\-P\-I} {\bf s64} B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Decode\-Rot\-Long (
+\begin{DoxyParamCaption}
+\item[{{\bf dt\-Val}}]{val}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_aeb01d4dda56a172f9d020e98daa91e38}
+\hypertarget{mm__tagarr_8c_a3b127f23c58e521dc7d6637231a9115a}{\index{mm\-\_\-tagarr.\-c@{mm\-\_\-tagarr.\-c}!B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long@{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long}}
+\index{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long@{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long}!mm_tagarr.c@{mm\-\_\-tagarr.\-c}}
+\subsubsection[{B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\-S2\-V\-M\-\_\-\-A\-P\-I} {\bf dt\-Val} B\-G\-B\-D\-T\-\_\-\-Tag\-Ty\-\_\-\-Encode\-Rot\-Long (
+\begin{DoxyParamCaption}
+\item[{{\bf s64}}]{value}
+\end{DoxyParamCaption}
+)}}\label{mm__tagarr_8c_a3b127f23c58e521dc7d6637231a9115a}

@@ -382,6 +382,54 @@ u32 BS2C_Image_HashData(byte *buf, int sz)
 	return(h);
 }
 
+char *BS2C_Image_FlagsToFlSig(BS2CC_CompileContext *ctx, s64 bmfl)
+{
+	char tb[256];
+	char *t;
+	
+	t=tb;
+
+	if(bmfl&BS2CC_TYFL_ABSTRACT)*t++='a';
+	if(bmfl&BS2CC_TYFL_BIGENDIAN)*t++='b';
+	if(bmfl&BS2CC_TYFL_CONST)*t++='c';	
+	if(bmfl&BS2CC_TYFL_DYNAMIC)*t++='d';
+	if(bmfl&BS2CC_TYFL_EXTERN)*t++='e';
+	if(bmfl&BS2CC_TYFL_FINAL)*t++='f';
+	if(bmfl&BS2CC_TYFL_GETTER)*t++='g';
+	if(bmfl&BS2CC_TYFL_SETTER)*t++='h';
+	if(bmfl&BS2CC_TYFL_INLINE)*t++='i';
+	if(bmfl&BS2CC_TYFL_ASYNC)*t++='j';
+	if(bmfl&BS2CC_TYFL_DELEGATE)*t++='k';
+	if(bmfl&BS2CC_TYFL_LTLENDIAN)*t++='l';
+	if(bmfl&BS2CC_TYFL_TRANSIENT)*t++='m';
+	if(bmfl&BS2CC_TYFL_NATIVE)*t++='n';
+	if(bmfl&BS2CC_TYFL_STRICT)*t++='o';
+	if(bmfl&BS2CC_TYFL_PUBLIC)*t++='p';
+	if(bmfl&BS2CC_TYFL_PRIVATE)*t++='q';
+	if(bmfl&BS2CC_TYFL_PROTECTED)*t++='r';
+	if(bmfl&BS2CC_TYFL_STATIC)*t++='s';
+	if(bmfl&BS2CC_TYFL_THREAD)*t++='t';
+	if(bmfl&BS2CC_TYFL_SYNCHRONIZED)*t++='u';
+	if(bmfl&BS2CC_TYFL_VOLATILE)*t++='v';
+	
+	*t++=0;
+	
+	return(bgbdt_mm_rstrdup(tb));
+}
+
+int BS2C_Image_FlagsToFlSigId(BS2CC_CompileContext *ctx, s64 bmfl)
+{
+	char *s;
+	int i;
+	
+	s=BS2C_Image_FlagsToFlSig(ctx, bmfl);
+	if(!s || !(*s))
+		return(0);
+
+	i=BS2C_ImgLookupString(ctx, s);
+	return(i);
+}
+
 byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 	BS2CC_CompileContext *ctx,
 	BS2CC_VarInfo *vari,
@@ -389,6 +437,7 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 {
 	BS2CC_CcFrame *frm;
 	byte *ct1, *ct2;
+	char *s;
 	s64 li;
 	int i, j, k;
 
@@ -407,6 +456,10 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 	i=BS2C_ImgLookupString(ctx, vari->sig);
 	if(i>0)
 		{ ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_SIG, i); }
+	
+	i=BS2C_Image_FlagsToFlSigId(ctx, vari->bmfl);
+	if(i>0)
+		{ ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_FLAGS, i); }
 	
 	if(	((vari->vitype==BS2CC_VITYPE_STRVAR) ||
 		(vari->vitype==BS2CC_VITYPE_STRFUNC)) &&
@@ -535,6 +588,10 @@ byte *BS2C_Image_FlattenGlobalInfo_StructI(
 		ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_NAMEH, li);
 	}
 
+	i=BS2C_Image_FlagsToFlSigId(ctx, vari->bmfl);
+	if(i>0)
+		{ ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_FLAGS, i); }
+
 	if(vari->pkg)
 	{
 		i=vari->pkg->gid;
@@ -629,6 +686,10 @@ byte *BS2C_Image_FlattenGlobalInfo_Package(
 		i=BS2C_ImgLookupString(ctx, vari->qname);
 		if(i>0)
 			{ ct2=BS2C_Image_EmitTagSVLI(ct2, BS2CC_I1CC_QNAME, i); }
+
+		i=BS2C_Image_FlagsToFlSigId(ctx, vari->bmfl);
+		if(i>0)
+			{ ct2=BS2C_Image_EmitTagSVLI(ct2, BS2CC_I1CC_FLAGS, i); }
 	}
 
 	ct3=ct2+256; ct4=ct3;
@@ -807,6 +868,7 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 {
 	BS2CC_CcFrame *frm;
 	BS2CC_VarInfo *vi;
+	char *s;
 	int i, j, k;
 
 //	if(vari->bmfl&BS2CC_TYFL_REACHDONE)
@@ -848,6 +910,9 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 
 	vari->bmfl|=BS2CC_TYFL_CANREACH;
 	BS2C_ImgGetString(ctx, vari->sig);
+	
+	s=BS2C_Image_FlagsToFlSig(ctx, vari->bmfl);
+	if(s && *s)BS2C_ImgGetString(ctx, s);
 	
 	if((vari->vitype==BS2CC_VITYPE_STRUCT) ||
 		(vari->vitype==BS2CC_VITYPE_CLASS) ||
@@ -922,6 +987,7 @@ BS2VM_API int BS2C_TouchReachable(
 {
 	BS2CC_PkgFrame *pcur;
 	BS2CC_VarInfo *vcur;
+	char *s;
 	int i;
 	
 	pcur=ctx->pkg_first;
@@ -931,6 +997,9 @@ BS2VM_API int BS2C_TouchReachable(
 		vcur->bmfl|=BS2CC_TYFL_CANREACH;
 
 		BS2C_ImgGetString(ctx, vcur->qname);
+
+		s=BS2C_Image_FlagsToFlSig(ctx, vcur->bmfl);
+		if(s && *s)BS2C_ImgGetString(ctx, s);
 
 		vcur=pcur->vars;
 		while(vcur)

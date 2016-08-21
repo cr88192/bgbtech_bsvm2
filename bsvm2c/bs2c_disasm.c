@@ -547,6 +547,12 @@ char *name;
 {"E1B2Zi",    "LDDRPL"},
 {"E1B3Zi",    "STDRPL"},
 {"E1B4Zn",    "DIFFPTR"},
+{"E1B5Zn",    "BSWAP"},
+{"E1B6Zn",    "LDDRBSW"},
+{"E1B7Zn",    "STDRBSW"},
+
+{"E1B8Gj",    "IFXDYV"},
+{"E1B9Gj",    "DFXDYV"},
 
 {"E1C0Kj",    "ADDISLC"},
 {"E1C1Kj",    "SUBISLC"},

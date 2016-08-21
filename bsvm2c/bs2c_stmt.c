@@ -22,7 +22,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 	BS2CC_VarInfo *vi, *vi2;
 	dtVal nn, nt, ni;
 	char *name;
-	int bty, ix, sz, z;
+	int bty, ix, ix2, sz, z;
 	int i;
 
 	name=BS2P_GetAstNodeAttrS(expr, "name");
@@ -38,6 +38,24 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 
 	vi=ctx->frm->locals[ix];
 	bty=vi->bty;
+
+	if(vi->bmfl&BS2CC_TYFL_DYNAMIC)
+	{
+		ix2=BS2C_LookupFrameGlobal(ctx, name);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_IFXDYV);
+		BS2C_EmitOpcodeJx(ctx, ix, ix2);
+
+		if(dtvTrueP(ni))
+		{
+			BS2C_CompileExpr(ctx, ni, bty);
+			BS2C_CompileStoreName(ctx, name);
+			return;
+		}
+
+		if(ctx->frm->jcleanup<=0)
+			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
+		return;
+	}
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{

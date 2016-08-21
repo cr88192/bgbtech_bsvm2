@@ -1,4 +1,4 @@
-/*
+/** \file
  * Float128
  *
  * Implements logic for working with 128-bit floating-point numbers.

@@ -349,6 +349,26 @@ int BS2C_CompileLoadName(BS2CC_CompileContext *ctx, char *name)
 		vari=ctx->frm->locals[i];
 		bty=vari->bty;
 
+		if(vari->bmfl&BS2CC_TYFL_DYNAMIC)
+		{
+			i=BS2C_LookupFrameGlobal(ctx, name);
+			if(i>=0)
+			{
+				vari=BS2C_GetFrameGlobalInfo(ctx, i);
+				bty=vari->bty;
+				BS2C_EmitOpcode(ctx, BSVM2_OP_LDGS);
+				BS2C_EmitOpcodeIdx(ctx, i);
+				BS2C_CompileExprPushType(ctx, bty);
+				return(0);
+			}else
+			{
+				BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
+				BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+				BS2C_ErrNoDecl(ctx, name);
+				return(-1);
+			}
+		}
+
 		if(bty==BS2CC_TYZ_VARARG)
 			bty=BS2CC_TYZ_VARIANT_ARR;
 
@@ -486,6 +506,25 @@ int BS2C_CompileStoreName(BS2CC_CompileContext *ctx, char *name)
 	{
 		vari=ctx->frm->locals[i];
 		bty=vari->bty;
+
+		if(vari->bmfl&BS2CC_TYFL_DYNAMIC)
+		{
+			i=BS2C_LookupFrameGlobal(ctx, name);
+			if(i>=0)
+			{
+				vari=BS2C_GetFrameGlobalInfo(ctx, i);
+				BS2C_EmitOpcode(ctx, BSVM2_OP_STGS);
+				BS2C_EmitOpcodeIdx(ctx, i);
+				BS2C_CompileExprPopType1(ctx);
+				return(0);
+			}else
+			{
+				BS2C_EmitOpcode(ctx, BSVM2_OP_POPA);
+				BS2C_CompileExprPopType1(ctx);
+				BS2C_ErrNoDecl(ctx, name);
+				return(-1);
+			}
+		}
 
 		z=BS2C_GetTypeBaseZ(ctx, bty);
 		

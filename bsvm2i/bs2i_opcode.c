@@ -3,6 +3,7 @@
 BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 	BSVM2_CodeBlock *cblk, int opn)
 {
+	BSVM2_ImageGlobal *vari;
 	BSVM2_Opcode *op;
 	int opn2;
 	int i;
@@ -448,6 +449,15 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 
 	case BSVM2_OP_LDGS:
 		BSVM2_Interp_DecodeOpGx(cblk, op);
+		
+		vari=op->v.p;
+		if(vari->flags&BS2CC_TYFL_DYNAMIC)
+		{
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_LDGS_DY);
+			break;
+		}
+		
 		switch(op->i1)
 		{
 		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
@@ -476,6 +486,15 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		break;
 	case BSVM2_OP_STGS:
 		BSVM2_Interp_DecodeOpGx(cblk, op);
+
+		vari=op->v.p;
+		if(vari->flags&BS2CC_TYFL_DYNAMIC)
+		{
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STGS_DY);
+			break;
+		}
+
 		switch(op->i1)
 		{
 		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
@@ -2593,6 +2612,17 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		BSVM2_Interp_DecodeOpGj(cblk, op);
 		BSVM2_Interp_SetupOpUat(cblk, op,
 			BSVM2_Op_DFXOBJ);
+		break;
+
+	case BSVM2_OP_IFXDYV:
+		BSVM2_Interp_DecodeOpGj(cblk, op);
+		BSVM2_Interp_SetupOpUat(cblk, op,
+			BSVM2_Op_IFXDYV);
+		break;
+	case BSVM2_OP_DFXDYV:
+		BSVM2_Interp_DecodeOpGj(cblk, op);
+		BSVM2_Interp_SetupOpUat(cblk, op,
+			BSVM2_Op_DFXDYV);
 		break;
 
 

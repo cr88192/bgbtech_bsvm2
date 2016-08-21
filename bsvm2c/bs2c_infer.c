@@ -109,6 +109,9 @@ int BS2C_InferExprLocalIndex(BS2CC_CompileContext *ctx, dtVal expr)
 		vari=ctx->frm->locals[i];
 		bty=vari->bty;
 
+		if(vari->bmfl&BS2CC_TYFL_DYNAMIC)
+			return(-1);
+
 		if(BS2C_TypeVarRefP(ctx, bty))
 			return(-1);
 		

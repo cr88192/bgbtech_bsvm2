@@ -1,4 +1,4 @@
-/*
+/** \file
  * Int128
  *
  * Implements logic for working with 128-bit integers.
@@ -15,6 +15,7 @@ static int objty_si128=-1;
 // static int objty_ui128=-1;
 // static int objty_f128=-1;
 
+/** Allocate Int128 value from pool. */
 BS2VM_API BGBDTC_X128 *BGBDT_XI128_AllocInt128(void)
 {
 	BGBDTC_X128 *xp;
@@ -69,6 +70,7 @@ BS2VM_API BGBDTC_X128 *BGBDT_XI128_AllocInt128(void)
 }
 #endif
 
+/** Free allocated int128 value to pool. */
 BS2VM_API void BGBDT_XI128_FreeInt128(BGBDTC_X128 *xp)
 {
 	*(BGBDTC_X128 **)xp=bgbdt_xi128_freesi128;
@@ -83,10 +85,14 @@ BS2VM_API void BGBDT_XI128_FreeInt128(BGBDTC_X128 *xp)
 }
 #endif
 
-BS2VM_API int BGBDT_XI128_IsInt128P(dtVal objv)
+/** Returns true if tagged value contains an int128. */
+BS2VM_API bool BGBDT_XI128_IsInt128P(dtVal objv)
 	{ return(dtvCheckPtrTagP(objv, objty_si128)); }
 
-BS2VM_API int BGBDT_XI128_IsSmallInt128P(dtVal objv)
+/** Returns true if tagged value contains an int128.
+  * Will also return true if the value promotes to int128.
+  */
+BS2VM_API bool BGBDT_XI128_IsSmallInt128P(dtVal objv)
 {
 	if(dtvCheckPtrTagP(objv, objty_si128))
 		return(1);
@@ -95,7 +101,7 @@ BS2VM_API int BGBDT_XI128_IsSmallInt128P(dtVal objv)
 	return(0);
 }
 
-
+/** Compose an int128 value from a 64-bit long (s64) */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_FromLong(s64 li)
 {
 	BGBDTC_X128 c;
@@ -107,6 +113,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_FromLong(s64 li)
 	return(c);
 }
 
+/** Compose an int128 value from a pair of 64-bit longs (u64) */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_FromLong2(u64 lo, u64 hi)
 {
 	BGBDTC_X128 c;
@@ -118,6 +125,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_FromLong2(u64 lo, u64 hi)
 	return(c);
 }
 
+/** Get low order bits of int128 as a long (s64) */
 BS2VM_API s64 BGBDT_XI128_ToLong(BGBDTC_X128 a)
 {
 	s64 li;
@@ -126,6 +134,7 @@ BS2VM_API s64 BGBDT_XI128_ToLong(BGBDTC_X128 a)
 	return(li);
 }
 
+/** Dump int128 value to a string (as a hex number). */
 BS2VM_API char *BGBDT_XI128_DumpString(BGBDTC_X128 a)
 {
 	char tb[256];
@@ -133,6 +142,7 @@ BS2VM_API char *BGBDT_XI128_DumpString(BGBDTC_X128 a)
 	return(bgbdt_mm_rstrdup(tb));
 }
 
+/** Print int128 to a string buffer */
 BS2VM_API void BGBDT_XI128_ToStringBuf(
 	BGBDTC_X128 a, char *buf, int wfl)
 {
@@ -205,6 +215,7 @@ BS2VM_API void BGBDT_XI128_ToStringBuf(
 	*t++=0;
 }
 
+/** Print int128 to a string and return temp string. */
 BS2VM_API char *BGBDT_XI128_ToString(BGBDTC_X128 a)
 {
 	char tb[256];
@@ -213,6 +224,7 @@ BS2VM_API char *BGBDT_XI128_ToString(BGBDTC_X128 a)
 	return(bgbdt_mm_rstrdup(tb));
 }
 
+/** Parse int128 value from string */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_FromString(char *str)
 {
 	if(str[0]==0)
@@ -230,6 +242,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_FromString(char *str)
 	return(BGBDT_XI128_FromStringD(str, 0));
 }
 
+/** Parse int128 value from a string of decimal digits.
+  * \param w If nonzero, number will be parsed as if w digits were present.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_FromStringD(char *str, int w)
 {
 	BGBDTC_X128 c;
@@ -291,7 +306,10 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_FromStringD(char *str, int w)
 	return(c);
 }
 
-
+/** Parse from a string of digits with a given a radix.
+  * Underscores in input are ignored.
+  * /param rx Radix in the range of 2 to 36.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_FromStringRx(char *str, int rx)
 {
 	BGBDTC_X128 c;
@@ -336,6 +354,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_FromStringRx(char *str, int rx)
 	return(c);
 }
 
+/** Add int128 value and an integer. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_AddIX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 c;
@@ -355,6 +374,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_AddIX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Add pair of int128 values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_AddX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 // #ifdef X86_MSVC
@@ -389,6 +409,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_AddX(BGBDTC_X128 a, BGBDTC_X128 b)
 #endif
 }
 
+/** Negate int128 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_NegX(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -405,6 +426,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_NegX(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Bitwise not of int128 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_NotX(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -423,6 +445,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_SubX(BGBDTC_X128 a, BGBDTC_X128 b)
 }
 #endif
 
+/** Subtract int128 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_SubX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 // #ifdef X86_MSVC
@@ -458,6 +481,15 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_SubX(BGBDTC_X128 a, BGBDTC_X128 b)
 }
 
 #if 1
+/**
+  * Add int128 values given as pairs, each representing a 256 bit value.
+  * /param aa Low 128 bits of left param.
+  * /param ab High 128 bits of left param.
+  * /param ba Low 128 bits of right param.
+  * /param bb High 128 bits of right param.
+  * /param rca Low 128 bits of result.
+  * /param rcb High 128 bits of result.
+  */
 BS2VM_API void BGBDT_XI128_AddWX(
 	BGBDTC_X128 aa, BGBDTC_X128 ab,
 	BGBDTC_X128 ba, BGBDTC_X128 bb,
@@ -477,6 +509,13 @@ BS2VM_API void BGBDT_XI128_AddWX(
 	*rca=ca; *rcb=cb;
 }
 
+/**
+  * Nagate int128 values given as a pair representing a 256 bit value.
+  * /param aa Low 128 bits of input.
+  * /param ab High 128 bits of input.
+  * /param rca Low 128 bits of result.
+  * /param rcb High 128 bits of result.
+  */
 BS2VM_API void BGBDT_XI128_NegWX(BGBDTC_X128 aa, BGBDTC_X128 ab,
 	BGBDTC_X128 *rca, BGBDTC_X128 *rcb)
 {
@@ -493,6 +532,14 @@ BS2VM_API void BGBDT_XI128_NegWX(BGBDTC_X128 aa, BGBDTC_X128 ab,
 	*rca=ca; *rcb=cb;
 }
 
+/**
+  * Bitwise not of int128 values given as a pair
+  *   representing a 256 bit value.
+  * /param aa Low 128 bits of input.
+  * /param ab High 128 bits of input.
+  * /param rca Low 128 bits of result.
+  * /param rcb High 128 bits of result.
+  */
 BS2VM_API void BGBDT_XI128_NotWX(BGBDTC_X128 aa, BGBDTC_X128 ab,
 	BGBDTC_X128 *rca, BGBDTC_X128 *rcb)
 {
@@ -500,6 +547,15 @@ BS2VM_API void BGBDT_XI128_NotWX(BGBDTC_X128 aa, BGBDTC_X128 ab,
 	*rcb=BGBDT_XI128_NotX(ab);
 }
 
+/**
+  * Subtract int128 values given as pairs representing 256 bit values.
+  * /param aa Low 128 bits of left param.
+  * /param ab High 128 bits of left param.
+  * /param ba Low 128 bits of right param.
+  * /param bb High 128 bits of right param.
+  * /param rca Low 128 bits of result.
+  * /param rcb High 128 bits of result.
+  */
 BS2VM_API void BGBDT_XI128_SubWX(
 	BGBDTC_X128 aa, BGBDTC_X128 ab,
 	BGBDTC_X128 ba, BGBDTC_X128 bb,
@@ -511,6 +567,7 @@ BS2VM_API void BGBDT_XI128_SubWX(
 }
 #endif
 
+/** Multiply pair of int128 values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_MulX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 // #ifdef X86_MSVC
@@ -673,6 +730,15 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_MulX(BGBDTC_X128 a, BGBDTC_X128 b)
 #endif
 }
 
+/**
+  * Multiply int128 values given as pairs representing 256 bit values.
+  * /param aa Low 128 bits of left param.
+  * /param ab High 128 bits of left param.
+  * /param ba Low 128 bits of right param.
+  * /param bb High 128 bits of right param.
+  * /param rca Low 128 bits of result.
+  * /param rcb High 128 bits of result.
+  */
 BS2VM_API int BGBDT_XI128_MulwX(BGBDTC_X128 a, BGBDTC_X128 b,
 	BGBDTC_X128 *rc, BGBDTC_X128 *rd)
 {
@@ -704,6 +770,7 @@ BS2VM_API int BGBDT_XI128_MulwX(BGBDTC_X128 a, BGBDTC_X128 b,
 	return(0);
 }
 
+/** Bitwise AND of 128-bit values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_AndX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -714,6 +781,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_AndX(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Bitwise OR of 128-bit values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_OrX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -724,6 +792,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_OrX(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Bitwise XOR of 128-bit values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_XorX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -734,6 +803,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_XorX(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Partial ShiftLeft of 128 bit value.
+  * /param b Shift in the range of 0 to 31.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlpX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 c;
@@ -746,6 +818,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlpX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Partial Logical ShiftRight of 128 bit value.
+  * /param b Shift in the range of 0 to 31.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrpX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 c;
@@ -758,6 +833,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrpX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Partial Arithmetic ShiftRight of 128 bit value.
+  * /param b Shift in the range of 0 to 31.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_SarpX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 c;
@@ -773,6 +851,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_SarpX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** ShiftLeft of 128 bit value.
+  * /param b Shift.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 a2, c;
@@ -801,6 +882,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Logical ShiftRight of 128 bit value.
+  * /param b Shift.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 a2, c;
@@ -829,6 +913,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Arithmetic ShiftRight of 128 bit value.
+  * /param b Shift.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_SarX(BGBDTC_X128 a, int b)
 {
 	BGBDTC_X128 a2, c;
@@ -861,6 +948,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_SarX(BGBDTC_X128 a, int b)
 	return(c);
 }
 
+/** Logical ShiftRight or ShiftLeft of 128 bit value.
+  * /param b Shift, Positive=ShiftRight, Negative=ShiftLeft.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrlX(BGBDTC_X128 a, int b)
 {
 	if(b>=0)
@@ -869,6 +959,9 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrlX(BGBDTC_X128 a, int b)
 		return(BGBDT_XI128_ShlX(a, -b));
 }
 
+/** Logical ShiftRight or ShiftLeft of 128 bit value.
+  * /param b Shift, Positive=ShiftLeft, Negative=ShiftRight.
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlrX(BGBDTC_X128 a, int b)
 {
 	if(b>=0)
@@ -877,6 +970,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShlrX(BGBDTC_X128 a, int b)
 		return(BGBDT_XI128_ShrX(a, -b));
 }
 
+/** Shift right int128 value by 1 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr1X(BGBDTC_X128 a)
 {
 #ifdef X86_MSVC
@@ -907,6 +1001,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr1X(BGBDTC_X128 a)
 #endif
 }
 
+/** Shift right int128 value by 2 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr2X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -917,6 +1012,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr2X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift right int128 value by 4 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr4X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -927,6 +1023,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr4X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift right int128 value by 8 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr8X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -937,6 +1034,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr8X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift right int128 value by 16 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr16X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -947,6 +1045,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr16X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift right int128 value by 32 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr32X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -955,6 +1054,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shr32X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 1 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl1X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -965,6 +1065,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl1X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 2 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl2X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -975,6 +1076,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl2X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 4 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl4X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -985,6 +1087,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl4X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 8 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl8X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -995,6 +1098,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl8X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 16 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl16X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -1005,6 +1109,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl16X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Shift left int128 value by 32 */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl32X(BGBDTC_X128 a)
 {
 	BGBDTC_X128 c;
@@ -1013,6 +1118,12 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shl32X(BGBDTC_X128 a)
 	return(c);
 }
 
+/** Partial Shift Right int128 value.
+  * Bits are shifted in from another value.
+  * /param a Value being shifted.
+  * /param b Value which is being shifted-in.
+  * /param n Number of bits to shift, 0 to 31
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrdpX(
 	BGBDTC_X128 a, BGBDTC_X128 b, int n)
 {
@@ -1027,6 +1138,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShrdpX(
 }
 
 
+/** Shift Right/In int128 value by 1 bit. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd1X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1037,6 +1149,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd1X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Shift Right/In int128 value by 2 bits. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd2X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1047,6 +1160,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd2X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Shift Right/In int128 value by 4 bits. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd4X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1057,6 +1171,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd4X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Shift Right/In int128 value by 8 bits. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd8X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1067,6 +1182,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd8X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Shift Right/In int128 value by 16 bits. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd16X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1077,6 +1193,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd16X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Shift Right/In int128 value by 32 bits. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd32X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1087,6 +1204,12 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shrd32X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Partial Shift Left int128 value.
+  * Bits are shifted in from another value.
+  * /param a Value being shifted.
+  * /param b Value which is being shifted-in.
+  * /param n Number of bits to shift, 0 to 31
+  */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ShldpX(
 	BGBDTC_X128 a, BGBDTC_X128 b, int n)
 {
@@ -1098,6 +1221,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ShldpX(
 	return(c);
 }
 
+/** Shift Left/In int128 value by 1 bit. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_Shld1X(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1108,16 +1232,19 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_Shld1X(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
-BS2VM_API int BGBDT_XI128_ZeroXP(BGBDTC_X128 a)
+/** Returns true if int128 is zero. */
+BS2VM_API bool BGBDT_XI128_ZeroXP(BGBDTC_X128 a)
 {
 	return(!(a.a|a.b|a.c|a.d));
 }
 
-BS2VM_API int BGBDT_XI128_NegXP(BGBDTC_X128 a)
+/** Returns true if int128 is negative. */
+BS2VM_API bool BGBDT_XI128_NegXP(BGBDTC_X128 a)
 {
 	return(a.d>>31);
 }
 
+/** Signed compare of int128 values. */
 BS2VM_API int BGBDT_XI128_CmpSgX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	if(((s32)a.d)>((s32)b.d))return( 1);
@@ -1131,6 +1258,7 @@ BS2VM_API int BGBDT_XI128_CmpSgX(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(0);
 }
 
+/** Unsigned compare of int128 values. */
 BS2VM_API int BGBDT_XI128_CmpX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 #if 0
@@ -1160,7 +1288,8 @@ BS2VM_API int BGBDT_XI128_CmpX(BGBDTC_X128 a, BGBDTC_X128 b)
 
 }
 
-BS2VM_API int BGBDT_XI128_CmpGtX(BGBDTC_X128 a, BGBDTC_X128 b)
+#if 0
+// BS2VM_API int BGBDT_XI128_CmpGtX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	int sa, sb, sc, sd;
 	int r;
@@ -1172,7 +1301,9 @@ BS2VM_API int BGBDT_XI128_CmpGtX(BGBDTC_X128 a, BGBDTC_X128 b)
 	r=(sd!=0)?sd:(sc!=0)?sc:(sb!=0)?sb:sa;
 	return(r>0);
 }
+#endif
 
+/** Wide (256 bit) compare of pairs of 128 bit values. */
 BS2VM_API int BGBDT_XI128_CmpWX(
 	BGBDTC_X128 aa, BGBDTC_X128 ab,
 	BGBDTC_X128 ba, BGBDTC_X128 bb)
@@ -1225,6 +1356,7 @@ BS2VM_API int BGBDT_XI128_CmpWX(
 	return(0);
 }
 
+/* Set a given bit in an int128 value. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_OrBitX(BGBDTC_X128 a, int pos)
 {
 	BGBDTC_X128 c;
@@ -1241,7 +1373,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_OrBitX(BGBDTC_X128 a, int pos)
 }
 
 #if 0
-BS2VM_API int BGBDT_XI128_DivunXI(BGBDTC_X128 a, u32 bv,
+// BS2VM_API int BGBDT_XI128_DivunXI(BGBDTC_X128 a, u32 bv,
 	BGBDTC_X128 *rq, BGBDTC_X128 *rr)
 {
 	BGBDTC_X128 q, r;
@@ -1284,6 +1416,7 @@ BS2VM_API int BGBDT_XI128_DivunXI(BGBDTC_X128 a, u32 bv,
 }
 #endif
 
+/** Unsigned divide of int128 values. */
 BS2VM_API int BGBDT_XI128_DivuXI(BGBDTC_X128 a, BGBDTC_X128 b,
 	BGBDTC_X128 *rq, BGBDTC_X128 *rr)
 {
@@ -1442,6 +1575,7 @@ BS2VM_API int BGBDT_XI128_DivuXI(BGBDTC_X128 a, BGBDTC_X128 b,
 	return(0);
 }
 
+/** Wide divide of 128 bit values. */
 BS2VM_API int BGBDT_XI128_DivW1XI(
 	BGBDTC_X128 al, BGBDTC_X128 ah,
 	BGBDTC_X128 b,
@@ -1472,6 +1606,7 @@ BS2VM_API int BGBDT_XI128_DivW1XI(
 	return(0);
 }
 
+/** Caching divide special-case of 128 bit values. */
 BS2VM_API int BGBDT_XI128_Divu2nXI(
 	BGBDTC_X128 a, u32 bv, BGBDTC_X128 *rq, BGBDTC_X128 *rr)
 {
@@ -1557,6 +1692,7 @@ BS2VM_API int BGBDT_XI128_Divu2nXI(
 	return(0);
 }
 
+/** Signed divide of 128 bit values, with remainder. */
 BS2VM_API int BGBDT_XI128_DivXI(BGBDTC_X128 a, BGBDTC_X128 b,
 	BGBDTC_X128 *rq, BGBDTC_X128 *rr)
 {
@@ -1584,6 +1720,7 @@ BS2VM_API int BGBDT_XI128_DivXI(BGBDTC_X128 a, BGBDTC_X128 b,
 	return(rt);
 }
 
+/** Signed divide of 128 bit values, no remainder. */
 BS2VM_API int BGBDT_XI128_Div2XI(BGBDTC_X128 a, BGBDTC_X128 b,
 	BGBDTC_X128 *rq)
 {
@@ -1609,6 +1746,7 @@ BS2VM_API int BGBDT_XI128_Div2XI(BGBDTC_X128 a, BGBDTC_X128 b,
 	return(rt);
 }
 
+/** Signed divide of 128 bit values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_DivX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1617,6 +1755,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_DivX(BGBDTC_X128 a, BGBDTC_X128 b)
 	return(c);
 }
 
+/** Signed modulo of 128 bit values. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_ModX(BGBDTC_X128 a, BGBDTC_X128 b)
 {
 	BGBDTC_X128 c;
@@ -1625,6 +1764,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_ModX(BGBDTC_X128 a, BGBDTC_X128 b)
 }
 
 
+/** Wrap int128 as tagged reference. */
 BS2VM_API dtVal BGBDT_XI128_WrapInt128(BGBDTC_X128 a)
 {
 	BGBDTC_X128 *xp;
@@ -1645,6 +1785,7 @@ BS2VM_API dtVal BGBDT_XI128_WrapInt128(BGBDTC_X128 a)
 }
 #endif
 
+/** Wrap int128 as tagged reference, created from an s64. */
 BS2VM_API dtVal BGBDT_XI128_WrapInt128L(s64 l)
 {
 	BGBDTC_X128 *xp;
@@ -1654,6 +1795,7 @@ BS2VM_API dtVal BGBDT_XI128_WrapInt128L(s64 l)
 	return(dtvWrapTagPtrF(xp, objty_si128));
 }
 
+/** Wrap int128 as tagged reference, created from a pair of u64 */
 BS2VM_API dtVal BGBDT_XI128_WrapInt128L2(u64 lo, u64 hi)
 {
 	BGBDTC_X128 *xp;
@@ -1680,6 +1822,7 @@ BS2VM_API dtVal BGBDT_XI128_WrapInt128L2(u64 lo, u64 hi)
 }
 #endif
 
+/** Get int128 value from an int128 tagged reference. */
 BS2VM_API void BGBDT_XI128_GetInt128v(dtVal vec, BGBDTC_X128 *v)
 {
 	BGBDTC_X128 *xp;
@@ -1687,6 +1830,7 @@ BS2VM_API void BGBDT_XI128_GetInt128v(dtVal vec, BGBDTC_X128 *v)
 	*v=*xp;
 }
 
+/** Unwrap an int128 value from a tagged reference. */
 BS2VM_API BGBDTC_X128 BGBDT_XI128_UnwrapInt128(dtVal vec)
 {
 	BGBDTC_X128 *xp;
@@ -1711,7 +1855,7 @@ BS2VM_API BGBDTC_X128 BGBDT_XI128_UnwrapInt128(dtVal vec)
 }
 #endif
 
-
+/** Add int128 values given by tagged references. */
 dtVal BGBDT_XI128_Add(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1727,6 +1871,7 @@ dtVal BGBDT_XI128_Add(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Subtract int128 values given by tagged references. */
 dtVal BGBDT_XI128_Sub(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1742,6 +1887,7 @@ dtVal BGBDT_XI128_Sub(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Multiply int128 values given by tagged references. */
 dtVal BGBDT_XI128_Mul(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1757,6 +1903,7 @@ dtVal BGBDT_XI128_Mul(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Divide int128 values given by tagged references. */
 dtVal BGBDT_XI128_Div(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1772,6 +1919,7 @@ dtVal BGBDT_XI128_Div(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Modulo int128 values given by tagged references. */
 dtVal BGBDT_XI128_Mod(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1787,6 +1935,7 @@ dtVal BGBDT_XI128_Mod(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Bitwise AND int128 values given by tagged references. */
 dtVal BGBDT_XI128_And(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1802,6 +1951,7 @@ dtVal BGBDT_XI128_And(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Bitwise OR int128 values given by tagged references. */
 dtVal BGBDT_XI128_Or(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1818,6 +1968,7 @@ dtVal BGBDT_XI128_Or(dtVal a, dtVal b)
 }
 
 
+/** Bitwise XOR int128 values given by tagged references. */
 dtVal BGBDT_XI128_Xor(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1833,6 +1984,7 @@ dtVal BGBDT_XI128_Xor(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Shift Left int128 values given by tagged references. */
 dtVal BGBDT_XI128_Shl(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1849,6 +2001,7 @@ dtVal BGBDT_XI128_Shl(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Shoft Right int128 values given by tagged references. */
 dtVal BGBDT_XI128_Shr(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1865,6 +2018,7 @@ dtVal BGBDT_XI128_Shr(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Shift Right Signed int128 values given by tagged references. */
 dtVal BGBDT_XI128_Sar(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1881,6 +2035,7 @@ dtVal BGBDT_XI128_Sar(dtVal a, dtVal b)
 	return(DTV_UNDEFINED);
 }
 
+/** Negate int128 value given by tagged reference. */
 dtVal BGBDT_XI128_Neg(dtVal a)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1896,6 +2051,7 @@ dtVal BGBDT_XI128_Neg(dtVal a)
 	return(DTV_UNDEFINED);
 }
 
+/** Bitwise NOT of int128 value given by tagged reference. */
 dtVal BGBDT_XI128_Not(dtVal a)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1911,6 +2067,7 @@ dtVal BGBDT_XI128_Not(dtVal a)
 	return(DTV_UNDEFINED);
 }
 
+/** Loginal Not of int128 value given by tagged reference. */
 dtVal BGBDT_XI128_LNot(dtVal a)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1926,6 +2083,9 @@ dtVal BGBDT_XI128_LNot(dtVal a)
 	return(DTV_UNDEFINED);
 }
 
+/** Compare int128 values given by tagged references.
+  * Returns -2 if values do not promote to int128;
+  */
 int BGBDT_XI128_Compare(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;
@@ -1940,9 +2100,12 @@ int BGBDT_XI128_Compare(dtVal a, dtVal b)
 		return(i);
 	}
 	
-	return(-1);
+	return(-2);
 }
 
+/** Compare int128 values given by tagged references.
+  * Coerces values to Int128.
+  */
 int BGBDT_XI128_CompareB(dtVal a, dtVal b)
 {
 	BGBDTC_X128 xa, xb, xc;

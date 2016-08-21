@@ -12,6 +12,11 @@ Instance Layout:
 #define BGBDTC_CTY_STRUCT	2		//structure
 #define BGBDTC_CTY_IFACE	3		//interface
 
+#define BGBDTC_SFL_BE		1		//big endian
+#define BGBDTC_SFL_LE		2		//little endian
+
+#define BGBDTC_SFL_ENBSW	1		//needs byte swap
+
 typedef struct _dtcobject_s *dtcObject;		//opaque
 
 typedef struct BGBDTC_SlotInfo_s *dtcField;
@@ -25,6 +30,7 @@ struct BGBDTC_SlotInfo_s {
 char *name;			//name
 char *sig;			//signature
 int offs;			//offset in object body
+u16 slotfl;			//slot flags
 byte slotty;		//slot type
 dtVal init;			//initial value
 s64 nameh;

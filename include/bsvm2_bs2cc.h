@@ -1,39 +1,33 @@
-#define BS2CC_TYFL_PUBLIC			0x00000001
-#define BS2CC_TYFL_PRIVATE			0x00000002
-#define BS2CC_TYFL_PROTECTED		0x00000004
-#define BS2CC_TYFL_STATIC			0x00000008
-#define BS2CC_TYFL_FINAL			0x00000010
-#define BS2CC_TYFL_SUPER			0x00000020
-#define BS2CC_TYFL_SYNCHRONIZED		BS2CC_TYFL_SUPER
-#define BS2CC_TYFL_VOLATILE			0x00000040
-#define BS2CC_TYFL_TRANSIENT		0x00000080
-#define BS2CC_TYFL_NATIVE			0x00000100
-#define BS2CC_TYFL_INTERFACE		0x00000200
-#define BS2CC_TYFL_ABSTRACT			0x00000400
-#define BS2CC_TYFL_STRICT			0x00000800
+#define BS2CC_TYFL_PUBLIC			0x00000001		///< p
+#define BS2CC_TYFL_PRIVATE			0x00000002		///< q
+#define BS2CC_TYFL_PROTECTED		0x00000004		///< r
+#define BS2CC_TYFL_STATIC			0x00000008		///< s
+#define BS2CC_TYFL_FINAL			0x00000010		///< f
+#define BS2CC_TYFL_NATIVE			0x00000020		///< n
+#define BS2CC_TYFL_ABSTRACT			0x00000040		///< a
+#define BS2CC_TYFL_ASYNC			0x00000080		///< w
+#define BS2CC_TYFL_DYNAMIC			0x00000100		///< x
+#define BS2CC_TYFL_SYNCHRONIZED		0x00000200		///< z
+#define BS2CC_TYFL_VOLATILE			0x00000400		///< v
+#define BS2CC_TYFL_TRANSIENT		0x00000800		///< y
 
 #define BS2CC_TYFL_PPP				0x00000007
 
-#define BS2CC_TYFL_BYREF			0x00001000
-#define BS2CC_TYFL_DELEGATE			0x00002000
-#define BS2CC_TYFL_GETTER			0x00004000
-#define BS2CC_TYFL_SETTER			0x00008000
+#define BS2CC_TYFL_CONST			0x00001000		///< k
+#define BS2CC_TYFL_INLINE			0x00002000		///< i
+#define BS2CC_TYFL_DELEGATE			0x00004000		///< d
+#define BS2CC_TYFL_EXTERN			0x00008000		///< e
+#define BS2CC_TYFL_GETTER			0x00010000		///< g
+#define BS2CC_TYFL_SETTER			0x00020000		///< h
+#define BS2CC_TYFL_STRICT			0x00040000		///< o
+#define BS2CC_TYFL_THREAD			0x00080000		///< t
+#define BS2CC_TYFL_LTLENDIAN		0x00100000		///< l
+#define BS2CC_TYFL_BIGENDIAN		0x00200000		///< b
+#define BS2CC_TYFL_DLLEXPORT		0x00400000
+#define BS2CC_TYFL_DLLIMPORT		0x00800000
 
-// #define BS2CC_TYFL_SIGNED			0x00010000
-// #define BS2CC_TYFL_UNSIGNED			0x00020000
-#define BS2CC_TYFL_EXTERN			0x00040000
-#define BS2CC_TYFL_CONST			0x00080000
-#define BS2CC_TYFL_INLINE			0x00100000
-// #define BS2CC_TYFL_EVENT			0x00200000
-// #define BS2CC_TYFL_WIDE				0x00400000
-#define BS2CC_TYFL_THREAD			0x00800000
-#define BS2CC_TYFL_DYNAMIC			0x01000000
-#define BS2CC_TYFL_ASYNC			0x02000000
-
-#define BS2CC_TYFL_LTLENDIAN		0x10000000
-#define BS2CC_TYFL_BIGENDIAN		0x20000000
-#define BS2CC_TYFL_DLLEXPORT		0x40000000
-#define BS2CC_TYFL_DLLIMPORT		0x80000000
+// #define BS2CC_TYFL_BYREF			0x00008000
+// #define BS2CC_TYFL_INTERFACE		0x00010000		///< j
 
 #define BS2CC_TYFL_CANREACH			0x000100000000LL
 #define BS2CC_TYFL_PUBVISIBLE		0x000200000000LL
@@ -245,192 +239,202 @@ typedef struct BS2CC_TypeOverflow_s BS2CC_TypeOverflow;
 typedef struct BS2CC_CcFrame_s BS2CC_CcFrame;
 typedef struct BS2CC_PkgFrame_s BS2CC_PkgFrame;
 
+/** Represents a variable of function declaration. */
 struct BS2CC_VarInfo_s
 {
-BS2CC_VarInfo *next;		//next in list
-BS2CC_VarInfo *pknext;		//next in package
-BS2CC_VarInfo *alcnext;		//next allocated in context
-BS2CC_PkgFrame *pkg;		//owning package (globals)
-BS2CC_VarInfo *obj;			//owning object (fields/methods)
-char *name;					//name (local)
-char *qname;				//name (fully qualified)
-char *sig;
-int bty;					//base type ID
-int rty;					//return type ID
-s64 bmfl;					//base flags
-int gid;					//var ID
-int vitype;					//varinfo type
-int tokcnt;					//body token count
+BS2CC_VarInfo *next;		///< next in list
+BS2CC_VarInfo *pknext;		///< next in package
+BS2CC_VarInfo *alcnext;		///< next allocated in context
+BS2CC_PkgFrame *pkg;		///< owning package (globals)
+BS2CC_VarInfo *obj;			///< owning object (fields/methods)
+char *name;					///< name (local)
+char *qname;				///< name (fully qualified)
+char *sig;					///< type signature string
+int bty;					///< base type ID
+int rty;					///< return type ID
+s64 bmfl;					///< base flags
+int gid;					///< var or global ID
+int vitype;					///< varinfo type
+int tokcnt;					///< body token count
 
-BS2CC_VarInfo *args[256];
-BS2CC_VarInfo *iface[32];
-BS2CC_VarInfo *super;
-int nargs, niface;
-BS2CC_CcFrame *body;
-dtVal typeExp;				//AST for variable type
-dtVal bodyExp;				//AST for function body
-dtVal initExp;				//AST for variable initialization
-dtVal extsExp;				//AST for extends
-dtVal implExp;				//AST for implements
+BS2CC_VarInfo *args[256];	///< function arguments, class/struct members
+BS2CC_VarInfo *iface[32];	///< class interfaces
+BS2CC_VarInfo *super;		///< class superclass
+int nargs, niface;			///< number of arguments and interfaces
+BS2CC_CcFrame *body;		///< function body
+dtVal typeExp;				///< AST for variable type
+dtVal bodyExp;				///< AST for function body
+dtVal initExp;				///< AST for variable initialization
+dtVal extsExp;				///< AST for extends
+dtVal implExp;				///< AST for implements
 };
 
+/** Represents an "overflowed" type.
+  * Used if a type if the type is to big to be bit-packed into an integer.
+  */
 struct BS2CC_TypeOverflow_s
 {
-int base;		//base type
-byte al;		//array level
-byte pl;		//pointer level
-byte rf;		//reference
-byte an;		//fixed array levels
-byte nab;		//nullable / nonnull
-int asz[16];	//fixed array sizes
+int base;		///< base type
+byte al;		///< array level
+byte pl;		///< pointer level
+byte rf;		///< reference
+byte an;		///< fixed array levels
+byte nab;		///< nullable / nonnull
+int asz[16];	///< fixed array sizes
 };
 
-#define BS2CC_CCFRM_TTEXT	4096
-#define BS2CC_CCFRM_TTLBL	128
-#define BS2CC_CCFRM_TTRLC	128
-#define BS2CC_CCFRM_TNLBL	128
-#define BS2CC_CCFRM_TGBL	256
+#define BS2CC_CCFRM_TTEXT	4096	///< size of temp text buffer
+#define BS2CC_CCFRM_TTLBL	128		///< size of temp label array
+#define BS2CC_CCFRM_TTRLC	128		///< size of temp reloc array
+#define BS2CC_CCFRM_TNLBL	128		///< size of temp named label array
+#define BS2CC_CCFRM_TGBL	256		///< size of temp global array
 
+/** Compile Frame.
+  *
+  * Represents the body of a function being compiled.
+  */
 struct BS2CC_CcFrame_s
 {
-byte *ct;
-byte *cts;
-byte *cte;
-byte newtrace;
-byte zpf, zpo;
-byte wasret;
-int szt;
+byte *ct;					///< bytecode output position
+byte *cts;					///< bytecode output buffer start
+byte *cte;					///< bytecode output buffer end
+byte newtrace;				///< set if prior instuction began a new trace
+byte zpf, zpo;				///< Z prefix and operator
+byte wasret;				///< set if prior instruction was a return
+int szt;					///< size of bytecode output
 
-byte *cs;
-byte *cse;
+byte *cs;					///< bytecode input position
+byte *cse;					///< bytecode input end
 
-BS2CC_CcFrame *alcnext;
-BS2CC_CompileContext *ctx;	//owning context
-BS2CC_VarInfo *func;		//parent function
+BS2CC_CcFrame *alcnext;		///< next in allocated list
+BS2CC_CompileContext *ctx;	///< owning context
+BS2CC_VarInfo *func;		///< parent function
 
-u32 stack_bty[256];			//temporary stack base-type
-int stackpos;				//stack pos for temp stack
-int stacksize;				//max size of stack frame
+u32 stack_bty[256];			///< temporary stack base-type
+int stackpos;				///< stack pos for temp stack
+int stacksize;				///< max size of stack frame
 
-BS2CC_VarInfo *locals[256];
-int nlocals;
-int bargs;					//start of arguments list
+BS2CC_VarInfo *locals[256];	///< local variables
+int nlocals;				///< number of local variables
+int bargs;					///< start of arguments list
 
-byte def_rlcty;				//default relocation type
+byte def_rlcty;				///< default relocation type
 
-int *tlbl_id, *tlbl_ct;
-int *trlc_id, *trlc_ct;
-int ntlbl, mtlbl;
-int ntrlc, mtrlc;
+int *tlbl_id, *tlbl_ct;		///< temp labels
+int *trlc_id, *trlc_ct;		///< temp relocs
+int ntlbl, mtlbl;			///< num and max temp labels
+int ntrlc, mtrlc;			///< num and max temp relocs
 
 // int nlbl_id[256];
 // char *nlbl_n[256];
-int *nlbl_id;
-char **nlbl_n;
-int nnlbl, mnlbl;
+int *nlbl_id;				///< named label IDs
+char **nlbl_n;				///< named label names
+int nnlbl, mnlbl;			///< num and max named labels
 
-int constk[64];			//continue stack
-int brkstk[64];			//break stack
-int constkpos;			//continue stack pos
-int brkstkpos;			//break stack pos
+int constk[64];			///< continue stack
+int brkstk[64];			///< break stack
+int constkpos;			///< continue stack pos
+int brkstkpos;			///< break stack pos
 
 // int gbltab[256];
-int *gbltab;
-int ngbl, mgbl;
+int *gbltab;			///< global index table
+int ngbl, mgbl;			///< num and max globals
 
-int jcleanup;
+int jcleanup;			///< label ID for function cleanup
 
-int t_tlbl_id[BS2CC_CCFRM_TTLBL];		//temp buffer for temp labels
-int t_tlbl_ct[BS2CC_CCFRM_TTLBL];
-int t_trlc_id[BS2CC_CCFRM_TTRLC];		//temp buffer for temp reloc
-int t_trlc_ct[BS2CC_CCFRM_TTRLC];
-int t_nlbl_id[BS2CC_CCFRM_TNLBL];		//temp buffer for named labels
-char *t_nlbl_n[BS2CC_CCFRM_TNLBL];
-int t_gbltab[BS2CC_CCFRM_TGBL];
+int t_tlbl_id[BS2CC_CCFRM_TTLBL];	///< temp buffer for temp label IDs
+int t_tlbl_ct[BS2CC_CCFRM_TTLBL];	///< temp buffer for temp label offsets
+int t_trlc_id[BS2CC_CCFRM_TTRLC];	///< temp buffer for temp reloc IDs
+int t_trlc_ct[BS2CC_CCFRM_TTRLC];	///< temp buffer for temp reloc offsets
+int t_nlbl_id[BS2CC_CCFRM_TNLBL];	///< temp buffer for named labels IDs
+char *t_nlbl_n[BS2CC_CCFRM_TNLBL];	///< temp buffer for named label names
+int t_gbltab[BS2CC_CCFRM_TGBL];		///< temp buffer for global indices
 
-byte t_textbuf[BS2CC_CCFRM_TTEXT];		//temp buffer for code
+byte t_textbuf[BS2CC_CCFRM_TTEXT];	///< temp buffer for bytecode
 };
 
+/** Represents a package. */
 struct BS2CC_PkgFrame_s
 {
-BS2CC_PkgFrame *next;
-BS2CC_PkgFrame *parent;
-char *name;
-char *qname;
+BS2CC_PkgFrame *next;		///< next package
+BS2CC_PkgFrame *parent;		///< parent package
+char *name;					///< name of package
+char *qname;				///< qualified name of package
 
-BS2CC_VarInfo *vars;		//declarations
+BS2CC_VarInfo *vars;		///< package declarations
 
-BS2CC_PkgFrame *imps[256];	//imports
-int nimps;
-int gid;
+BS2CC_PkgFrame *imps[256];	///< package imports
+int nimps;					///< number of package imports
+int gid;					///< global ID for package
 };
 
+/** Context holding main compiler state */
 struct BS2CC_CompileContext_s
 {
 /* Lexer / Parser */
-char *srcbuf;
-int *srcofs;
-char *tokbuf;
-int *tokarr;
-int ntok;
-int tok;
-char *cname;
+char *srcbuf;				///< source text buffer
+int *srcofs;				///< source text offsets
+char *tokbuf;				///< token string buffer
+int *tokarr;				///< token offsets
+int ntok;					///< number of tokens
+int tok;					///< token position
+char *cname;				///< current name
 
 /* Bytecode Generation */
-BS2CC_CcFrame *frmstack[256];
-int frmstackpos;
+BS2CC_CcFrame *frmstack[256];	///< frame stack
+int frmstackpos;				///< frame stack position
 
-BS2CC_PkgFrame *pkg_first;
+BS2CC_PkgFrame *pkg_first;		///< first package
 
-BS2CC_CcFrame *frm;
-BS2CC_PkgFrame *pkg;
-BS2CC_VarInfo *obj;
-int gsseq;
+BS2CC_CcFrame *frm;				///< current compile frame
+BS2CC_PkgFrame *pkg;			///< current package
+BS2CC_VarInfo *obj;				///< current object
+int gsseq;						///< sequence number for gensyms
 
-BS2CC_VarInfo *objstk[16];
-BS2CC_PkgFrame *pkgstk[16];
-int objstkpos;
-int pkgstkpos;
+BS2CC_VarInfo *objstk[16];		///< object stack
+BS2CC_PkgFrame *pkgstk[16];		///< package stack
+int objstkpos;					///< object stack pos
+int pkgstkpos;					///< package stack pos
 
 // char *curpkg;
-BS2CC_VarInfo *globals[4096];
-int nglobals;
+BS2CC_VarInfo *globals[4096];	///< array of toplevel declarations
+int nglobals;					///< number of toplevel declarations
 
-BS2CC_TypeOverflow *tyovf[4096];
-int ntyovf;
+BS2CC_TypeOverflow *tyovf[4096];	///< array of overflowed types
+int ntyovf;							///< number of overflowed types
 
 
-int cwarnln[256];	//warning line number
-u16 cwarn[256];		//warning and hint types
-int cerrln[256];	//error line number
-u16 cerr[256];		//error type
-int cfatalln[16];	//fatal line number
-u16 cfatal[16];		//fatal type
-int ncwarn;			//number of warnings
-int ncerr;			//number of errors
-int ncfatal;		//number of fatal errors
+int cwarnln[256];	///< warning line number
+u16 cwarn[256];		///< warning and hint types
+int cerrln[256];	///< error line number
+u16 cerr[256];		///< error type
+int cfatalln[16];	///< fatal line number
+u16 cfatal[16];		///< fatal type
+int ncwarn;			///< number of warnings
+int ncerr;			///< number of errors
+int ncfatal;		///< number of fatal errors
 
-s16 cwarnpix[256];	//warning parameter index
-s16 cerrpix[256];	//error parameter intex
+s16 cwarnpix[256];	///< warning parameter index
+s16 cerrpix[256];	///< error parameter intex
 
-char *srcfns[256];	//source file names (warning/error)
-int nsrcfns;
-char *srcnix[256];	//source name index (warning/error)
-int nsrcnixs;
+char *srcfns[256];	///< source file names (warning/error)
+int nsrcfns;		///< number of source file names
+char *srcnix[256];	///< source name index (warning/error)
+int nsrcnixs;		///< number of source indices
 
-int cwparm[1024];	//warning/error parameters
-int ncwparm;
+int cwparm[1024];	///< warning/error parameters
+int ncwparm;		///< number of warning/error parameters
 
-char *srcfn;		//source file name
-int srcln;			//source line number
+char *srcfn;		///< source file name
+int srcln;			///< source line number
 
-BGBDT_MM_ParsePrintInfo *dbgprn;
+BGBDT_MM_ParsePrintInfo *dbgprn;	///< debug message print context
 
-char *strtab;
-char *strtabe;
-char *strct;
+char *strtab;		///< strings table
+char *strtabe;		///< strings table end
+char *strct;		///< strings table position
 
-BS2CC_VarInfo *lst_vari;	//list of all VarInfo in context
-BS2CC_CcFrame *lst_ccfrm;	//list of all CcFrame in context
+BS2CC_VarInfo *lst_vari;	///< list of all VarInfo in context
+BS2CC_CcFrame *lst_ccfrm;	///< list of all CcFrame in context
 };
 

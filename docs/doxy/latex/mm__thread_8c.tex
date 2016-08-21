@@ -1,0 +1,340 @@
+\hypertarget{mm__thread_8c}{\section{mm/mm\-\_\-thread.c File Reference}
+\label{mm__thread_8c}\index{mm/mm\-\_\-thread.\-c@{mm/mm\-\_\-thread.\-c}}
+}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structth__context__s}{th\-\_\-context\-\_\-s}
+\item 
+struct \hyperlink{structBIPRO__RegisterState__s}{B\-I\-P\-R\-O\-\_\-\-Register\-State\-\_\-s}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mm__thread_8c_a2dc3870be25a19efa2940150507aaf71}{U\-N\-D\-E\-F\-I\-N\-E\-D}~((void $\ast$)(-\/1))
+\item 
+\#define \hyperlink{mm__thread_8c_a8e5f703e1cf83ce96dfb8c83554b4092}{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T}~0
+\item 
+\#define \hyperlink{mm__thread_8c_a59a20155229f477d852aa128aba548d3}{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M}~1
+\item 
+\#define \hyperlink{mm__thread_8c_a647fae04348a46b84701b46fee1094a1}{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S}
+\item 
+\#define \hyperlink{mm__thread_8c_ae8dbfb55dd235fd10df9f8060ba47f60}{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bsvm2__mm_8h_a6ee4a25d2e71b074dabe386c326e80de}{th\-Context} $\ast$ \hyperlink{mm__thread_8c_ab5d0558574bdcda156c2c74693bd2ab2}{th\-Get\-Context} ()
+\item 
+void $\ast$ \hyperlink{mm__thread_8c_ac4e6f2f5d852e82fc30030dfa05b588f}{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\item 
+void \hyperlink{mm__thread_8c_adebe3df687a88c3d06bc1fedf34dbb86}{bipro\-\_\-thread\-\_\-markctx} (\hyperlink{bsvm2__mm_8h_a6ee4a25d2e71b074dabe386c326e80de}{th\-Context} $\ast$inf)
+\item 
+void \hyperlink{mm__thread_8c_a08348a2441174a19b60e59c3a3d64941}{bipro\-\_\-thread\-\_\-mark} ()
+\item 
+void \hyperlink{mm__thread_8c_a9d5a46b2f8c464d3ef44a15684912730}{bipro\-\_\-thread\-\_\-init} ()
+\item 
+int \hyperlink{mm__thread_8c_af9921746333c596f51598735880b17b9}{th\-Alloc\-Tls} ()
+\item 
+int \hyperlink{mm__thread_8c_aa3062bb5609bce9f58ee51559576f1dc}{th\-Alloc\-Tls\-Name} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name}, int sz)
+\item 
+void \hyperlink{mm__thread_8c_ac1e8c376a43f9a64181b1d3c3f7aa674}{th\-Free\-Tls} (int idx)
+\item 
+void $\ast$ \hyperlink{mm__thread_8c_aa62b56ef5acfa5abb6ffc62be73fb51d}{th\-Get\-Tls\-Value} (int idx)
+\item 
+void \hyperlink{mm__thread_8c_a90be05a0fd765e399b5f9615b19da296}{th\-Set\-Tls\-Value} (int idx, void $\ast$val)
+\item 
+void $\ast$ \hyperlink{mm__thread_8c_a607f69412a2c1484d8df751553970e41}{th\-Get\-Tls\-Ptr} (int idx)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a0c087a8d93561c81fa8843457b9ece90}{bipro\-\_\-strdup} (char $\ast$str)
+\item 
+void \hyperlink{mm__thread_8c_aaadfe4503ee0ec6fd892cb89c407ac86}{B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name}, \hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} va, \hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} sz, int fl)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_ae5670ecaebe992defeb19eafff67caae}{B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name} (void $\ast$ptr)
+\item 
+void \hyperlink{mm__thread_8c_adbf0044aaba00d98ee0f72de1375838f}{B\-I\-P\-R\-O\-\_\-\-Add\-Sym} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name}, void $\ast$ptr)
+\item 
+void $\ast$ \hyperlink{mm__thread_8c_afcb04911251394165eb6238edece61fa}{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label} (char $\ast$\hyperlink{bs2c__disasm_8c_a5ac083a645d964373f022d03df4849c8}{name})
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a047f13d8076cab7fe8d03c23250be8c3}{B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S} (void $\ast$ptr, void $\ast$$\ast$rbase)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_aeb129a213a9c97c092ce3f99ab3eea24}{B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr} (void $\ast$ptr)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_ae540bf83abd82837c81ebdb07926d1a4}{B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr} (void $\ast$ptr, void $\ast$$\ast$rbp)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a6ee9eb63110072af11da7210bb6a0589}{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name} (void $\ast$ptr)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_af34ad113daa9666a42c46cfc8401b98a}{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name} (void $\ast$ptr, void $\ast$$\ast$rbp)
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a1b1f9237c37914414e650618cea2b945}{B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name} (void $\ast$ptr)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bsvm2__mm_8h_a6ee4a25d2e71b074dabe386c326e80de}{th\-Context} $\ast$ \hyperlink{mm__thread_8c_a534271f6af81a25471a7a91ce9c9e8b7}{bipro\-\_\-thread\-\_\-inf} \mbox{[}1024\mbox{]}
+\item 
+int \hyperlink{mm__thread_8c_a74b1f0095f160bfa15e4499940746bb9}{bipro\-\_\-thread\-\_\-num} =0
+\item 
+int \hyperlink{mm__thread_8c_ab83c46039f9754dcfc6295a72ad9147d}{bipro\-\_\-threadctx\-\_\-tls} =-\/1
+\item 
+int \hyperlink{mm__thread_8c_a9f48558f6bce55560a7ac95b8ede6d4e}{bipro\-\_\-threadtls\-\_\-tls} =-\/1
+\item 
+int \hyperlink{mm__thread_8c_a3253109128ad004ad244486948396466}{bipro\-\_\-thread\-\_\-tlsrov} =1
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a29aa6fc744e5595a7543f72646957d6f}{bipro\-\_\-thread\-\_\-tlsname} \mbox{[}1024\mbox{]}
+\item 
+volatile long \hyperlink{mm__thread_8c_aace3625c69c456bb02c0a95814d2462b}{bipro\-\_\-thread\-\_\-ptrwait} =0
+\item 
+volatile long \hyperlink{mm__thread_8c_ae0bdf4de0318d96cc40de2f922385a25}{bipro\-\_\-thread\-\_\-ptrwait2} =0
+\item 
+volatile void $\ast$ \hyperlink{mm__thread_8c_a94b095b5e88633c710846f9239ba0b69}{bipro\-\_\-thread\-\_\-sigptr} =N\-U\-L\-L
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a6e5a050212c9dfdcb48aa3e91b28d729}{bipro\-\_\-exesec\-\_\-n} \mbox{[}256\mbox{]}
+\item 
+\hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} \hyperlink{mm__thread_8c_ac776764ab13d8fafca5f36f84ce7b7e7}{bipro\-\_\-exesec\-\_\-va} \mbox{[}256\mbox{]}
+\item 
+\hyperlink{bgbasm__conf_8h_a4258bfb2c3a440d06c4aaa3c2b450dde}{s64} \hyperlink{mm__thread_8c_a9b21da4f75ba025af988c69d2be5f6c0}{bipro\-\_\-exesec\-\_\-sz} \mbox{[}256\mbox{]}
+\item 
+int \hyperlink{mm__thread_8c_aac772331c39583ebebc19c1cc070ff0f}{bipro\-\_\-n\-\_\-exesec}
+\item 
+char $\ast$ \hyperlink{mm__thread_8c_a7cb4609dceb890a2680944ceb406744b}{bipro\-\_\-sym\-\_\-name} \mbox{[}1$<$$<$ 14\mbox{]}
+\item 
+void $\ast$ \hyperlink{mm__thread_8c_aaff8d108142b3fb0bbc3dbcd8542dda5}{bipro\-\_\-sym\-\_\-addr} \mbox{[}1$<$$<$ 14\mbox{]}
+\item 
+int \hyperlink{mm__thread_8c_a27257af2523d6c26d7f47d6a793e0bfd}{bipro\-\_\-sym\-\_\-nsym} =0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{mm__thread_8c_a8e5f703e1cf83ce96dfb8c83554b4092}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T@{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T}}
+\index{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T@{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-D\-E\-F\-A\-U\-L\-T~0}}\label{mm__thread_8c_a8e5f703e1cf83ce96dfb8c83554b4092}
+\hypertarget{mm__thread_8c_a59a20155229f477d852aa128aba548d3}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M@{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M}}
+\index{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M@{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-C\-E\-H\-\_\-\-T\-R\-Y\-\_\-\-S\-Y\-S\-T\-E\-M~1}}\label{mm__thread_8c_a59a20155229f477d852aa128aba548d3}
+\hypertarget{mm__thread_8c_ae8dbfb55dd235fd10df9f8060ba47f60}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S@{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S}}
+\index{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S@{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-A\-D\-D\-R\-N\-A\-M\-E\-O\-S}}\label{mm__thread_8c_ae8dbfb55dd235fd10df9f8060ba47f60}
+\hypertarget{mm__thread_8c_a647fae04348a46b84701b46fee1094a1}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S@{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S}}
+\index{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S@{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\-A\-S\-\_\-\-L\-O\-O\-K\-U\-P\-L\-A\-B\-E\-L\-O\-S}}\label{mm__thread_8c_a647fae04348a46b84701b46fee1094a1}
+\hypertarget{mm__thread_8c_a2dc3870be25a19efa2940150507aaf71}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!U\-N\-D\-E\-F\-I\-N\-E\-D@{U\-N\-D\-E\-F\-I\-N\-E\-D}}
+\index{U\-N\-D\-E\-F\-I\-N\-E\-D@{U\-N\-D\-E\-F\-I\-N\-E\-D}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{U\-N\-D\-E\-F\-I\-N\-E\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\-N\-D\-E\-F\-I\-N\-E\-D~((void $\ast$)(-\/1))}}\label{mm__thread_8c_a2dc3870be25a19efa2940150507aaf71}
+
+
+\subsection{Function Documentation}
+\hypertarget{mm__thread_8c_aaadfe4503ee0ec6fd892cb89c407ac86}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section@{B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section}}
+\index{B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section@{B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section}]{\setlength{\rightskip}{0pt plus 5cm}void B\-I\-P\-R\-O\-\_\-\-Add\-Exe\-Section (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name, }
+\item[{{\bf s64}}]{va, }
+\item[{{\bf s64}}]{sz, }
+\item[{int}]{fl}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_aaadfe4503ee0ec6fd892cb89c407ac86}
+\hypertarget{mm__thread_8c_adbf0044aaba00d98ee0f72de1375838f}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Add\-Sym@{B\-I\-P\-R\-O\-\_\-\-Add\-Sym}}
+\index{B\-I\-P\-R\-O\-\_\-\-Add\-Sym@{B\-I\-P\-R\-O\-\_\-\-Add\-Sym}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Add\-Sym}]{\setlength{\rightskip}{0pt plus 5cm}void B\-I\-P\-R\-O\-\_\-\-Add\-Sym (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name, }
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_adbf0044aaba00d98ee0f72de1375838f}
+\hypertarget{mm__thread_8c_af34ad113daa9666a42c46cfc8401b98a}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name@{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name}}
+\index{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name@{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Last\-Name (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr, }
+\item[{void $\ast$$\ast$}]{rbp}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_af34ad113daa9666a42c46cfc8401b98a}
+\hypertarget{mm__thread_8c_a6ee9eb63110072af11da7210bb6a0589}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name@{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name}}
+\index{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name@{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Get\-Addr\-Name (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a6ee9eb63110072af11da7210bb6a0589}
+\hypertarget{mm__thread_8c_ae540bf83abd82837c81ebdb07926d1a4}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr@{B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr}}
+\index{B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr@{B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Get\-Last\-Name\-Ptr (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr, }
+\item[{void $\ast$$\ast$}]{rbp}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_ae540bf83abd82837c81ebdb07926d1a4}
+\hypertarget{mm__thread_8c_aeb129a213a9c97c092ce3f99ab3eea24}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr@{B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr}}
+\index{B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr@{B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Get\-Name\-Ptr (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_aeb129a213a9c97c092ce3f99ab3eea24}
+\hypertarget{mm__thread_8c_a047f13d8076cab7fe8d03c23250be8c3}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S}}
+\index{B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Lookup\-Addr\-Name\-O\-S (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr, }
+\item[{void $\ast$$\ast$}]{rbase}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a047f13d8076cab7fe8d03c23250be8c3}
+\hypertarget{mm__thread_8c_ae5670ecaebe992defeb19eafff67caae}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name}}
+\index{B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Lookup\-Exe\-Section\-Ptr\-Name (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_ae5670ecaebe992defeb19eafff67caae}
+\hypertarget{mm__thread_8c_afcb04911251394165eb6238edece61fa}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Lookup\-Label@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label}}
+\index{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ B\-I\-P\-R\-O\-\_\-\-Lookup\-Label (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_afcb04911251394165eb6238edece61fa}
+\hypertarget{mm__thread_8c_ac4e6f2f5d852e82fc30030dfa05b588f}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S}}
+\index{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ B\-I\-P\-R\-O\-\_\-\-Lookup\-Label\-O\-S (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_ac4e6f2f5d852e82fc30030dfa05b588f}
+\hypertarget{mm__thread_8c_a1b1f9237c37914414e650618cea2b945}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name}}
+\index{B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name@{B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-I\-P\-R\-O\-\_\-\-Lookup\-Section\-Addr\-Name (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a1b1f9237c37914414e650618cea2b945}
+\hypertarget{mm__thread_8c_a0c087a8d93561c81fa8843457b9ece90}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-strdup@{bipro\-\_\-strdup}}
+\index{bipro\-\_\-strdup@{bipro\-\_\-strdup}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-strdup}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ bipro\-\_\-strdup (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a0c087a8d93561c81fa8843457b9ece90}
+\hypertarget{mm__thread_8c_a9d5a46b2f8c464d3ef44a15684912730}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-init@{bipro\-\_\-thread\-\_\-init}}
+\index{bipro\-\_\-thread\-\_\-init@{bipro\-\_\-thread\-\_\-init}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void bipro\-\_\-thread\-\_\-init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a9d5a46b2f8c464d3ef44a15684912730}
+\hypertarget{mm__thread_8c_a08348a2441174a19b60e59c3a3d64941}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-mark@{bipro\-\_\-thread\-\_\-mark}}
+\index{bipro\-\_\-thread\-\_\-mark@{bipro\-\_\-thread\-\_\-mark}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-mark}]{\setlength{\rightskip}{0pt plus 5cm}void bipro\-\_\-thread\-\_\-mark (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a08348a2441174a19b60e59c3a3d64941}
+\hypertarget{mm__thread_8c_adebe3df687a88c3d06bc1fedf34dbb86}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-markctx@{bipro\-\_\-thread\-\_\-markctx}}
+\index{bipro\-\_\-thread\-\_\-markctx@{bipro\-\_\-thread\-\_\-markctx}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-markctx}]{\setlength{\rightskip}{0pt plus 5cm}void bipro\-\_\-thread\-\_\-markctx (
+\begin{DoxyParamCaption}
+\item[{{\bf th\-Context} $\ast$}]{inf}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_adebe3df687a88c3d06bc1fedf34dbb86}
+\hypertarget{mm__thread_8c_af9921746333c596f51598735880b17b9}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Alloc\-Tls@{th\-Alloc\-Tls}}
+\index{th\-Alloc\-Tls@{th\-Alloc\-Tls}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Alloc\-Tls}]{\setlength{\rightskip}{0pt plus 5cm}int th\-Alloc\-Tls (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_af9921746333c596f51598735880b17b9}
+\hypertarget{mm__thread_8c_aa3062bb5609bce9f58ee51559576f1dc}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Alloc\-Tls\-Name@{th\-Alloc\-Tls\-Name}}
+\index{th\-Alloc\-Tls\-Name@{th\-Alloc\-Tls\-Name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Alloc\-Tls\-Name}]{\setlength{\rightskip}{0pt plus 5cm}int th\-Alloc\-Tls\-Name (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{name, }
+\item[{int}]{sz}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_aa3062bb5609bce9f58ee51559576f1dc}
+\hypertarget{mm__thread_8c_ac1e8c376a43f9a64181b1d3c3f7aa674}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Free\-Tls@{th\-Free\-Tls}}
+\index{th\-Free\-Tls@{th\-Free\-Tls}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Free\-Tls}]{\setlength{\rightskip}{0pt plus 5cm}void th\-Free\-Tls (
+\begin{DoxyParamCaption}
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_ac1e8c376a43f9a64181b1d3c3f7aa674}
+\hypertarget{mm__thread_8c_ab5d0558574bdcda156c2c74693bd2ab2}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Get\-Context@{th\-Get\-Context}}
+\index{th\-Get\-Context@{th\-Get\-Context}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Get\-Context}]{\setlength{\rightskip}{0pt plus 5cm}{\bf th\-Context}$\ast$ th\-Get\-Context (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_ab5d0558574bdcda156c2c74693bd2ab2}
+\hypertarget{mm__thread_8c_a607f69412a2c1484d8df751553970e41}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Get\-Tls\-Ptr@{th\-Get\-Tls\-Ptr}}
+\index{th\-Get\-Tls\-Ptr@{th\-Get\-Tls\-Ptr}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Get\-Tls\-Ptr}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ th\-Get\-Tls\-Ptr (
+\begin{DoxyParamCaption}
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a607f69412a2c1484d8df751553970e41}
+\hypertarget{mm__thread_8c_aa62b56ef5acfa5abb6ffc62be73fb51d}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Get\-Tls\-Value@{th\-Get\-Tls\-Value}}
+\index{th\-Get\-Tls\-Value@{th\-Get\-Tls\-Value}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Get\-Tls\-Value}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ th\-Get\-Tls\-Value (
+\begin{DoxyParamCaption}
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_aa62b56ef5acfa5abb6ffc62be73fb51d}
+\hypertarget{mm__thread_8c_a90be05a0fd765e399b5f9615b19da296}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!th\-Set\-Tls\-Value@{th\-Set\-Tls\-Value}}
+\index{th\-Set\-Tls\-Value@{th\-Set\-Tls\-Value}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{th\-Set\-Tls\-Value}]{\setlength{\rightskip}{0pt plus 5cm}void th\-Set\-Tls\-Value (
+\begin{DoxyParamCaption}
+\item[{int}]{idx, }
+\item[{void $\ast$}]{val}
+\end{DoxyParamCaption}
+)}}\label{mm__thread_8c_a90be05a0fd765e399b5f9615b19da296}
+
+
+\subsection{Variable Documentation}
+\hypertarget{mm__thread_8c_a6e5a050212c9dfdcb48aa3e91b28d729}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-exesec\-\_\-n@{bipro\-\_\-exesec\-\_\-n}}
+\index{bipro\-\_\-exesec\-\_\-n@{bipro\-\_\-exesec\-\_\-n}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-exesec\-\_\-n}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ bipro\-\_\-exesec\-\_\-n\mbox{[}256\mbox{]}}}\label{mm__thread_8c_a6e5a050212c9dfdcb48aa3e91b28d729}
+\hypertarget{mm__thread_8c_a9b21da4f75ba025af988c69d2be5f6c0}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-exesec\-\_\-sz@{bipro\-\_\-exesec\-\_\-sz}}
+\index{bipro\-\_\-exesec\-\_\-sz@{bipro\-\_\-exesec\-\_\-sz}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-exesec\-\_\-sz}]{\setlength{\rightskip}{0pt plus 5cm}{\bf s64} bipro\-\_\-exesec\-\_\-sz\mbox{[}256\mbox{]}}}\label{mm__thread_8c_a9b21da4f75ba025af988c69d2be5f6c0}
+\hypertarget{mm__thread_8c_ac776764ab13d8fafca5f36f84ce7b7e7}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-exesec\-\_\-va@{bipro\-\_\-exesec\-\_\-va}}
+\index{bipro\-\_\-exesec\-\_\-va@{bipro\-\_\-exesec\-\_\-va}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-exesec\-\_\-va}]{\setlength{\rightskip}{0pt plus 5cm}{\bf s64} bipro\-\_\-exesec\-\_\-va\mbox{[}256\mbox{]}}}\label{mm__thread_8c_ac776764ab13d8fafca5f36f84ce7b7e7}
+\hypertarget{mm__thread_8c_aac772331c39583ebebc19c1cc070ff0f}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-n\-\_\-exesec@{bipro\-\_\-n\-\_\-exesec}}
+\index{bipro\-\_\-n\-\_\-exesec@{bipro\-\_\-n\-\_\-exesec}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-n\-\_\-exesec}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-n\-\_\-exesec}}\label{mm__thread_8c_aac772331c39583ebebc19c1cc070ff0f}
+\hypertarget{mm__thread_8c_aaff8d108142b3fb0bbc3dbcd8542dda5}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-sym\-\_\-addr@{bipro\-\_\-sym\-\_\-addr}}
+\index{bipro\-\_\-sym\-\_\-addr@{bipro\-\_\-sym\-\_\-addr}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-sym\-\_\-addr}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ bipro\-\_\-sym\-\_\-addr\mbox{[}1$<$$<$ 14\mbox{]}}}\label{mm__thread_8c_aaff8d108142b3fb0bbc3dbcd8542dda5}
+\hypertarget{mm__thread_8c_a7cb4609dceb890a2680944ceb406744b}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-sym\-\_\-name@{bipro\-\_\-sym\-\_\-name}}
+\index{bipro\-\_\-sym\-\_\-name@{bipro\-\_\-sym\-\_\-name}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-sym\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ bipro\-\_\-sym\-\_\-name\mbox{[}1$<$$<$ 14\mbox{]}}}\label{mm__thread_8c_a7cb4609dceb890a2680944ceb406744b}
+\hypertarget{mm__thread_8c_a27257af2523d6c26d7f47d6a793e0bfd}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-sym\-\_\-nsym@{bipro\-\_\-sym\-\_\-nsym}}
+\index{bipro\-\_\-sym\-\_\-nsym@{bipro\-\_\-sym\-\_\-nsym}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-sym\-\_\-nsym}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-sym\-\_\-nsym =0}}\label{mm__thread_8c_a27257af2523d6c26d7f47d6a793e0bfd}
+\hypertarget{mm__thread_8c_a534271f6af81a25471a7a91ce9c9e8b7}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-inf@{bipro\-\_\-thread\-\_\-inf}}
+\index{bipro\-\_\-thread\-\_\-inf@{bipro\-\_\-thread\-\_\-inf}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-inf}]{\setlength{\rightskip}{0pt plus 5cm}{\bf th\-Context}$\ast$ bipro\-\_\-thread\-\_\-inf\mbox{[}1024\mbox{]}}}\label{mm__thread_8c_a534271f6af81a25471a7a91ce9c9e8b7}
+\hypertarget{mm__thread_8c_a74b1f0095f160bfa15e4499940746bb9}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-num@{bipro\-\_\-thread\-\_\-num}}
+\index{bipro\-\_\-thread\-\_\-num@{bipro\-\_\-thread\-\_\-num}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-num}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-thread\-\_\-num =0}}\label{mm__thread_8c_a74b1f0095f160bfa15e4499940746bb9}
+\hypertarget{mm__thread_8c_aace3625c69c456bb02c0a95814d2462b}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-ptrwait@{bipro\-\_\-thread\-\_\-ptrwait}}
+\index{bipro\-\_\-thread\-\_\-ptrwait@{bipro\-\_\-thread\-\_\-ptrwait}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-ptrwait}]{\setlength{\rightskip}{0pt plus 5cm}volatile long bipro\-\_\-thread\-\_\-ptrwait =0}}\label{mm__thread_8c_aace3625c69c456bb02c0a95814d2462b}
+\hypertarget{mm__thread_8c_ae0bdf4de0318d96cc40de2f922385a25}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-ptrwait2@{bipro\-\_\-thread\-\_\-ptrwait2}}
+\index{bipro\-\_\-thread\-\_\-ptrwait2@{bipro\-\_\-thread\-\_\-ptrwait2}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-ptrwait2}]{\setlength{\rightskip}{0pt plus 5cm}volatile long bipro\-\_\-thread\-\_\-ptrwait2 =0}}\label{mm__thread_8c_ae0bdf4de0318d96cc40de2f922385a25}
+\hypertarget{mm__thread_8c_a94b095b5e88633c710846f9239ba0b69}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-sigptr@{bipro\-\_\-thread\-\_\-sigptr}}
+\index{bipro\-\_\-thread\-\_\-sigptr@{bipro\-\_\-thread\-\_\-sigptr}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-sigptr}]{\setlength{\rightskip}{0pt plus 5cm}volatile void$\ast$ bipro\-\_\-thread\-\_\-sigptr =N\-U\-L\-L}}\label{mm__thread_8c_a94b095b5e88633c710846f9239ba0b69}
+\hypertarget{mm__thread_8c_a29aa6fc744e5595a7543f72646957d6f}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-tlsname@{bipro\-\_\-thread\-\_\-tlsname}}
+\index{bipro\-\_\-thread\-\_\-tlsname@{bipro\-\_\-thread\-\_\-tlsname}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-tlsname}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ bipro\-\_\-thread\-\_\-tlsname\mbox{[}1024\mbox{]}}}\label{mm__thread_8c_a29aa6fc744e5595a7543f72646957d6f}
+\hypertarget{mm__thread_8c_a3253109128ad004ad244486948396466}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-thread\-\_\-tlsrov@{bipro\-\_\-thread\-\_\-tlsrov}}
+\index{bipro\-\_\-thread\-\_\-tlsrov@{bipro\-\_\-thread\-\_\-tlsrov}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-thread\-\_\-tlsrov}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-thread\-\_\-tlsrov =1}}\label{mm__thread_8c_a3253109128ad004ad244486948396466}
+\hypertarget{mm__thread_8c_ab83c46039f9754dcfc6295a72ad9147d}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-threadctx\-\_\-tls@{bipro\-\_\-threadctx\-\_\-tls}}
+\index{bipro\-\_\-threadctx\-\_\-tls@{bipro\-\_\-threadctx\-\_\-tls}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-threadctx\-\_\-tls}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-threadctx\-\_\-tls =-\/1}}\label{mm__thread_8c_ab83c46039f9754dcfc6295a72ad9147d}
+\hypertarget{mm__thread_8c_a9f48558f6bce55560a7ac95b8ede6d4e}{\index{mm\-\_\-thread.\-c@{mm\-\_\-thread.\-c}!bipro\-\_\-threadtls\-\_\-tls@{bipro\-\_\-threadtls\-\_\-tls}}
+\index{bipro\-\_\-threadtls\-\_\-tls@{bipro\-\_\-threadtls\-\_\-tls}!mm_thread.c@{mm\-\_\-thread.\-c}}
+\subsubsection[{bipro\-\_\-threadtls\-\_\-tls}]{\setlength{\rightskip}{0pt plus 5cm}int bipro\-\_\-threadtls\-\_\-tls =-\/1}}\label{mm__thread_8c_a9f48558f6bce55560a7ac95b8ede6d4e}

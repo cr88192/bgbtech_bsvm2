@@ -1,0 +1,67 @@
+\hypertarget{bgbasm__link_8h}{\section{include/basm/bgbasm\-\_\-link.h File Reference}
+\label{bgbasm__link_8h}\index{include/basm/bgbasm\-\_\-link.\-h@{include/basm/bgbasm\-\_\-link.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$basm/bgbasm\-\_\-conf.\-h$>$}\\*
+{\ttfamily \#include $<$basm/bgbasm\-\_\-lnkctx.\-h$>$}\\*
+{\ttfamily \#include $<$basm/bgbasm\-\_\-lnkobj.\-h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBLNK__GCFuncs__t}{B\-L\-N\-K\-\_\-\-G\-C\-Funcs\-\_\-t}
+\item 
+struct \hyperlink{structBLNK__IOFuncs__t}{B\-L\-N\-K\-\_\-\-I\-O\-Funcs\-\_\-t}
+\item 
+struct \hyperlink{structBLNK__ScopeSym__s}{B\-L\-N\-K\-\_\-\-Scope\-Sym\-\_\-s}
+\item 
+struct \hyperlink{structBLNK__Scope__s}{B\-L\-N\-K\-\_\-\-Scope\-\_\-s}
+\item 
+struct \hyperlink{structBLNK__Env__s}{B\-L\-N\-K\-\_\-\-Env\-\_\-s}
+\item 
+struct \hyperlink{structBLNK__Thunk}{B\-L\-N\-K\-\_\-\-Thunk}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{bgbasm__link_8h_a07ce2efa8265af1c84670f6f6b693a39}{B\-G\-B\-L\-I\-N\-K\-\_\-\-H}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structBLNK__Scope__s}{B\-L\-N\-K\-\_\-\-Scope\-\_\-s} \hyperlink{bgbasm__link_8h_a6156142d7a5eea419e9aa41bd4f02ade}{B\-L\-N\-K\-\_\-\-Scope}
+\item 
+typedef struct \hyperlink{structBLNK__ScopeSym__s}{B\-L\-N\-K\-\_\-\-Scope\-Sym\-\_\-s} \hyperlink{bgbasm__link_8h_aec8df36ce0dd6e58cd99a8b0da2d39d9}{B\-L\-N\-K\-\_\-\-Scope\-Sym}
+\item 
+typedef struct \hyperlink{structBLNK__Env__s}{B\-L\-N\-K\-\_\-\-Env\-\_\-s} \hyperlink{bgbasm__link_8h_a2ded178d35c968f450bedc7b8362cda0}{B\-L\-N\-K\-\_\-\-Env}
+\item 
+typedef void $\ast$($\ast$ \hyperlink{bgbasm__link_8h_a0e1859f2e82574e3ad150fd5c51957b5}{blnk\-\_\-lookup\-\_\-ft} )(char $\ast$sym)
+\item 
+typedef void($\ast$ \hyperlink{bgbasm__link_8h_a8367f3d08e8a6f00f56f6028900b5b3d}{blnk\-\_\-notify\-\_\-ft} )(char $\ast$sym, void $\ast$ptr)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{bgbasm__link_8h_a07ce2efa8265af1c84670f6f6b693a39}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!B\-G\-B\-L\-I\-N\-K\-\_\-\-H@{B\-G\-B\-L\-I\-N\-K\-\_\-\-H}}
+\index{B\-G\-B\-L\-I\-N\-K\-\_\-\-H@{B\-G\-B\-L\-I\-N\-K\-\_\-\-H}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{B\-G\-B\-L\-I\-N\-K\-\_\-\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\-G\-B\-L\-I\-N\-K\-\_\-\-H}}\label{bgbasm__link_8h_a07ce2efa8265af1c84670f6f6b693a39}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{bgbasm__link_8h_a2ded178d35c968f450bedc7b8362cda0}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!B\-L\-N\-K\-\_\-\-Env@{B\-L\-N\-K\-\_\-\-Env}}
+\index{B\-L\-N\-K\-\_\-\-Env@{B\-L\-N\-K\-\_\-\-Env}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{B\-L\-N\-K\-\_\-\-Env}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf B\-L\-N\-K\-\_\-\-Env\-\_\-s} {\bf B\-L\-N\-K\-\_\-\-Env}}}\label{bgbasm__link_8h_a2ded178d35c968f450bedc7b8362cda0}
+\hypertarget{bgbasm__link_8h_a0e1859f2e82574e3ad150fd5c51957b5}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!blnk\-\_\-lookup\-\_\-ft@{blnk\-\_\-lookup\-\_\-ft}}
+\index{blnk\-\_\-lookup\-\_\-ft@{blnk\-\_\-lookup\-\_\-ft}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{blnk\-\_\-lookup\-\_\-ft}]{\setlength{\rightskip}{0pt plus 5cm}typedef void$\ast$($\ast$ blnk\-\_\-lookup\-\_\-ft)(char $\ast$sym)}}\label{bgbasm__link_8h_a0e1859f2e82574e3ad150fd5c51957b5}
+\hypertarget{bgbasm__link_8h_a8367f3d08e8a6f00f56f6028900b5b3d}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!blnk\-\_\-notify\-\_\-ft@{blnk\-\_\-notify\-\_\-ft}}
+\index{blnk\-\_\-notify\-\_\-ft@{blnk\-\_\-notify\-\_\-ft}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{blnk\-\_\-notify\-\_\-ft}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ blnk\-\_\-notify\-\_\-ft)(char $\ast$sym, void $\ast$ptr)}}\label{bgbasm__link_8h_a8367f3d08e8a6f00f56f6028900b5b3d}
+\hypertarget{bgbasm__link_8h_a6156142d7a5eea419e9aa41bd4f02ade}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!B\-L\-N\-K\-\_\-\-Scope@{B\-L\-N\-K\-\_\-\-Scope}}
+\index{B\-L\-N\-K\-\_\-\-Scope@{B\-L\-N\-K\-\_\-\-Scope}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{B\-L\-N\-K\-\_\-\-Scope}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf B\-L\-N\-K\-\_\-\-Scope\-\_\-s} {\bf B\-L\-N\-K\-\_\-\-Scope}}}\label{bgbasm__link_8h_a6156142d7a5eea419e9aa41bd4f02ade}
+\hypertarget{bgbasm__link_8h_aec8df36ce0dd6e58cd99a8b0da2d39d9}{\index{bgbasm\-\_\-link.\-h@{bgbasm\-\_\-link.\-h}!B\-L\-N\-K\-\_\-\-Scope\-Sym@{B\-L\-N\-K\-\_\-\-Scope\-Sym}}
+\index{B\-L\-N\-K\-\_\-\-Scope\-Sym@{B\-L\-N\-K\-\_\-\-Scope\-Sym}!bgbasm_link.h@{bgbasm\-\_\-link.\-h}}
+\subsubsection[{B\-L\-N\-K\-\_\-\-Scope\-Sym}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf B\-L\-N\-K\-\_\-\-Scope\-Sym\-\_\-s} {\bf B\-L\-N\-K\-\_\-\-Scope\-Sym}}}\label{bgbasm__link_8h_aec8df36ce0dd6e58cd99a8b0da2d39d9}

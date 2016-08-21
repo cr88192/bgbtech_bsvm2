@@ -248,8 +248,9 @@ int BS2P_ParseExpectOptToken(BS2CC_CompileContext *ctx, char *tok)
 dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 {
 	BGBDTC_X128 xa, xb, xc;
-	dtVal n0, n1, n2;
+	dtVal n0, n1, n2, n3, n4, n5, n6, n7;
 	char *t0, *t1, *t2, *t3;
+	char *fn;
 	s64 li;
 	int i, j, k;
 	
@@ -524,6 +525,57 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 			BS2P_SetAstNodeAttr(n0, "type", n1);
 			if(dtvTrueP(n2))
 				BS2P_SetAstNodeAttr(n0, "args", n2);
+
+			return(n0);
+		}
+
+		if(!strcmp(t0, "Ifunction"))
+		{
+			BS2P_NextToken(ctx);
+			
+			fn=NULL;
+			t0=BS2P_PeekToken(ctx, 0);
+			if(*t0=='I')
+			{
+				fn=t0+1;
+				BS2P_NextToken(ctx);
+				t0=BS2P_PeekToken(ctx, 0);
+			}
+			
+			if(!strcmp(t0, "X("))
+			{
+				BS2P_NextToken(ctx);
+				n1=BS2P_ParseFunVars(ctx);
+				BS2P_ParseExpectToken(ctx, "X)");
+				t0=BS2P_PeekToken(ctx, 0);
+			}
+
+			if(!strcmp(t0, "X:"))
+			{
+				BS2P_NextToken(ctx);
+				n5=BS2P_ParseModifierList(ctx);
+				n4=BS2P_ParseTypeExpr(ctx);
+				t0=BS2P_PeekToken(ctx, 0);
+			}
+
+			l0=BS2P_GetCurPosition(ctx);
+			n2=BS2P_ParseBlockStatementTail2(ctx);
+			l1=BS2P_GetCurPosition(ctx);
+			l2=l1-l0;
+
+			n0=BS2P_NewAstNode(ctx, "func");
+			BS2P_SetAstNodeAttrS(n0, "name", fn);
+			if(dtvTrueP(n4))
+				BS2P_SetAstNodeAttr(n0, "type", n4);
+			if(dtvTrueP(n5))
+				BS2P_SetAstNodeAttr(n0, "modi", n5);
+
+			if(dtvTrueP(n1))
+				BS2P_SetAstNodeAttr(n0, "args", n1);
+			if(dtvTrueP(n2))
+				BS2P_SetAstNodeAttr(n0, "body", n2);
+
+			BS2P_SetAstNodeAttrI(n0, "tokcnt", l2);
 
 			return(n0);
 		}

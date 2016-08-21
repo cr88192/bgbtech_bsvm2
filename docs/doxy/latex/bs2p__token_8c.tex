@@ -1,0 +1,166 @@
+\hypertarget{bs2p__token_8c}{\section{bsvm2c/bs2p\-\_\-token.c File Reference}
+\label{bs2p__token_8c}\index{bsvm2c/bs2p\-\_\-token.\-c@{bsvm2c/bs2p\-\_\-token.\-c}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a0a3fc68b6dbc8196517d4e6df7b9edd0}{B\-S2\-P\-\_\-\-Eat\-White\-Only} (char $\ast$s)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_ae0f92429ecee73b3c92aef5ec1454bf0}{B\-S2\-P\-\_\-\-Eat\-White} (char $\ast$s)
+\item 
+int \hyperlink{bs2p__token_8c_a9d27c933840d14019d0b4638388af301}{B\-S2\-P\-\_\-\-Parse\-Hex\-N} (char $\ast$s, int n)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a629d0acf7be7545d3ea2b2154c4552fd}{B\-S2\-P\-\_\-\-Read\-Utf8} (char $\ast$sb, int $\ast$rv)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a274b1394b032f6f1a5adda396d7a881e}{B\-S2\-P\-\_\-\-Emit\-Utf8} (char $\ast$t, int v)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a787f1b2355c66c1dbc224d3364d22870}{B\-S2\-P\-\_\-\-Parse\-Token\-Basic} (char $\ast$s, char $\ast$tb)
+\item 
+int \hyperlink{bs2p__token_8c_a7f23e81c7f6876849c46b2bf9730b7e8}{B\-S2\-P\-\_\-\-Lex\-Buffer} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, char $\ast$ibuf, int szbuf)
+\item 
+int \hyperlink{bs2p__token_8c_a59a480444c46565f7f5c23118f322511}{B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a4a403825fb5085fa93f134c2c7547298}{B\-S2\-P\-\_\-\-Peek\-Token} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, int idx)
+\item 
+void \hyperlink{bs2p__token_8c_a057b8c293db5f8c9c3e32ec42383cb92}{B\-S2\-P\-\_\-\-Next\-Token\-N} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, int cnt)
+\item 
+void \hyperlink{bs2p__token_8c_a4bd1ef72645bee7c4e91f20ab4bb362a}{B\-S2\-P\-\_\-\-Next\-Token} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx)
+\item 
+char $\ast$ \hyperlink{bs2p__token_8c_a764db1bb456612df97b140a2566dd16c}{B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, int idx)
+\item 
+void \hyperlink{bs2p__token_8c_aa89aa648a5731b197a623e2b49cce854}{B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, char $\ast$pos)
+\item 
+int \hyperlink{bs2p__token_8c_a3a55bebbe4347afb5c18802c13b6b36f}{B\-S2\-P\-\_\-\-Get\-Cur\-Position} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx)
+\item 
+void \hyperlink{bs2p__token_8c_ad004989b24c263569963d9f1d8eb1415}{B\-S2\-P\-\_\-\-Set\-Cur\-Position} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, int tok)
+\item 
+int \hyperlink{bs2p__token_8c_a9355701e6456ccd8971f76f65401c267}{B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line} (\hyperlink{bsvm2__bs2cc_8h_abc0a36ac1b44e95ebf1c37affd166f25}{B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$ctx, char $\ast$$\ast$rlfn, int $\ast$rlln)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{bs2p__token_8c_a59a480444c46565f7f5c23118f322511}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer@{B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer}}
+\index{B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer@{B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-P\-\_\-\-Cleanup\-Lex\-Buffer (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a59a480444c46565f7f5c23118f322511}
+\hypertarget{bs2p__token_8c_ae0f92429ecee73b3c92aef5ec1454bf0}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Eat\-White@{B\-S2\-P\-\_\-\-Eat\-White}}
+\index{B\-S2\-P\-\_\-\-Eat\-White@{B\-S2\-P\-\_\-\-Eat\-White}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Eat\-White}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Eat\-White (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_ae0f92429ecee73b3c92aef5ec1454bf0}
+\hypertarget{bs2p__token_8c_a0a3fc68b6dbc8196517d4e6df7b9edd0}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Eat\-White\-Only@{B\-S2\-P\-\_\-\-Eat\-White\-Only}}
+\index{B\-S2\-P\-\_\-\-Eat\-White\-Only@{B\-S2\-P\-\_\-\-Eat\-White\-Only}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Eat\-White\-Only}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Eat\-White\-Only (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a0a3fc68b6dbc8196517d4e6df7b9edd0}
+\hypertarget{bs2p__token_8c_a274b1394b032f6f1a5adda396d7a881e}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Emit\-Utf8@{B\-S2\-P\-\_\-\-Emit\-Utf8}}
+\index{B\-S2\-P\-\_\-\-Emit\-Utf8@{B\-S2\-P\-\_\-\-Emit\-Utf8}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Emit\-Utf8}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Emit\-Utf8 (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{t, }
+\item[{int}]{v}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a274b1394b032f6f1a5adda396d7a881e}
+\hypertarget{bs2p__token_8c_a3a55bebbe4347afb5c18802c13b6b36f}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Get\-Cur\-Position@{B\-S2\-P\-\_\-\-Get\-Cur\-Position}}
+\index{B\-S2\-P\-\_\-\-Get\-Cur\-Position@{B\-S2\-P\-\_\-\-Get\-Cur\-Position}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Get\-Cur\-Position}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-P\-\_\-\-Get\-Cur\-Position (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a3a55bebbe4347afb5c18802c13b6b36f}
+\hypertarget{bs2p__token_8c_a9355701e6456ccd8971f76f65401c267}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line@{B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line}}
+\index{B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line@{B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-P\-\_\-\-Get\-Cur\-Source\-Line (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{char $\ast$$\ast$}]{rlfn, }
+\item[{int $\ast$}]{rlln}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a9355701e6456ccd8971f76f65401c267}
+\hypertarget{bs2p__token_8c_a764db1bb456612df97b140a2566dd16c}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position@{B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position}}
+\index{B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position@{B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Get\-Cur\-Src\-Position (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a764db1bb456612df97b140a2566dd16c}
+\hypertarget{bs2p__token_8c_a7f23e81c7f6876849c46b2bf9730b7e8}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Lex\-Buffer@{B\-S2\-P\-\_\-\-Lex\-Buffer}}
+\index{B\-S2\-P\-\_\-\-Lex\-Buffer@{B\-S2\-P\-\_\-\-Lex\-Buffer}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Lex\-Buffer}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-P\-\_\-\-Lex\-Buffer (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{char $\ast$}]{ibuf, }
+\item[{int}]{szbuf}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a7f23e81c7f6876849c46b2bf9730b7e8}
+\hypertarget{bs2p__token_8c_a4bd1ef72645bee7c4e91f20ab4bb362a}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Next\-Token@{B\-S2\-P\-\_\-\-Next\-Token}}
+\index{B\-S2\-P\-\_\-\-Next\-Token@{B\-S2\-P\-\_\-\-Next\-Token}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Next\-Token}]{\setlength{\rightskip}{0pt plus 5cm}void B\-S2\-P\-\_\-\-Next\-Token (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a4bd1ef72645bee7c4e91f20ab4bb362a}
+\hypertarget{bs2p__token_8c_a057b8c293db5f8c9c3e32ec42383cb92}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Next\-Token\-N@{B\-S2\-P\-\_\-\-Next\-Token\-N}}
+\index{B\-S2\-P\-\_\-\-Next\-Token\-N@{B\-S2\-P\-\_\-\-Next\-Token\-N}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Next\-Token\-N}]{\setlength{\rightskip}{0pt plus 5cm}void B\-S2\-P\-\_\-\-Next\-Token\-N (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{int}]{cnt}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a057b8c293db5f8c9c3e32ec42383cb92}
+\hypertarget{bs2p__token_8c_a9d27c933840d14019d0b4638388af301}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Parse\-Hex\-N@{B\-S2\-P\-\_\-\-Parse\-Hex\-N}}
+\index{B\-S2\-P\-\_\-\-Parse\-Hex\-N@{B\-S2\-P\-\_\-\-Parse\-Hex\-N}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Parse\-Hex\-N}]{\setlength{\rightskip}{0pt plus 5cm}int B\-S2\-P\-\_\-\-Parse\-Hex\-N (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a9d27c933840d14019d0b4638388af301}
+\hypertarget{bs2p__token_8c_a787f1b2355c66c1dbc224d3364d22870}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Parse\-Token\-Basic@{B\-S2\-P\-\_\-\-Parse\-Token\-Basic}}
+\index{B\-S2\-P\-\_\-\-Parse\-Token\-Basic@{B\-S2\-P\-\_\-\-Parse\-Token\-Basic}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Parse\-Token\-Basic}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Parse\-Token\-Basic (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{char $\ast$}]{tb}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a787f1b2355c66c1dbc224d3364d22870}
+\hypertarget{bs2p__token_8c_a4a403825fb5085fa93f134c2c7547298}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Peek\-Token@{B\-S2\-P\-\_\-\-Peek\-Token}}
+\index{B\-S2\-P\-\_\-\-Peek\-Token@{B\-S2\-P\-\_\-\-Peek\-Token}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Peek\-Token}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Peek\-Token (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{int}]{idx}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a4a403825fb5085fa93f134c2c7547298}
+\hypertarget{bs2p__token_8c_a629d0acf7be7545d3ea2b2154c4552fd}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Read\-Utf8@{B\-S2\-P\-\_\-\-Read\-Utf8}}
+\index{B\-S2\-P\-\_\-\-Read\-Utf8@{B\-S2\-P\-\_\-\-Read\-Utf8}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Read\-Utf8}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ B\-S2\-P\-\_\-\-Read\-Utf8 (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{sb, }
+\item[{int $\ast$}]{rv}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_a629d0acf7be7545d3ea2b2154c4552fd}
+\hypertarget{bs2p__token_8c_ad004989b24c263569963d9f1d8eb1415}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Set\-Cur\-Position@{B\-S2\-P\-\_\-\-Set\-Cur\-Position}}
+\index{B\-S2\-P\-\_\-\-Set\-Cur\-Position@{B\-S2\-P\-\_\-\-Set\-Cur\-Position}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Set\-Cur\-Position}]{\setlength{\rightskip}{0pt plus 5cm}void B\-S2\-P\-\_\-\-Set\-Cur\-Position (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{int}]{tok}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_ad004989b24c263569963d9f1d8eb1415}
+\hypertarget{bs2p__token_8c_aa89aa648a5731b197a623e2b49cce854}{\index{bs2p\-\_\-token.\-c@{bs2p\-\_\-token.\-c}!B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position@{B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position}}
+\index{B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position@{B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position}!bs2p_token.c@{bs2p\-\_\-token.\-c}}
+\subsubsection[{B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position}]{\setlength{\rightskip}{0pt plus 5cm}void B\-S2\-P\-\_\-\-Set\-Cur\-Src\-Position (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-S2\-C\-C\-\_\-\-Compile\-Context} $\ast$}]{ctx, }
+\item[{char $\ast$}]{pos}
+\end{DoxyParamCaption}
+)}}\label{bs2p__token_8c_aa89aa648a5731b197a623e2b49cce854}

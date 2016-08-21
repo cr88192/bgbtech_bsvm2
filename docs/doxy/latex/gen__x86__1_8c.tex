@@ -1,0 +1,191 @@
+\hypertarget{gen__x86__1_8c}{\section{bgbasm3/gen\-\_\-x86\-\_\-1.c File Reference}
+\label{gen__x86__1_8c}\index{bgbasm3/gen\-\_\-x86\-\_\-1.\-c@{bgbasm3/gen\-\_\-x86\-\_\-1.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{gen__x86__1_8c_a4cf7ff4f0258b56f97ee92371e4287a7}{O\-P\-C\-A\-T\-\_\-\-R\-E\-G}~1
+\item 
+\#define \hyperlink{gen__x86__1_8c_a3da3cccb166fde16cc094b79f3a97b43}{O\-P\-C\-A\-T\-\_\-\-M\-E\-M}~2
+\item 
+\#define \hyperlink{gen__x86__1_8c_a0b22d343242961f81eb839f51bf3feae}{O\-P\-C\-A\-T\-\_\-\-I\-M\-M}~3
+\item 
+\#define \hyperlink{gen__x86__1_8c_ad01e7d570908ee79b652051499d95ae0}{O\-P\-C\-A\-T\-\_\-\-R\-M}~4
+\item 
+\#define \hyperlink{gen__x86__1_8c_af529903c93e49a283c233d431c4b5d66}{O\-P\-C\-A\-T\-\_\-\-E\-A\-X}~5
+\item 
+\#define \hyperlink{gen__x86__1_8c_a527ab6895bfefc97514302cdcb29cae1}{O\-P\-C\-A\-T\-\_\-\-R\-E\-L}~6
+\item 
+\#define \hyperlink{gen__x86__1_8c_afebcc0c856db7dd1fd0509d8c16ce5e5}{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16}~8
+\item 
+\#define \hyperlink{gen__x86__1_8c_a1f19a4420660823e11f40c20fad91769}{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32}~9
+\item 
+\#define \hyperlink{gen__x86__1_8c_a236f52a40a4852e272236cbdb1cb4e08}{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64}~10
+\item 
+\#define \hyperlink{gen__x86__1_8c_a067b7e53e0720986c492ea9bfa78535f}{O\-P\-C\-A\-T\-\_\-\-S\-R}~11
+\item 
+\#define \hyperlink{gen__x86__1_8c_a56b053127aad96497f8a5127f2e2f5c8}{O\-P\-C\-A\-T\-\_\-\-C\-R}~12
+\item 
+\#define \hyperlink{gen__x86__1_8c_a04021ba81f768b109f8bdcd027758a56}{O\-P\-C\-A\-T\-\_\-\-D\-R}~13
+\item 
+\#define \hyperlink{gen__x86__1_8c_a7908bbd4f34e5e9335d27d66ca89c9be}{O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G}~14
+\item 
+\#define \hyperlink{gen__x86__1_8c_ad25b5b4eb1e79916110aa35774550fd9}{O\-P\-C\-A\-T\-\_\-\-F\-R\-M}~15
+\item 
+\#define \hyperlink{gen__x86__1_8c_a2a905773912197e3cf2d4686ae6a3ae6}{O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G}~16
+\item 
+\#define \hyperlink{gen__x86__1_8c_af128708ffe15afeb94f072669757921b}{O\-P\-C\-A\-T\-\_\-\-X\-R\-M}~17
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{gen__x86__1_8c_a9f5f062e4f3a3583b311df9a61d7481f}{kralloc} (int sz)
+\item 
+char $\ast$$\ast$ \hyperlink{gen__x86__1_8c_a959dacacbcf285a235527fe277d178ee}{ksplit} (char $\ast$s)
+\item 
+int \hyperlink{gen__x86__1_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_a61430c621562573a562f477281a4f6c9}{in\-\_\-txt} =\char`\"{}basm\-\_\-insns.\-txt\char`\"{}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_ae892f990cf0ec0493a3204126a4c7a91}{out\-\_\-c} =\char`\"{}basm\-\_\-insns.\-c\char`\"{}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_a077535ffb1572de235417370abd455f1}{out\-\_\-h} =\char`\"{}bgbasm\-\_\-x86ops.\-h\char`\"{}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_ad9c48b6d850baa73eb3414cd0f346922}{ops} \mbox{[}4096\mbox{]}
+\item 
+int \hyperlink{gen__x86__1_8c_a38706808f034ee7a970ac54a1256bf12}{opidx} \mbox{[}4096\mbox{]}
+\item 
+int \hyperlink{gen__x86__1_8c_a8f70925089aac63a2f2a9aceb9b71352}{nops}
+\item 
+int \hyperlink{gen__x86__1_8c_ada59d0dece58ec213bd40ef64b077ead}{opnum} \mbox{[}4096\mbox{]}
+\item 
+char \hyperlink{gen__x86__1_8c_a87f84bff98240f30e0741f08e997b9ae}{opcat} \mbox{[}4096 $\ast$4\mbox{]}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_ad23e6840751fd016a809c92e5a000947}{opdecl} \mbox{[}4096\mbox{]}
+\item 
+int \hyperlink{gen__x86__1_8c_aa78f276efc0598b0f69274c807b7abaf}{ndecls}
+\item 
+char $\ast$ \hyperlink{gen__x86__1_8c_a8bdfcd07c92c0110f2028277892e4d11}{kralloc\-\_\-buffer} =N\-U\-L\-L
+\item 
+int \hyperlink{gen__x86__1_8c_a2cdb4a02a02ecb3743b60738d1c3fcf9}{kralloc\-\_\-pos} =0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{gen__x86__1_8c_a56b053127aad96497f8a5127f2e2f5c8}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-C\-R@{O\-P\-C\-A\-T\-\_\-\-C\-R}}
+\index{O\-P\-C\-A\-T\-\_\-\-C\-R@{O\-P\-C\-A\-T\-\_\-\-C\-R}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-C\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-C\-R~12}}\label{gen__x86__1_8c_a56b053127aad96497f8a5127f2e2f5c8}
+\hypertarget{gen__x86__1_8c_a04021ba81f768b109f8bdcd027758a56}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-D\-R@{O\-P\-C\-A\-T\-\_\-\-D\-R}}
+\index{O\-P\-C\-A\-T\-\_\-\-D\-R@{O\-P\-C\-A\-T\-\_\-\-D\-R}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-D\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-D\-R~13}}\label{gen__x86__1_8c_a04021ba81f768b109f8bdcd027758a56}
+\hypertarget{gen__x86__1_8c_af529903c93e49a283c233d431c4b5d66}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-E\-A\-X@{O\-P\-C\-A\-T\-\_\-\-E\-A\-X}}
+\index{O\-P\-C\-A\-T\-\_\-\-E\-A\-X@{O\-P\-C\-A\-T\-\_\-\-E\-A\-X}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-E\-A\-X}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-E\-A\-X~5}}\label{gen__x86__1_8c_af529903c93e49a283c233d431c4b5d66}
+\hypertarget{gen__x86__1_8c_a7908bbd4f34e5e9335d27d66ca89c9be}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G}}
+\index{O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-F\-R\-E\-G~14}}\label{gen__x86__1_8c_a7908bbd4f34e5e9335d27d66ca89c9be}
+\hypertarget{gen__x86__1_8c_ad25b5b4eb1e79916110aa35774550fd9}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-F\-R\-M@{O\-P\-C\-A\-T\-\_\-\-F\-R\-M}}
+\index{O\-P\-C\-A\-T\-\_\-\-F\-R\-M@{O\-P\-C\-A\-T\-\_\-\-F\-R\-M}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-F\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-F\-R\-M~15}}\label{gen__x86__1_8c_ad25b5b4eb1e79916110aa35774550fd9}
+\hypertarget{gen__x86__1_8c_a0b22d343242961f81eb839f51bf3feae}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-I\-M\-M@{O\-P\-C\-A\-T\-\_\-\-I\-M\-M}}
+\index{O\-P\-C\-A\-T\-\_\-\-I\-M\-M@{O\-P\-C\-A\-T\-\_\-\-I\-M\-M}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-I\-M\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-I\-M\-M~3}}\label{gen__x86__1_8c_a0b22d343242961f81eb839f51bf3feae}
+\hypertarget{gen__x86__1_8c_a3da3cccb166fde16cc094b79f3a97b43}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-M\-E\-M@{O\-P\-C\-A\-T\-\_\-\-M\-E\-M}}
+\index{O\-P\-C\-A\-T\-\_\-\-M\-E\-M@{O\-P\-C\-A\-T\-\_\-\-M\-E\-M}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-M\-E\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-M\-E\-M~2}}\label{gen__x86__1_8c_a3da3cccb166fde16cc094b79f3a97b43}
+\hypertarget{gen__x86__1_8c_afebcc0c856db7dd1fd0509d8c16ce5e5}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16}}
+\index{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S16~8}}\label{gen__x86__1_8c_afebcc0c856db7dd1fd0509d8c16ce5e5}
+\hypertarget{gen__x86__1_8c_a1f19a4420660823e11f40c20fad91769}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32}}
+\index{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S32~9}}\label{gen__x86__1_8c_a1f19a4420660823e11f40c20fad91769}
+\hypertarget{gen__x86__1_8c_a236f52a40a4852e272236cbdb1cb4e08}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64}}
+\index{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64@{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-M\-O\-F\-F\-S64~10}}\label{gen__x86__1_8c_a236f52a40a4852e272236cbdb1cb4e08}
+\hypertarget{gen__x86__1_8c_a4cf7ff4f0258b56f97ee92371e4287a7}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-R\-E\-G}}
+\index{O\-P\-C\-A\-T\-\_\-\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-R\-E\-G}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-R\-E\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-R\-E\-G~1}}\label{gen__x86__1_8c_a4cf7ff4f0258b56f97ee92371e4287a7}
+\hypertarget{gen__x86__1_8c_a527ab6895bfefc97514302cdcb29cae1}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-R\-E\-L@{O\-P\-C\-A\-T\-\_\-\-R\-E\-L}}
+\index{O\-P\-C\-A\-T\-\_\-\-R\-E\-L@{O\-P\-C\-A\-T\-\_\-\-R\-E\-L}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-R\-E\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-R\-E\-L~6}}\label{gen__x86__1_8c_a527ab6895bfefc97514302cdcb29cae1}
+\hypertarget{gen__x86__1_8c_ad01e7d570908ee79b652051499d95ae0}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-R\-M@{O\-P\-C\-A\-T\-\_\-\-R\-M}}
+\index{O\-P\-C\-A\-T\-\_\-\-R\-M@{O\-P\-C\-A\-T\-\_\-\-R\-M}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-R\-M~4}}\label{gen__x86__1_8c_ad01e7d570908ee79b652051499d95ae0}
+\hypertarget{gen__x86__1_8c_a067b7e53e0720986c492ea9bfa78535f}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-S\-R@{O\-P\-C\-A\-T\-\_\-\-S\-R}}
+\index{O\-P\-C\-A\-T\-\_\-\-S\-R@{O\-P\-C\-A\-T\-\_\-\-S\-R}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-S\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-S\-R~11}}\label{gen__x86__1_8c_a067b7e53e0720986c492ea9bfa78535f}
+\hypertarget{gen__x86__1_8c_a2a905773912197e3cf2d4686ae6a3ae6}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G}}
+\index{O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G@{O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-X\-R\-E\-G~16}}\label{gen__x86__1_8c_a2a905773912197e3cf2d4686ae6a3ae6}
+\hypertarget{gen__x86__1_8c_af128708ffe15afeb94f072669757921b}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!O\-P\-C\-A\-T\-\_\-\-X\-R\-M@{O\-P\-C\-A\-T\-\_\-\-X\-R\-M}}
+\index{O\-P\-C\-A\-T\-\_\-\-X\-R\-M@{O\-P\-C\-A\-T\-\_\-\-X\-R\-M}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{O\-P\-C\-A\-T\-\_\-\-X\-R\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\-P\-C\-A\-T\-\_\-\-X\-R\-M~17}}\label{gen__x86__1_8c_af128708ffe15afeb94f072669757921b}
+
+
+\subsection{Function Documentation}
+\hypertarget{gen__x86__1_8c_a9f5f062e4f3a3583b311df9a61d7481f}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!kralloc@{kralloc}}
+\index{kralloc@{kralloc}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{kralloc}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ kralloc (
+\begin{DoxyParamCaption}
+\item[{int}]{sz}
+\end{DoxyParamCaption}
+)}}\label{gen__x86__1_8c_a9f5f062e4f3a3583b311df9a61d7481f}
+\hypertarget{gen__x86__1_8c_a959dacacbcf285a235527fe277d178ee}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!ksplit@{ksplit}}
+\index{ksplit@{ksplit}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{ksplit}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ ksplit (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s}
+\end{DoxyParamCaption}
+)}}\label{gen__x86__1_8c_a959dacacbcf285a235527fe277d178ee}
+\hypertarget{gen__x86__1_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!main@{main}}
+\index{main@{main}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{gen__x86__1_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+
+
+\subsection{Variable Documentation}
+\hypertarget{gen__x86__1_8c_a61430c621562573a562f477281a4f6c9}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!in\-\_\-txt@{in\-\_\-txt}}
+\index{in\-\_\-txt@{in\-\_\-txt}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{in\-\_\-txt}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ in\-\_\-txt =\char`\"{}basm\-\_\-insns.\-txt\char`\"{}}}\label{gen__x86__1_8c_a61430c621562573a562f477281a4f6c9}
+\hypertarget{gen__x86__1_8c_a8bdfcd07c92c0110f2028277892e4d11}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!kralloc\-\_\-buffer@{kralloc\-\_\-buffer}}
+\index{kralloc\-\_\-buffer@{kralloc\-\_\-buffer}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{kralloc\-\_\-buffer}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ kralloc\-\_\-buffer =N\-U\-L\-L}}\label{gen__x86__1_8c_a8bdfcd07c92c0110f2028277892e4d11}
+\hypertarget{gen__x86__1_8c_a2cdb4a02a02ecb3743b60738d1c3fcf9}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!kralloc\-\_\-pos@{kralloc\-\_\-pos}}
+\index{kralloc\-\_\-pos@{kralloc\-\_\-pos}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{kralloc\-\_\-pos}]{\setlength{\rightskip}{0pt plus 5cm}int kralloc\-\_\-pos =0}}\label{gen__x86__1_8c_a2cdb4a02a02ecb3743b60738d1c3fcf9}
+\hypertarget{gen__x86__1_8c_aa78f276efc0598b0f69274c807b7abaf}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!ndecls@{ndecls}}
+\index{ndecls@{ndecls}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{ndecls}]{\setlength{\rightskip}{0pt plus 5cm}int ndecls}}\label{gen__x86__1_8c_aa78f276efc0598b0f69274c807b7abaf}
+\hypertarget{gen__x86__1_8c_a8f70925089aac63a2f2a9aceb9b71352}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!nops@{nops}}
+\index{nops@{nops}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{nops}]{\setlength{\rightskip}{0pt plus 5cm}int nops}}\label{gen__x86__1_8c_a8f70925089aac63a2f2a9aceb9b71352}
+\hypertarget{gen__x86__1_8c_a87f84bff98240f30e0741f08e997b9ae}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!opcat@{opcat}}
+\index{opcat@{opcat}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{opcat}]{\setlength{\rightskip}{0pt plus 5cm}char opcat\mbox{[}4096 $\ast$4\mbox{]}}}\label{gen__x86__1_8c_a87f84bff98240f30e0741f08e997b9ae}
+\hypertarget{gen__x86__1_8c_ad23e6840751fd016a809c92e5a000947}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!opdecl@{opdecl}}
+\index{opdecl@{opdecl}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{opdecl}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ opdecl\mbox{[}4096\mbox{]}}}\label{gen__x86__1_8c_ad23e6840751fd016a809c92e5a000947}
+\hypertarget{gen__x86__1_8c_a38706808f034ee7a970ac54a1256bf12}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!opidx@{opidx}}
+\index{opidx@{opidx}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{opidx}]{\setlength{\rightskip}{0pt plus 5cm}int opidx\mbox{[}4096\mbox{]}}}\label{gen__x86__1_8c_a38706808f034ee7a970ac54a1256bf12}
+\hypertarget{gen__x86__1_8c_ada59d0dece58ec213bd40ef64b077ead}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!opnum@{opnum}}
+\index{opnum@{opnum}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{opnum}]{\setlength{\rightskip}{0pt plus 5cm}int opnum\mbox{[}4096\mbox{]}}}\label{gen__x86__1_8c_ada59d0dece58ec213bd40ef64b077ead}
+\hypertarget{gen__x86__1_8c_ad9c48b6d850baa73eb3414cd0f346922}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!ops@{ops}}
+\index{ops@{ops}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{ops}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ ops\mbox{[}4096\mbox{]}}}\label{gen__x86__1_8c_ad9c48b6d850baa73eb3414cd0f346922}
+\hypertarget{gen__x86__1_8c_ae892f990cf0ec0493a3204126a4c7a91}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!out\-\_\-c@{out\-\_\-c}}
+\index{out\-\_\-c@{out\-\_\-c}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{out\-\_\-c}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ out\-\_\-c =\char`\"{}basm\-\_\-insns.\-c\char`\"{}}}\label{gen__x86__1_8c_ae892f990cf0ec0493a3204126a4c7a91}
+\hypertarget{gen__x86__1_8c_a077535ffb1572de235417370abd455f1}{\index{gen\-\_\-x86\-\_\-1.\-c@{gen\-\_\-x86\-\_\-1.\-c}!out\-\_\-h@{out\-\_\-h}}
+\index{out\-\_\-h@{out\-\_\-h}!gen_x86_1.c@{gen\-\_\-x86\-\_\-1.\-c}}
+\subsubsection[{out\-\_\-h}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ out\-\_\-h =\char`\"{}bgbasm\-\_\-x86ops.\-h\char`\"{}}}\label{gen__x86__1_8c_a077535ffb1572de235417370abd455f1}
