@@ -1,4 +1,24 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 
 void BS2C_CompileLoadNameAsType(BS2CC_CompileContext *ctx,
 	char *name, int ty)
@@ -4671,6 +4691,19 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 		return;
 	}
 
+#if 0
+	if(!strcmp(tag, "func_ind"))
+	{
+		BS2C_CompileTopFunc(expr);
+		fn=BS2P_GetAstNodeAttrS(expr, "name");
+		j=BS2C_LookupFrameGlobal(ctx, fn);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_MKLFCN);
+		BS2C_EmitOpcodeUCx(ctx, j);
+
+		BS2C_CompileExprPushType(ctx, BS2CC_TYZ_VARIANT);
+		return;
+	}
+#endif
 
 	BS2C_CaseError(ctx);
 	return;

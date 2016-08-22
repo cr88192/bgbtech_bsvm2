@@ -1,4 +1,24 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 
 int BS2C_InferName(BS2CC_CompileContext *ctx, char *name)
 {
@@ -711,6 +731,176 @@ int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr)
 		return(-1);
 	}
 
+	if(!strcmp(tag, "func_dfl") ||
+		!strcmp(tag, "func_aut") ||
+		!strcmp(tag, "func_ind"))
+	{
+		return(BS2CC_TYZ_VARIANT);
+	}
+
 	BS2C_CaseError(ctx);
 	return(-1);
+}
+
+void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
+{
+	dtVal n0, n1, n2, n3;
+	char *tag, *fn;
+	int ln;
+	int i, j, k, l;
+
+	if(ctx->ncfatal)
+		return;
+
+	if(dtvIsArrayP(expr))
+	{
+		l=dtvArrayGetSize(expr);
+		for(i=0; i<l; i++)
+		{
+			n0=dtvArrayGetIndexDtVal(expr, i);
+			BS2C_InferCaptureStatement(ctx, n0);
+			if(ctx->ncfatal)
+				break;
+		}
+		return;
+	}
+
+	tag=BS2P_GetAstNodeTag(expr);
+	
+	if(!tag)
+	{
+		BS2C_CaseError(ctx);
+		return;
+	}
+
+	fn=BS2P_GetAstNodeAttrS(expr, "fn");
+	ln=BS2P_GetAstNodeAttrI(expr, "ln");
+	if(fn)ctx->srcfn=fn;
+	if(ln>0)ctx->srcln=ln;
+
+	if(!strcmp(tag, "block"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferCaptureStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "var"))
+	{
+//		BS2C_CompileFunVar(ctx, expr);
+		return;
+	}
+	
+	if(!strcmp(tag, "vars"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "value");
+		l=dtvArrayGetSize(n0);
+		for(i=0; i<l; i++)
+		{
+			n1=dtvArrayGetIndexDtVal(n0, i);
+//			BS2C_CompileFunVar(ctx, n1);
+		}
+		return;
+	}
+
+	if(!strcmp(tag, "func"))
+	{
+//		BS2C_CompileFunVar(ctx, expr);
+		return;
+	}
+
+	if(!strcmp(tag, "for"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		BS2C_InferCaptureStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "if"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		n1=BS2P_GetAstNodeAttr(expr, "else");
+		BS2C_InferCaptureStatement(ctx, n0);
+//		if(!dtvNullP(n1))
+		if(dtvTrueP(n1))
+			BS2C_InferCaptureStatement(ctx, n1);
+		return;
+	}
+
+	if(!strcmp(tag, "ifelse"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		n1=BS2P_GetAstNodeAttr(expr, "else");
+		BS2C_InferCaptureStatement(ctx, n0);
+//		if(!dtvNullP(n1))
+		if(dtvTrueP(n1))
+			BS2C_InferCaptureStatement(ctx, n1);
+		return;
+	}
+
+	if(!strcmp(tag, "while"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		BS2C_InferCaptureStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "do_while"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		BS2C_InferCaptureStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "switch"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		BS2C_InferCaptureStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "assign"))
+		return;
+	if(!strcmp(tag, "assignop"))
+		return;
+	if(!strcmp(tag, "break"))
+		return;
+	if(!strcmp(tag, "call"))
+		return;
+	if(!strcmp(tag, "case"))
+		return;
+	if(!strcmp(tag, "case_default"))
+		return;
+	if(!strcmp(tag, "continue"))
+		return;
+	if(!strcmp(tag, "default"))
+		return;
+	if(!strcmp(tag, "delete"))
+		return;
+	if(!strcmp(tag, "goto"))
+		return;
+	if(!strcmp(tag, "label"))
+		return;
+
+	if(!strcmp(tag, "postdec"))
+		return;
+	if(!strcmp(tag, "postinc"))
+		return;
+	if(!strcmp(tag, "predec"))
+		return;
+	if(!strcmp(tag, "preinc"))
+		return;
+
+	if(!strcmp(tag, "return"))
+		return;
+	if(!strcmp(tag, "throw"))
+		return;
+
+	if(!strcmp(tag, "tail"))
+		return;
+
+	if(!strcmp(tag, "empty_block"))
+		return;
+
+	BS2C_CaseError(ctx);
 }

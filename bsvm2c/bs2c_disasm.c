@@ -1,4 +1,24 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 
 struct {
 char *frmt;
@@ -277,8 +297,10 @@ char *name;
 {"83Zi",      "LDRLX"},
 {"84Zi",      "LDLX"},
 {"85Zi",      "STLX"},
-{"86Zn",      "DCLX"},
-{"87Zn",      "DELX"},
+{"86Zi",      "LDDRLX"},
+{"87Zi",      "STDRLX"},
+//{"86Zn",      "DCLX"},
+//{"87Zn",      "DELX"},
 {"88Gx",      "NEWOBJ"},
 {"89Zn",      "NEWARR"},
 {"8A",        "DELOBJ"},
@@ -553,6 +575,12 @@ char *name;
 
 {"E1B8Gj",    "IFXDYV"},
 {"E1B9Gj",    "DFXDYV"},
+{"E1BAGj",    "IFXLFCN"},
+{"E1BBGj",    "DFXLFCN"},
+{"E1BCGx",    "MKLFCN"},
+{"E1BDZn",    "DSTIXUZ"},
+{"E1BEZi",    "DSTIXUZL"},
+{"E1BFZi",    "DSTIXUZRL"},
 
 {"E1C0Kj",    "ADDISLC"},
 {"E1C1Kj",    "SUBISLC"},
