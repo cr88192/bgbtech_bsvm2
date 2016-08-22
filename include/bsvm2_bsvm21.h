@@ -256,8 +256,8 @@
 #define BSVM2_OP_LDRLX		0x83	//Load Ref To Lexical
 #define BSVM2_OP_LDLX		0x84	//Load Lexical
 #define BSVM2_OP_STLX		0x85	//Store Lexical
-#define BSVM2_OP_DCLX		0x86	//Declare Lexical Variables
-#define BSVM2_OP_DELX		0x87	//Delete Lexical Variables
+// #define BSVM2_OP_DCLX		0x86	//Declare Lexical Variables
+// #define BSVM2_OP_DELX		0x87	//Delete Lexical Variables
 #define BSVM2_OP_NEWOBJ		0x88	//Create object instance.
 #define BSVM2_OP_NEWARR		0x89	//Create array instance.
 #define BSVM2_OP_DELETE		0x8A	//Delete object/array instance.
@@ -506,8 +506,15 @@
 #define BSVM2_OP_STDRBSW	0x01B7	//Store Deref Byte Swap
 
 #define BSVM2_OP_IFXDYV		0x01B8	//Init Dynamic Var
-#define BSVM2_OP_DFXDYV		0x01B9	//DeInit Dynamic Var
+#define BSVM2_OP_DFXDYV		0x01B9	//Deinit Dynamic Var
 
+#define BSVM2_OP_IFXLFCN	0x01BA	//Init Lambda Function
+#define BSVM2_OP_DFXLFCN	0x01BB	//Deinit Lambda Function
+
+#define BSVM2_OP_MKLFCN		0x01BC	//Make new lambda function
+#define BSVM2_OP_DSTIXUZ	0x01BD	//Store index into Lambda (stack)
+#define BSVM2_OP_DSTIXUZL	0x01BE	//Store index into Lambda (local)
+#define BSVM2_OP_DSTIXUZRL	0x01BF	//Store index into Lambda (ref-local)
 
 #define BSVM2_OP_ADDISLC	0x01C0	//
 #define BSVM2_OP_SUBISLC	0x01C1	//

@@ -389,6 +389,8 @@ BS2CC_PkgFrame *pkg_first;		///< first package
 BS2CC_CcFrame *frm;				///< current compile frame
 BS2CC_PkgFrame *pkg;			///< current package
 BS2CC_VarInfo *obj;				///< current object
+
+u32 gshash;						///< hash value for gensyms
 int gsseq;						///< sequence number for gensyms
 
 BS2CC_VarInfo *objstk[16];		///< object stack

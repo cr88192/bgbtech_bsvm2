@@ -579,6 +579,7 @@ dtVal BGBDT_XV128_Sub(dtVal a, dtVal b);
 dtVal BGBDT_XV128_Mul(dtVal a, dtVal b);
 dtVal BGBDT_XV128_Div(dtVal a, dtVal b);
 //AHSRC:bsvm2c/bs2p_astnode.c
+char *BS2P_GenSym(BS2CC_CompileContext *ctx);
 char *BS2P_StrSym(BS2CC_CompileContext *ctx, char *str);
 dtVal BS2P_NewAstNode(BS2CC_CompileContext *ctx, char *tag);
 void BS2P_SetAstNodeAttr(dtVal obj, char *attr, dtVal val);
@@ -867,6 +868,7 @@ int BS2C_InferRetTypeName(BS2CC_CompileContext *ctx, char *name);
 int BS2C_InferExprLocalIndex(BS2CC_CompileContext *ctx, dtVal expr);
 int BS2C_InferExprObjMethodCall(BS2CC_CompileContext *ctx,int clsty, char *name, dtVal args);
 int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr);
+void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr);
 //AHSRC:bsvm2c/bs2c_jcond.c
 int BS2C_CompileGetCondBool(BS2CC_CompileContext *ctx, dtVal cc);
 void BS2C_CompileTempJmpIfElse(BS2CC_CompileContext *ctx,dtVal cc, int tt, int tf);
