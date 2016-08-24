@@ -368,7 +368,7 @@ void BS2C_CompileTopFuncArg(BS2CC_CompileContext *ctx,
 	BS2C_CompileSetupVarInfo(ctx, vi, expr);
 }
 
-void BS2C_CompileTopFunc(BS2CC_CompileContext *ctx, dtVal expr)
+int BS2C_CompileTopFunc(BS2CC_CompileContext *ctx, dtVal expr)
 {
 	char tb[256];
 	dtVal n0, n1, n2, n3;
@@ -446,6 +446,7 @@ void BS2C_CompileTopFunc(BS2CC_CompileContext *ctx, dtVal expr)
 	}
 	 	
 	vi->bodyExp=nb;
+	return(vi->gid);
 }
 
 void BS2C_CompileTopStruct(BS2CC_CompileContext *ctx, dtVal expr)

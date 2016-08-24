@@ -1,4 +1,25 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 
 BSVM2_Trace *BSVM2_TrRun_NULL(BSVM2_Frame *frm, BSVM2_Trace *tr)
 {
@@ -1145,6 +1166,124 @@ BSVM2_Trace *BSVM2_TrOp_CALLTH(
 	{
 		frmb->local[fvi->cblk->bargs+i]=
 			frm->stack[op->t1+i];
+	}
+
+	tr=BS2I_ImageGetFuncTrace(fvi);
+	return(tr);
+}
+
+BSVM2_Trace *BSVM2_TrOp_CALLA(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	BSVM2_Context *ctx;
+	BSVM2_Frame *frmb;
+	BSVM2_ImageGlobal *vi, *fvi;
+	BSVM2_Lambda *lfcn;
+	BSVM2_Trace *tr;
+	dtVal fcn;
+	int i;
+	
+	ctx=frm->ctx;
+	vi=op->v.p;
+
+	fcn=frm->stack[(op->t1)-1].a;
+
+	if(BSVM2_Interp_IsLambdaP(fcn))
+	{
+		lfcn=dtvUnwrapPtrF(fcn);
+		fvi=lfcn->func;
+	}else
+	{
+		lfcn=NULL;
+		fvi=dtvUnwrapPtrF(fcn);
+	}
+
+	frmb=BSVM2_Interp_AllocFrame(ctx);
+
+	frmb->local=ctx->tstack+ctx->tstackref;
+	frmb->stack=frmb->local+fvi->cblk->largs;
+
+	ctx->tstackref=ctx->tstackref+fvi->cblk->szframe;
+	frmb->tstkpos=ctx->tstackref;
+
+	frmb->rnext=frm;
+	frm->rtrace=op->nexttrace;
+	frm->rcsrv=op->t0;
+	ctx->frame=frmb;
+
+	if(lfcn)
+		{ frmb->lxvar=lfcn->lxvar; }
+
+	if(fvi->nargs>1)
+	{
+		for(i=0; i<fvi->nargs; i++)
+		{
+			frmb->local[fvi->cblk->bargs+i]=
+				frm->stack[op->t1+i];
+		}
+	}else if(fvi->nargs)
+	{
+		frmb->local[fvi->cblk->bargs]=
+			frm->stack[op->t1];
+	}
+
+	tr=BS2I_ImageGetFuncTrace(fvi);
+	return(tr);
+}
+
+BSVM2_Trace *BSVM2_TrOp_CALLL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	BSVM2_Context *ctx;
+	BSVM2_Frame *frmb;
+	BSVM2_ImageGlobal *vi, *fvi;
+	BSVM2_Lambda *lfcn;
+	BSVM2_Trace *tr;
+	dtVal fcn;
+	int i;
+	
+	ctx=frm->ctx;
+	vi=op->v.p;
+
+	fcn=frm->local[op->i0].a;
+
+	if(BSVM2_Interp_IsLambdaP(fcn))
+	{
+		lfcn=dtvUnwrapPtrF(fcn);
+		fvi=lfcn->func;
+	}else
+	{
+		lfcn=NULL;
+		fvi=dtvUnwrapPtrF(fcn);
+	}
+
+	frmb=BSVM2_Interp_AllocFrame(ctx);
+
+	frmb->local=ctx->tstack+ctx->tstackref;
+	frmb->stack=frmb->local+fvi->cblk->largs;
+
+	ctx->tstackref=ctx->tstackref+fvi->cblk->szframe;
+	frmb->tstkpos=ctx->tstackref;
+
+	frmb->rnext=frm;
+	frm->rtrace=op->nexttrace;
+	frm->rcsrv=op->t0;
+	ctx->frame=frmb;
+
+	if(lfcn)
+		{ frmb->lxvar=lfcn->lxvar; }
+
+	if(fvi->nargs>1)
+	{
+		for(i=0; i<fvi->nargs; i++)
+		{
+			frmb->local[fvi->cblk->bargs+i]=
+				frm->stack[op->t1+i];
+		}
+	}else if(fvi->nargs)
+	{
+		frmb->local[fvi->cblk->bargs]=
+			frm->stack[op->t1];
 	}
 
 	tr=BS2I_ImageGetFuncTrace(fvi);

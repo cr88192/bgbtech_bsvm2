@@ -425,6 +425,24 @@ int BS2C_TypeClassOrInterfaceP(BS2CC_CompileContext *ctx, int ty)
 		(vi->vitype==BS2CC_VITYPE_IFACE));
 }
 
+int BS2C_TypeFunctionP(BS2CC_CompileContext *ctx, int ty)
+{
+	BS2CC_VarInfo *vi;
+
+	vi=BS2C_GetTypeObject(ctx, ty);
+	if(!vi)return(0);
+	
+	if(BS2C_TypeArrayP(ctx, ty))
+		return(0);
+	if(BS2C_TypePointerP(ctx, ty))
+		return(0);
+	
+	return(vi->vitype==BS2CC_VITYPE_GBLFUNC);
+
+//	return((vi->vitype==BS2CC_VITYPE_CLASS) ||
+//		(vi->vitype==BS2CC_VITYPE_IFACE));
+}
+
 int BS2C_TypeSmallIntP(BS2CC_CompileContext *ctx, int ty)
 {
 	if((ty==BS2CC_TYZ_INT) || (ty==BS2CC_TYZ_UINT))

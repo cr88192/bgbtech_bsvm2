@@ -1,8 +1,15 @@
-native void printf(cstring str, ...);
+// native void printf(cstring str, ...);
 native int clock();
 native int rand();
 native int bsvm2_natfib(int x);
 native void bsvm2_natsorttst(int n);
+
+//native variant bsvm2_vm_printf(string str, variant[] va);
+native variant bsvm2_vm_printf(string str, ...va);
+void printf(string str, ...va)
+	{ bsvm2_vm_printf(str, va); }
+
+int fn_noArgReturnsInt();
 
 package bstest {
 	public struct Foo {
@@ -139,6 +146,19 @@ package bstest {
 			i=i+j;
 			return(j);
 		}
+		
+		public static void tst_func()
+		{
+//			variant fn;
+			fn_noArgReturnsInt fn;
+			int x, y, z;
+			
+			x=2; y=3;
+			
+			fn=function():int { x+y }
+			z=fn();
+			printf("tst_func: %d %d %d\n", x, y, z);
+		}
 	
 		public static void main(string[] argv)
 		{
@@ -244,6 +264,8 @@ package bstest {
 			i+=2;
 			j=i*j;
 			printf("St2 i=%d, j=%d\n", i, j);
+			
+			tst_func();
 		}
 	}
 }

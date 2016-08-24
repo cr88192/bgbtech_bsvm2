@@ -1,4 +1,25 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 
 byte *BSVM2_Interp_DecodeOpJAddr(BSVM2_CodeBlock *cblk)
 {
@@ -128,6 +149,30 @@ void BSVM2_Interp_DecodeTopJx(BSVM2_CodeBlock *cblk, BSVM2_TailOpcode *op)
 	BSVM2_Interp_DecodeOpUJxI(cblk, &i, &j);
 	op->i0=i;
 	op->i1=j;
+}
+
+void BSVM2_Interp_DecodeTopGj(BSVM2_CodeBlock *cblk, BSVM2_TailOpcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	void *p;
+	int i, j, k, ix;
+
+	BSVM2_Interp_DecodeOpUJxI(cblk, &i, &j);
+
+	op->i0=i;
+	ix=j;
+	k=cblk->gitab[ix];
+	if(!(k&3))
+	{
+		vi=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
+		op->v.p=vi;
+		op->i1=vi->brty;
+	}else
+	{
+		p=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
+		op->v.p=p;
+		op->i1=BSVM2_OPZ_CONST;
+	}
 }
 
 void BSVM2_Interp_SetupTopPopUnJmp(BSVM2_CodeBlock *cblk,
@@ -421,6 +466,81 @@ void BSVM2_Interp_SetupTopCallTh(BSVM2_CodeBlock *cblk,
 	return;
 }
 
+
+void BSVM2_Interp_SetupTopCallA(BSVM2_CodeBlock *cblk,
+	BSVM2_TailOpcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	void *p;
+	char *s;
+	int ix;
+	int i, j;
+	
+	ix=BSVM2_Interp_DecodeOpUCxI(cblk);
+	if((ix<0) || (ix>=cblk->ngi))
+		{ BSVM2_DBGTRAP }
+	i=cblk->gitab[ix];
+	if(i&3)
+	{
+		return;
+	}
+
+	vi=BS2I_ImageGetGlobal(cblk->img, i>>2);
+	op->v.p=vi;
+	
+	cblk->stkpos-=vi->nargs;
+	op->t1=cblk->stkpos;
+//	op->t2=cblk->stkpos;
+
+	cblk->stkpos--;		//pop func
+
+	if(vi->brty!=BSVM2_OPZ_VOID)
+		{ op->t0=cblk->stkpos++; }
+	else
+		{ op->t0=cblk->stkpos; }
+
+	op->Run=BSVM2_TrOp_CALLA;
+	return;
+}
+
+void BSVM2_Interp_SetupTopCallL(BSVM2_CodeBlock *cblk,
+	BSVM2_TailOpcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	void *p;
+	char *s;
+	int ix;
+	int i, j;
+	
+	BSVM2_Interp_DecodeOpUJxI(cblk, &j, &ix);
+	if((ix<0) || (ix>=cblk->ngi))
+		{ BSVM2_DBGTRAP }
+	i=cblk->gitab[ix];
+	if(i&3)
+	{
+		BSVM2_DBGTRAP
+		return;
+	}
+	
+	op->i0=j;
+
+	vi=BS2I_ImageGetGlobal(cblk->img, i>>2);
+	op->v.p=vi;
+	
+	cblk->stkpos-=vi->nargs;
+	op->t1=cblk->stkpos;
+//	op->t2=cblk->stkpos;
+
+	if(vi->brty!=BSVM2_OPZ_VOID)
+		{ op->t0=cblk->stkpos++; }
+	else
+		{ op->t0=cblk->stkpos; }
+
+	op->Run=BSVM2_TrOp_CALLL;
+	return;
+}
+
+
 BSVM2_TailOpcode *BSVM2_Interp_DecodeTailOpcode(
 	BSVM2_CodeBlock *cblk, int opn)
 {
@@ -665,6 +785,13 @@ BSVM2_TailOpcode *BSVM2_Interp_DecodeTailOpcode(
 		break;
 	case BSVM2_OP_CALLTH:
 		BSVM2_Interp_SetupTopCallTh(cblk, tmp);
+		break;
+
+	case BSVM2_OP_CALLA:
+		BSVM2_Interp_SetupTopCallA(cblk, tmp);
+		break;
+	case BSVM2_OP_CALLL:
+		BSVM2_Interp_SetupTopCallL(cblk, tmp);
 		break;
 
 	default:

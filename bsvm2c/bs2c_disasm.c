@@ -278,7 +278,7 @@ char *name;
 {"70Gx",      "CALLG"},
 {"71Gx",      "CALLA"},
 {"72Gx",      "CALLV"},
-{"73GxIx",    "CALLL"},
+{"73Gj",      "CALLL"},
 {"74",        "RETI"},
 {"75",        "RETL"},
 {"76",        "RETF"},
@@ -478,6 +478,7 @@ char *name;
 {"E16BZn",    "AGETI"},
 {"E16CGj",    "LDOSL"},
 {"E16DGj",    "STOSL"},
+{"E16E",      "CALLAA"},
 
 // {"E160Zo",      "BINOP"},
 // {"E161Zo",      "CMPOP"},
@@ -579,8 +580,8 @@ char *name;
 {"E1BBGj",    "DFXLFCN"},
 {"E1BCGx",    "MKLFCN"},
 {"E1BDZn",    "DSTIXUZ"},
-{"E1BEZi",    "DSTIXUZL"},
-{"E1BFZi",    "DSTIXUZRL"},
+{"E1BEZnIx",  "DSTIXUZL"},
+{"E1BFZnIx",  "DSTIXUZRL"},
 
 {"E1C0Kj",    "ADDISLC"},
 {"E1C1Kj",    "SUBISLC"},

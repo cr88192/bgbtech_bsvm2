@@ -1,4 +1,24 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 
 
 void BSVM2_Op_LDI(BSVM2_Frame *frm, BSVM2_Opcode *op)
@@ -33,6 +53,30 @@ void BSVM2_Op_LDCD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].d=op->v.d; }
 void BSVM2_Op_LDCA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=op->v.a; }
+
+#if 1
+void BSVM2_Op_LDLXI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].i=frm->lxvar[op->i0].i; }
+void BSVM2_Op_LDLXL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].l=frm->lxvar[op->i0].l; }
+void BSVM2_Op_LDLXF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].f=frm->lxvar[op->i0].f; }
+void BSVM2_Op_LDLXD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].d=frm->lxvar[op->i0].d; }
+void BSVM2_Op_LDLXA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].a=frm->lxvar[op->i0].a; }
+
+void BSVM2_Op_STLXI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->lxvar[op->i0].i=frm->stack[op->t0].i; }
+void BSVM2_Op_STLXL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->lxvar[op->i0].l=frm->stack[op->t0].l; }
+void BSVM2_Op_STLXF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->lxvar[op->i0].f=frm->stack[op->t0].f; }
+void BSVM2_Op_STLXD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->lxvar[op->i0].d=frm->stack[op->t0].d; }
+void BSVM2_Op_STLXA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->lxvar[op->i0].a=frm->stack[op->t0].a; }
+#endif
 
 void BSVM2_Op_MVI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->local[op->i0].i=frm->local[op->i1].i; }
@@ -175,3 +219,49 @@ void BSVM2_Op_STGS_DY(BSVM2_Frame *frm, BSVM2_Opcode *op)
 
 void BSVM2_Op_LDCTH(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=frm->self; }
+
+
+void BSVM2_Op_MKLFCN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	BSVM2_Lambda *lfcn;
+	
+//	lfcn=dtmAlloc("bsvm2_lambda_t",
+//		sizeof(BSVM2_Lambda));
+	lfcn=BSVM2_Interp_AllocLambda(frm->ctx);
+//	lfcn->func=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->func=op->v.p;
+	lfcn->lxvar=lfcn->t_lxvar;
+	frm->stack[op->t0].a=dtvWrapPtr(lfcn);
+}
+
+void BSVM2_Op_DSTIXUZ_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].i=frm->stack[op->t1].i;		}
+void BSVM2_Op_DSTIXUZ_L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].l=frm->stack[op->t1].l;		}
+void BSVM2_Op_DSTIXUZ_F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].f=frm->stack[op->t1].f;		}
+void BSVM2_Op_DSTIXUZ_D(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].d=frm->stack[op->t1].d;		}
+void BSVM2_Op_DSTIXUZ_A(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].a=frm->stack[op->t1].a;		}
+
+void BSVM2_Op_DSTIXUZL_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].i=frm->local[op->i1].i;		}
+void BSVM2_Op_DSTIXUZL_L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].l=frm->local[op->i1].l;		}
+void BSVM2_Op_DSTIXUZL_F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].f=frm->local[op->i1].f;		}
+void BSVM2_Op_DSTIXUZL_D(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].d=frm->local[op->i1].d;		}
+void BSVM2_Op_DSTIXUZL_A(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	BSVM2_Lambda *lfcn;		lfcn=dtvUnwrapPtr(frm->stack[op->t0].a);
+	lfcn->lxvar[op->i0].a=frm->local[op->i1].a;		}

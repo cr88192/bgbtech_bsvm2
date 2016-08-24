@@ -1,4 +1,25 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 
 BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 	BSVM2_CodeBlock *cblk, int opn)
@@ -230,6 +251,142 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			BSVM2_OPZ_ADDRESS, BSVM2_Op_LDROS);
 		break;
 
+	case BSVM2_OP_LDLX:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDLXI);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_LONG, BSVM2_Op_LDLXL);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_LDLXF);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_LDLXD);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_LDLXA);
+			break;
+		default:
+			break;
+		}
+		break;
+	case BSVM2_OP_STLX:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_LDLXI);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_LDLXL);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_LDLXF);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_LDLXD);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_LDLXA);
+			break;
+		default:
+			break;
+		}
+		break;
+	case BSVM2_OP_MKLFCN:
+		BSVM2_Interp_DecodeOpGx(cblk, op);
+		BSVM2_Interp_SetupOpUnP(cblk, op,
+			BSVM2_OPZ_ADDRESS, BSVM2_Op_MKLFCN);
+		break;
+
+	case BSVM2_OP_DSTIXUZ:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZ_I);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZ_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZ_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZ_D);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZ_A);
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case BSVM2_OP_DSTIXUZL:
+		BSVM2_Interp_DecodeOpZiIx(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_I);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_D);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_A);
+			break;
+		default:
+			break;
+		}
+		break;
+	
 	case BSVM2_OP_DIFFPTR:
 		BSVM2_Interp_DecodeOpZn(cblk, op);
 		switch(op->i1)
@@ -2139,6 +2296,10 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 	case BSVM2_OP_SWAPA:
 		BSVM2_Interp_SetupOpUat2(cblk, op,
 			BSVM2_OPZ_ADDRESS, BSVM2_Op_SWAPA);
+		break;
+
+	case BSVM2_OP_DROPAA:
+		BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_NOP);
 		break;
 	
 	case BSVM2_OP_ADDIC:

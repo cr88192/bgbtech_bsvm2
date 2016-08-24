@@ -1,4 +1,25 @@
-// #include <bteifgl.h>
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 
 int BSVM2_Interp_DecodeOpUCxI(BSVM2_CodeBlock *cblk)
 {
@@ -534,11 +555,13 @@ void BSVM2_Interp_DecodeOpGj(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 		vi=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=vi;
 		op->i1=vi->brty;
+		op->z=vi->brty;
 	}else
 	{
 		p=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=p;
 		op->i1=BSVM2_OPZ_CONST;
+		op->z=BSVM2_OPZ_CONST;
 	}
 }
 
@@ -703,6 +726,7 @@ void BSVM2_Interp_DecodeOpZx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	li=BSVM2_Interp_DecodeOpUCxL(cblk);
 	op->i1=li&15;
 	lj=li>>4;
+	op->z=op->i1;
 
 	switch(op->i1)
 	{
@@ -749,6 +773,7 @@ void BSVM2_Interp_DecodeOpZy(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	li=BSVM2_Interp_DecodeOpUCxL(cblk);
 	op->i1=li&15;
 	lj=li>>4;
+	op->z=op->i1;
 	
 	switch(op->i1)
 	{
@@ -805,6 +830,7 @@ void BSVM2_Interp_DecodeOpZn(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->i1=li&15;
 	lj=li>>4;
 	op->i0=lj;
+	op->z=op->i1;
 }
 
 void BSVM2_Interp_DecodeOpZiIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
@@ -817,6 +843,7 @@ void BSVM2_Interp_DecodeOpZiIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	lj=li>>4;
 	op->i0=lj;
 	op->i1=BSVM2_Interp_DecodeOpUCxI(cblk);
+	op->z=op->i2;
 }
 
 void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
@@ -828,6 +855,7 @@ void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->i2=li&15;
 	lj=li>>4;
 	op->i0=lj;
+	op->z=op->i2;
 //	BSVM2_Interp_DecodeOpCx(cblk, op, )
 	lk=BSVM2_Interp_DecodeOpSCxL(cblk);
 //	lk=bsvm2_interp_decsignfoldl(lk);

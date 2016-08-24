@@ -1,7 +1,30 @@
+/*
+Copyright (C) 2015-2016 by Brendan G Bohannon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 /** \file
  * BS2 Interpreter
  *
  */
+
 
 BSVM2_Context *bsvm2_interp_freectx;
 
@@ -34,6 +57,133 @@ BS2VM_API void bsvm2_natsorttst(int n)
 	}
 	
 	bgbdt_mm_free(arr);
+}
+
+BS2VM_API dtVal bsvm2_vm_printf(dtVal str, dtVal va)
+{
+	char tb[1024];
+	char *str1, *s0;
+	char *s, *t;
+	dtVal vn;
+	double f;
+	s64 li;
+	int fl, w, pr;
+	int i, j, k, n;
+
+	str1=BGBDT_TagStr_GetUtf8(str);
+	
+	s=str1; t=tb; n=0;
+	while(*s)
+	{
+		if(*s!='%')
+		{
+			*t++=*s++;
+			continue;
+		}
+		
+		s++;
+		if(*s=='%')
+		{
+			*t++=*s++;
+			continue;
+		}
+		
+		if(dtvIsArrayP(va))
+			{ vn=dtvArrayGetIndexDtVal(va, n++); }
+		else
+			{ vn=va; }
+		
+		fl=0; w=0; pr=0;
+		
+		if(*s=='-') { fl|=1; s++; }
+		if(*s=='+') { fl|=2; s++; }
+		if(*s=='0') { fl|=4; s++; }
+		if(*s==' ') { fl|=8; s++; }
+		if(*s=='#') { fl|=16; s++; }
+		if(*s=='\'') { fl|=32; s++; }
+		
+		if((*s>='1') && (*s<='9'))
+		{
+			i=0;
+			while((*s>='0') && (*s<='9'))
+				{ i=(i*10)+((*s++)-'0'); }
+			w=i;
+		}
+		
+		if(*s=='.')
+		{
+			s++;
+			i=0;
+			while((*s>='0') && (*s<='9'))
+				{ i=(i*10)+((*s++)-'0'); }
+			pr=i;
+		}
+		
+		if(*s=='h')
+		{
+			s++;
+			if(*s=='h')s++;
+		}
+		if(*s=='l')
+		{
+			s++;
+			if(*s=='l')s++;
+		}
+		if(*s=='L')s++;
+		if(*s=='q')s++;
+		
+		if(*s=='f')
+		{
+			f=dtvUnwrapDouble(vn);
+			sprintf(t, "%f", f);
+			s++; t+=strlen(t);
+			continue;
+		}
+
+		if((*s=='d') || (*s=='i'))
+		{
+			li=dtvUnwrapLong(vn);
+			if(w)	sprintf(t, "%*lld", w, li);
+			else	sprintf(t, "%lld", li);
+			s++; t+=strlen(t);
+			continue;
+		}
+
+		if((*s=='x') || (*s=='X'))
+		{
+			li=dtvUnwrapLong(vn);
+			if(w)	sprintf(t, "%*llX", w, li);
+			else	sprintf(t, "%llX", li);
+			s++; t+=strlen(t);
+			continue;
+		}
+		
+		if(*s=='c')
+		{
+			i=dtvUnwrapInt(vn);
+			*t++=i;
+			s++;
+			continue;
+		}
+
+		if(*s=='s')
+		{
+			s0=BGBDT_TagStr_GetUtf8(vn);
+			if(w)	sprintf(t, "%*s", w, s0);
+			else	sprintf(t, "%s", s0);
+			s++; t+=strlen(t);
+			continue;
+		}
+
+		s++;
+		*t++='?';
+		continue;
+	}
+	*t++=0;
+	
+	fputs(tb, stdout);
+	
+	return(DTV_NULL);
 }
 
 /** Allocate VM Context. */
@@ -97,6 +247,24 @@ BS2VM_API BSVM2_Frame *BSVM2_Interp_AllocFrame(BSVM2_Context *ctx)
 	tmp=dtmAlloc("bsvm2_frame_t", sizeof(BSVM2_Frame));
 	tmp->ctx=ctx;
 	return(tmp);
+}
+
+BS2VM_API bool BSVM2_Interp_IsLambdaP(dtVal objv)
+{
+	static int objty_lambda=-1;
+
+	if(objty_lambda<0)
+		{ objty_lambda=BGBDT_MM_GetIndexObjTypeName("bsvm2_lambda_t"); }
+	return(dtvCheckPtrTagP(objv, objty_lambda));
+}
+
+BS2VM_API BSVM2_Lambda *BSVM2_Interp_AllocLambda(BSVM2_Context *ctx)
+{
+	BSVM2_Lambda *lfcn;
+	
+	lfcn=dtmAlloc("bsvm2_lambda_t",
+		sizeof(BSVM2_Lambda));
+	return(lfcn);
 }
 
 /** Setup VM context for calling a function. */

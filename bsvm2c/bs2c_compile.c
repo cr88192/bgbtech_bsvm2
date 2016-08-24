@@ -459,7 +459,17 @@ void BS2C_CompileFuncBody(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
 	int tk;
 	int i, j, k, l;
 
-	frm=BS2C_AllocCcFrame(ctx);
+//	if(func->body)
+	if(0)
+	{
+		frm->func->body;
+		frm->nlocals=0;
+		frm->ntrlc=0;
+		frm->ntlbl=0;
+	}else
+	{
+		frm=BS2C_AllocCcFrame(ctx);
+	}
 
 	tk=func->tokcnt;
 	frm->def_rlcty=0;
@@ -632,10 +642,20 @@ void BS2C_CompileRebuildStructType(
 BS2VM_API void BS2C_CompileFuncs(
 	BS2CC_CompileContext *ctx)
 {
+	BS2C_CompileFuncs2(ctx, 0);
+}
+
+/** Compile the functions within a context starting from base. */
+BS2VM_API void BS2C_CompileFuncs2(
+	BS2CC_CompileContext *ctx, int base)
+{
 	BS2CC_VarInfo *vari;
+	int ongbl;
 	int i;
 
-	for(i=0; i<ctx->nglobals; i++)
+	ongbl=ctx->nglobals;
+//	for(i=base; i<ctx->nglobals; i++)
+	for(i=base; i<ongbl; i++)
 	{
 		vari=ctx->globals[i];
 		if(!vari)
@@ -667,7 +687,8 @@ BS2VM_API void BS2C_CompileFuncs(
 		}
 	}
 	
-	for(i=0; i<ctx->nglobals; i++)
+//	for(i=base; i<ctx->nglobals; i++)
+	for(i=base; i<ongbl; i++)
 	{
 		vari=ctx->globals[i];
 //		if(dtvNullP(vari->bodyExp))
@@ -684,10 +705,16 @@ BS2VM_API void BS2C_CompileFuncs(
 		}
 	}
 	
-	if(vari->gid<65280)
+	/* Did compilation create more globals? */
+	if(ongbl!=ctx->nglobals)
 	{
-		vari->bty=vari->gid+256;
+		BS2C_CompileFuncs2(ctx, ongbl);
 	}
+	
+//	if(vari->gid<65280)
+//	{
+//		vari->bty=vari->gid+256;
+//	}
 }
 
 /**

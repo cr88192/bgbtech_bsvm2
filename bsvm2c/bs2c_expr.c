@@ -764,6 +764,243 @@ void BS2C_CompileCallArg(BS2CC_CompileContext *ctx,
 	BS2C_CompileExpr(ctx, expr, vai->bty);
 }
 
+void BS2C_CompileCallVariArgs(BS2CC_CompileContext *ctx,
+	BS2CC_VarInfo *vari, dtVal an)
+{
+	dtVal n0, n1;
+	BS2CC_VarInfo *vai;
+	int l2, lt, rt;
+	int i, j, k, l;
+
+	if(vari->nargs>=1)
+	{
+		i=vari->nargs-1;
+		vai=vari->args[i];
+	}else { vai=NULL; }
+
+	if(vai && (vai->bty==BS2CC_TYZ_VARARG) && dtvIsArrayP(an))
+	{
+		l=dtvArrayGetSize(an);
+		l2=vari->nargs-1;
+		if(l<l2)
+		{
+			BS2C_ErrTooFewArgs(ctx);
+			l=l2;
+		}
+		
+		for(i=0; i<l2; i++)
+		{
+			vai=vari->args[i];
+			n0=dtvArrayGetIndexDtVal(an, i);
+			n0=BS2C_ReduceExpr(ctx, n0);
+			BS2C_CompileCallArg(ctx, vai, n0);
+		}
+
+		n1=DTV_NULL;
+		if(l==(l2+1))
+		{
+			vai=vari->args[l2];
+			n0=dtvArrayGetIndexDtVal(an, l2);
+			n0=BS2C_ReduceExpr(ctx, n0);
+			rt=BS2C_InferExpr(ctx, n0);
+			if((rt==BS2CC_TYZ_VARIANT_ARR) ||
+				(rt==BS2CC_TYZ_VARARG))
+					n1=n0;
+		}
+
+		if(!dtvNullP(n1))
+		{
+			BS2C_CompileExpr(ctx, n1,
+				BS2CC_TYZ_VARIANT_ARR);
+		}else if(l>l2)
+		{
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
+			BS2C_EmitOpcodeUZx(ctx, BS2CC_TYZ_ADDRESS, l-l2);
+
+			for(i=l2; i<l; i++)
+			{
+				n0=dtvArrayGetIndexDtVal(an, i);
+				n0=BS2C_ReduceExpr(ctx, n0);
+				BS2C_CompileExpr(ctx, n0, BS2CC_TYZ_VARIANT);
+				BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXAC);
+				BS2C_EmitOpcodeSCx(ctx, i-l2);
+				BS2C_CompileExprPopType1(ctx);
+			}
+			BS2C_CompileExprPopType1(ctx);
+		}else
+		{
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
+		}
+	}else if(dtvIsArrayP(an))
+	{
+		l=dtvArrayGetSize(an);
+		if(l<vari->nargs)
+		{
+			BS2C_ErrTooFewArgs(ctx);
+		}else if(l>vari->nargs)
+		{
+			BS2C_ErrTooManyArgs(ctx);
+			l=vari->nargs;
+		}
+		
+		for(i=0; i<l; i++)
+		{
+			vai=vari->args[i];
+			n0=dtvArrayGetIndexDtVal(an, i);
+			n0=BS2C_ReduceExpr(ctx, n0);
+			BS2C_CompileCallArg(ctx, vai, n0);
+		}
+	}else if(vai && (vai->bty==BS2CC_TYZ_VARARG))
+	{
+		l=1;
+		l2=vari->nargs-1;
+		if(l<l2)
+		{
+			BS2C_ErrTooFewArgs(ctx);
+		}else if(l>l2)
+		{
+			BS2C_ErrTooManyArgs(ctx);
+			l=vari->nargs;
+		}
+
+		vai=vari->args[0];
+		an=BS2C_ReduceExpr(ctx, an);
+		BS2C_CompileCallArg(ctx, vai, an);
+
+		BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
+		BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+	}else if(dtvTrueP(an))
+	{			
+		l=1;
+		if(l<vari->nargs)
+		{
+			BS2C_ErrTooFewArgs(ctx);
+		}else if(l>vari->nargs)
+		{
+			BS2C_ErrTooManyArgs(ctx);
+			l=vari->nargs;
+		}
+
+		vai=vari->args[0];
+		an=BS2C_ReduceExpr(ctx, an);
+		BS2C_CompileCallArg(ctx, vai, an);
+	}else
+	{
+		if(vari->nargs)
+			BS2C_ErrTooFewArgs(ctx);
+	}
+}
+
+void BS2C_CompileExprCall(BS2CC_CompileContext *ctx,
+	dtVal fnn, dtVal an, int dty)
+{
+	BS2CC_VarInfo *vari;
+	dtVal n0, n1;
+	int nty, ix, stp, bty;
+	int i, j, k, l;
+
+	nty=BS2C_InferExpr(ctx, fnn);
+
+	if(BS2C_TypeVariantP(ctx, nty))
+	{
+		if(dtvIsArrayP(an))
+		{
+			l=dtvArrayGetSize(an);
+
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
+			BS2C_EmitOpcodeUZx(ctx, BS2CC_TYZ_ADDRESS, l);
+
+			for(i=0; i<l; i++)
+			{
+				n0=dtvArrayGetIndexDtVal(an, i);
+				n0=BS2C_ReduceExpr(ctx, n0);
+				BS2C_CompileExpr(ctx, n0, BS2CC_TYZ_VARIANT);
+				BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXAC);
+				BS2C_EmitOpcodeSCx(ctx, i);
+				BS2C_CompileExprPopType1(ctx);
+			}
+		}else if(dtvTrueP(an))
+		{			
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
+			BS2C_EmitOpcodeUZx(ctx, BS2CC_TYZ_ADDRESS, 1);
+
+			an=BS2C_ReduceExpr(ctx, an);
+			BS2C_CompileExpr(ctx, an, BS2CC_TYZ_VARIANT);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXAC);
+			BS2C_EmitOpcodeSCx(ctx, 0);
+			BS2C_CompileExprPopType1(ctx);
+		}else
+		{
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
+		}
+
+		BS2C_CompileExpr(ctx, fnn, BS2CC_TYZ_VARIANT);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_CALLAA);
+		BS2C_CompileExprPopType2(ctx);
+
+		if(dty!=BS2CC_TYZ_VOID)
+		{
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_VARIANT);
+			BS2C_CompileConvType(ctx, dty);
+		}else
+		{
+			BS2C_EmitOpcode(ctx, BSVM2_OP_DROPAA);
+		}
+		return;
+	}
+	
+	if(BS2C_TypeFunctionP(ctx, nty))
+	{
+		vari=BS2C_GetTypeObject(ctx, nty);
+		bty=vari->bty;
+		
+		ix=BS2C_IndexFrameGlobal(ctx, vari->gid);
+
+		stp=ctx->frm->stackpos;
+
+		BS2C_CompileCallVariArgs(ctx, vari, an);
+
+		ctx->frm->stackpos=stp;
+
+		i=BS2C_InferExprLocalIndex(ctx, fnn);
+
+		if(i>=0)
+		{
+//			BS2C_CompileExpr(ctx, fnn, nty);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLL);
+			BS2C_EmitOpcodeJx(ctx, i, ix);
+		}else
+		{
+//			BS2C_CompileExpr(ctx, fnn, BS2CC_TYZ_VARIANT);
+			BS2C_CompileExpr(ctx, fnn, nty);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLA);
+			BS2C_EmitOpcodeIdx(ctx, ix);
+			BS2C_CompileExprPopType1(ctx);
+		}
+
+		if((vari->rty!=BSVM2_OPZ_VOID) && (dty!=BSVM2_OPZ_VOID))
+		{
+			BS2C_CompileExprPushType(ctx, vari->rty);
+			BS2C_CompileConvType(ctx, dty);
+		}else if(vari->rty!=BSVM2_OPZ_VOID)
+		{
+			BS2C_CompileExprPushType(ctx, vari->rty);
+			BS2C_CompilePop(ctx);
+		}else if(dty!=BSVM2_OPZ_VOID)
+		{
+			BS2C_CompileError(ctx, BS2CC_ERRN_ERRBADCONV);
+		}
+		return;
+	}
+
+	BS2C_CaseError(ctx);
+}
+
 void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 {
 	BS2CC_VarInfo *vari;
@@ -814,7 +1051,8 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 			ix=BS2C_LookupFrameGlobal(ctx, fn);
 			if(ix<0)
 			{
-				BS2C_ErrNoDecl(ctx, fn);
+				BS2C_CompileExprCall(ctx, fnn, an, dty);
+//				BS2C_ErrNoDecl(ctx, fn);
 				return;
 			}
 
@@ -824,6 +1062,7 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 
 		stp=ctx->frm->stackpos;
 
+#if 0
 		if(vari->nargs>=1)
 		{
 			i=vari->nargs-1;
@@ -856,8 +1095,9 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 				n0=BS2C_ReduceExpr(ctx, n0);
 //				BS2C_CompileCallArg(ctx, vai, n0);
 				rt=BS2C_InferExpr(ctx, n0);
-				if(rt==BS2CC_TYZ_VARIANT_ARR)
-					n1=n0;
+				if((rt==BS2CC_TYZ_VARIANT_ARR) ||
+					(rt==BS2CC_TYZ_VARARG))
+						n1=n0;
 			}
 
 			if(!dtvNullP(n1))
@@ -968,6 +1208,9 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 			if(vari->nargs)
 				BS2C_ErrTooFewArgs(ctx);
 		}
+#endif
+
+		BS2C_CompileCallVariArgs(ctx, vari, an);
 
 		ctx->frm->stackpos=stp;
 		if(vari->vitype==BS2CC_VITYPE_STRFUNC)
@@ -1097,6 +1340,7 @@ void BS2C_CompileObjMethodCallB(BS2CC_CompileContext *ctx,
 
 		bty=vari->bty;
 
+#if 0
 		if(vari->nargs>=1)
 		{
 			i=vari->nargs-1;
@@ -1206,6 +1450,9 @@ void BS2C_CompileObjMethodCallB(BS2CC_CompileContext *ctx,
 			if(vari->nargs)
 				BS2C_ErrTooFewArgs(ctx);
 		}
+#endif
+
+		BS2C_CompileCallVariArgs(ctx, vari, an);
 
 		ctx->frm->stackpos=stp;
 		
@@ -2608,7 +2855,7 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 	dtVal ln, rn, cn, ln2, rn2;
 	s64 li, lj, lk;
 	BGBDTC_X128 xa, xb, xc;
-	BS2CC_VarInfo *vi, *vi2;
+	BS2CC_VarInfo *vi, *vi2, *vi3, *vi4;
 	double f, g;
 	char *tag, *tag2;
 	char *op, *fn;
@@ -4691,16 +4938,81 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 		return;
 	}
 
-#if 0
-	if(!strcmp(tag, "func_ind"))
+#if 1
+	if(!strcmp(tag, "func_ind") ||
+		!strcmp(tag, "func_dfl"))
 	{
-		BS2C_CompileTopFunc(expr);
-		fn=BS2P_GetAstNodeAttrS(expr, "name");
+//		ctx->isinfer_varcapture=1;
+//		ctx->frm->inf_ncapvar=0;
+
+		i=BS2C_CompileTopFunc(ctx, expr);
+		vi=ctx->globals[i];
+
+		n0=BS2P_GetAstNodeAttr(expr, "body");
+//		BS2C_InferCaptureStatement(ctx, n0);
+		BS2C_InferCaptureFunc(ctx, vi);
+//		ctx->isinfer_varcapture=0;
+
+		if(vi->body->inf_ncapvar==0)
+		{
+//			BS2C_CompileTopFunc(ctx, expr);
+			fn=BS2P_GetAstNodeAttrS(expr, "name");
+			j=BS2C_LookupFrameGlobal(ctx, fn);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_LDGS);
+			BS2C_EmitOpcodeUCx(ctx, j);
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_VARIANT);
+			return;
+		}
+
+//		i=BS2C_CompileTopFunc(ctx, expr);
+//		vi=ctx->globals[i];
+		fn=vi->name;
+		
+		vi->niface=vi->body->inf_ncapvar;
+		for(i=0; i<vi->niface; i++)
+		{
+			vi2=BS2C_AllocVarInfo(ctx);
+			vi->iface[i]=vi2;
+			vi2->name=BS2P_StrSym(ctx, vi->body->inf_capvar[i]);
+//			vi2->bty=bty;
+			
+			k=BS2C_LookupLocal(ctx, vi2->name);
+			vi3=ctx->frm->locals[k];
+			vi2->bty=vi3->bty;
+			vi2->bmfl=vi3->bmfl;
+			vi2->typeExp=vi3->typeExp;
+		}
+
+//		fn=BS2P_GetAstNodeAttrS(expr, "name");
 		j=BS2C_LookupFrameGlobal(ctx, fn);
 		BS2C_EmitOpcode(ctx, BSVM2_OP_MKLFCN);
 		BS2C_EmitOpcodeUCx(ctx, j);
-
 		BS2C_CompileExprPushType(ctx, BS2CC_TYZ_VARIANT);
+
+		for(i=0; i<vi->niface; i++)
+		{
+			vi2=vi->iface[i];
+			n1=BGBDT_TagStr_Symbol(vi2->name);
+//			t0=BS2C_LookupLocal(ctx, vi2->name);
+			t0=BS2C_InferExprLocalIndex(ctx, n1);
+			if(t0>=0)
+			{
+//				lt=BS2C_InferRetTypeName(ctx, vi2->name);
+				z=BS2C_GetTypeBaseZ(ctx, vi2->bty);
+				BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXUZL);
+				BS2C_EmitOpcodeUZx(ctx, z, i);
+				BS2C_EmitOpcodeUCx(ctx, t0);
+				continue;
+			}
+
+			lt=BS2C_InferExpr(ctx, n1);
+			BS2C_CompileExpr(ctx, n1, lt);
+			z=BS2C_GetTypeBaseZ(ctx, lt);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXUZ);
+			BS2C_EmitOpcodeUZx(ctx, z, i);
+			BS2C_CompileExprPopType1(ctx);
+		}
+
 		return;
 	}
 #endif

@@ -40,6 +40,20 @@ int BS2C_InferName(BS2CC_CompileContext *ctx, char *name)
 		return(bty);
 	}
 	
+	i=BS2C_LookupLexical(ctx, name);
+	if(i>=0)
+	{
+		vari=ctx->frm->func->iface[i];
+		bty=vari->bty;
+
+		if(BS2C_TypeVarRefP(ctx, bty))
+		{
+			bty=BS2C_TypeDerefType(ctx, bty);
+		}
+
+		return(bty);
+	}
+	
 //	if(ctx->frm->func && ctx->frm->func->obj &&
 //		(ctx->frm->func->vitype!=BS2CC_VITYPE_GBLFUNC))
 	if(ctx->frm->func && ctx->frm->func->obj)
@@ -61,6 +75,18 @@ int BS2C_InferName(BS2CC_CompileContext *ctx, char *name)
 		vari=BS2C_GetFrameGlobalInfo(ctx, i);
 		bty=vari->bty;
 		return(bty);
+	}
+	
+	if(ctx->frm->isinfer_varcapture)
+	{
+		for(i=0; i<ctx->frm->inf_ncapvar; i++)
+			if(!strcmp(ctx->frm->inf_capvar[i], name))
+				break;
+		if(i<ctx->frm->inf_ncapvar)
+			return(0);
+		i=ctx->frm->inf_ncapvar++;
+		ctx->frm->inf_capvar[i]=bgbdt_mm_strdup(name);
+		return(0);
 	}
 
 	BS2C_ErrNoDecl(ctx, name);
@@ -805,12 +831,19 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "func"))
 	{
-//		BS2C_CompileFunVar(ctx, expr);
+		BS2C_CompileFunVar(ctx, expr);
 		return;
 	}
 
 	if(!strcmp(tag, "for"))
 	{
+		n0=BS2P_GetAstNodeAttr(expr, "init");
+		n1=BS2P_GetAstNodeAttr(expr, "cond");
+		n2=BS2P_GetAstNodeAttr(expr, "step");
+		BS2C_InferExpr(ctx, n0);
+		BS2C_InferExpr(ctx, n1);
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		BS2C_InferCaptureStatement(ctx, n0);
 		return;
@@ -818,6 +851,9 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "if"))
 	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		n1=BS2P_GetAstNodeAttr(expr, "else");
 		BS2C_InferCaptureStatement(ctx, n0);
@@ -829,6 +865,9 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "ifelse"))
 	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		n1=BS2P_GetAstNodeAttr(expr, "else");
 		BS2C_InferCaptureStatement(ctx, n0);
@@ -840,6 +879,9 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "while"))
 	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		BS2C_InferCaptureStatement(ctx, n0);
 		return;
@@ -847,6 +889,9 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "do_while"))
 	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		BS2C_InferCaptureStatement(ctx, n0);
 		return;
@@ -854,21 +899,37 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(!strcmp(tag, "switch"))
 	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_InferExpr(ctx, n2);
+
 		n0=BS2P_GetAstNodeAttr(expr, "then");
 		BS2C_InferCaptureStatement(ctx, n0);
 		return;
 	}
 
 	if(!strcmp(tag, "assign"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "assignop"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "break"))
 		return;
 	if(!strcmp(tag, "call"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "case"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferExpr(ctx, n2);
 		return;
+	}
 	if(!strcmp(tag, "case_default"))
 		return;
 	if(!strcmp(tag, "continue"))
@@ -876,31 +937,128 @@ void BS2C_InferCaptureStatement(BS2CC_CompileContext *ctx, dtVal expr)
 	if(!strcmp(tag, "default"))
 		return;
 	if(!strcmp(tag, "delete"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferExpr(ctx, n2);
 		return;
+	}
 	if(!strcmp(tag, "goto"))
 		return;
 	if(!strcmp(tag, "label"))
 		return;
 
 	if(!strcmp(tag, "postdec"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "postinc"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "predec"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "preinc"))
+	{
+		BS2C_InferExpr(ctx, expr);
 		return;
+	}
 
 	if(!strcmp(tag, "return"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferExpr(ctx, n2);
 		return;
+	}
 	if(!strcmp(tag, "throw"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferExpr(ctx, n2);
 		return;
+	}
 
 	if(!strcmp(tag, "tail"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_InferExpr(ctx, n2);
 		return;
+	}
 
 	if(!strcmp(tag, "empty_block"))
 		return;
 
 	BS2C_CaseError(ctx);
+}
+
+void BS2C_InferCaptureFunc(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
+{
+	BS2CC_CcFrame *frm;
+	int tk;
+	int i, j, k, l;
+
+	frm=BS2C_AllocCcFrame(ctx);
+
+	tk=func->tokcnt;
+	frm->def_rlcty=0;
+	if(tk>=32)frm->def_rlcty=1;
+	if(tk>=4096)frm->def_rlcty=2;
+	if(tk>=(1<<20))frm->def_rlcty=3;
+
+	i=ctx->frmstackpos++;
+	ctx->frmstack[i]=ctx->frm;
+	ctx->frm=frm;
+	func->body=frm;
+	frm->func=func;
+	frm->ctx=ctx;
+
+	frm->isinfer_varcapture=1;
+	BS2C_CompileFunVarStatement(ctx,
+		func->bodyExp);
+	
+	frm->bargs=frm->nlocals;
+	for(j=0; j<func->nargs; j++)
+	{
+		k=frm->nlocals++;
+		frm->locals[k]=func->args[j];
+	}
+
+	BS2C_InferCaptureStatement(ctx, func->bodyExp);
+
+	frm->isinfer_varcapture=0;
+
+#if 0
+	BS2C_CompileStatement(ctx,
+		func->bodyExp);
+	
+	if(!ctx->frm->wasret)
+	{
+		if(ctx->frm->jcleanup>0)
+			{ BS2C_EmitReturnCleanupV(ctx, 1); }
+		else
+			{ BS2C_EmitReturnV(ctx); }
+	}
+	
+	if(ctx->frm->jcleanup>0)
+	{
+		BS2C_CompileFuncBodyCleanup(ctx);
+	}
+	
+	if(ctx->frm->stackpos!=0)
+	{
+		BS2C_ErrStackMisalign(ctx);
+	}
+	
+	BS2C_FixupLabels(ctx);
+	
+	frm->szt=frm->ct-frm->cts;
+	
+//	printf("Avg B/tk=%f\n", frm->szt/(tk+0.00001));
+#endif
+	
+	ctx->frm=ctx->frmstack[i];
+	ctx->frmstackpos=i;
 }

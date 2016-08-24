@@ -256,6 +256,8 @@
 #define BSVM2_OP_LDRLX		0x83	//Load Ref To Lexical
 #define BSVM2_OP_LDLX		0x84	//Load Lexical
 #define BSVM2_OP_STLX		0x85	//Store Lexical
+#define BSVM2_OP_LDDRLX		0x86	//Load Deref Lexical
+#define BSVM2_OP_STDRLX		0x87	//Store Deref Lexical
 // #define BSVM2_OP_DCLX		0x86	//Declare Lexical Variables
 // #define BSVM2_OP_DELX		0x87	//Delete Lexical Variables
 #define BSVM2_OP_NEWOBJ		0x88	//Create object instance.
@@ -429,6 +431,7 @@
 #define BSVM2_OP_AGETI		0x016B	//Check if address is type
 #define BSVM2_OP_LDOSL		0x016C	//Load object field from local
 #define BSVM2_OP_STOSL		0x016D	//Store object field from local
+#define BSVM2_OP_CALLAA		0x016E	//Dynamic Call
 
 #define BSVM2_OP_DIVI		0x0170	//
 #define BSVM2_OP_DIVL		0x0171	//
@@ -696,6 +699,8 @@ typedef struct BSVM2_ImageGlobal_s BSVM2_ImageGlobal;
 typedef struct BSVM2_CodeBlock_s BSVM2_CodeBlock;
 typedef struct BSVM2_CodeImage_s BSVM2_CodeImage;
 
+typedef struct BSVM2_Lambda_s BSVM2_Lambda;
+
 union BSVM2_Value_u {
 struct { s32 i, j; };
 struct { u32 ui, uj; };
@@ -722,6 +727,7 @@ void (*Run)(BSVM2_Frame *frm, BSVM2_Opcode *op);
 short i0, i1, i2;
 short t0, t1, t2;
 short opn, opn2;
+byte z, o;
 int opfl;
 BSVM2_Value v;
 };
@@ -732,9 +738,10 @@ BSVM2_Trace *(*Run)(BSVM2_Frame *frm,
 BSVM2_Trace *nexttrace;
 BSVM2_Trace *jmptrace;
 byte *jcs;
-int i0, i1;
-int t0, t1;
+short i0, i1;
+short t0, t1;
 short opn, opn2;
+byte z, o;
 BSVM2_Value v;
 };
 
@@ -756,6 +763,7 @@ struct BSVM2_Frame_s {
 BSVM2_Context *ctx;		//owning context
 BSVM2_Value *stack;		//stack base
 BSVM2_Value *local;		//locals base
+BSVM2_Value *lxvar;		//lexical vars
 
 BSVM2_Frame *rnext;		//return frame
 BSVM2_Trace *rtrace;	//return trace
@@ -833,6 +841,14 @@ BSVM2_ImageGlobal *pkg;
 BSVM2_ImageGlobal *obj;
 BSVM2_CodeBlock *cblk;
 };
+
+
+struct BSVM2_Lambda_s {
+BSVM2_ImageGlobal *func;	//function
+BSVM2_Value *lxvar;			//captured variables
+BSVM2_Value t_lxvar[6];		//temp array for vars
+};
+
 
 struct BSVM2_CodeImage_s {
 BSVM2_CodeImage *next;

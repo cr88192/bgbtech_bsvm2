@@ -614,7 +614,7 @@ Instructions
 * 70 Gx, CALLG			//Call Static/Global Function
 * 71 Gx, CALLA			//Call Function Reference (Pops Func)
 * 72 Gx, CALLV			//Call Virtual Method (Pops Obj)
-* 73 Gx Ix, CALLL		//Call Local Function Reference
+* 73 Gj, CALLL			//Call Local Function Reference
 
 ** These call operations use fixed argument lists. The argument list comes from the signature of the referenced global. This is either a function or a function prototype.
 
@@ -662,10 +662,13 @@ Instructions
 
 * 84 Zi, LDLX				//Load Lexical
 * 85 Zi, STLX				//Store Lexical
-* 86 Zn, DCLX				//Declare Lexical Variables
-* 87 Zn, DELX				//Delete Lexical Variables
-** Manage lexical environment.
-** In this VM, the lexical environment will behave as a stack of variables with relative indices.
+* 86 Zi, LDDRLX				//Load Deref Lexical
+* 87 Zi, STDRLX				//Store Deref Lexical
+
+* / 86 Zn, DCLX				//Declare Lexical Variables
+* / 87 Zn, DELX				//Delete Lexical Variables
+** (Drop) Manage lexical environment.
+** (Drop) In this VM, the lexical environment will behave as a stack of variables with relative indices.
 
 * 88 Gx, NEWOBJ				//Create object instance.
 * 89 Zn, NEWARR				//Create array instance.
@@ -941,6 +944,9 @@ Instructions
 * E1 6C Gj, LDOSL				//Load Instance Variable Local, ( => A )
 * E1 6D Gj, STOSL				//Store Instance Variable Local ( V => )
 
+* E1 6E, CALLAA				//Dynamic Call ( Args Func => Ret )
+* / E1 6F Ix, CALLLAA			//Dynamic Call Local ( I; Args => Ret )
+
 * E1 70, DIVI				//Divide Int
 * E1 71, DIVL				//Divide Long
 * E1 72, MODI				//Modulo Int
@@ -1070,13 +1076,21 @@ More Array ops:
 * E1 B8 Gj, IFXDYV			//Init Dynamic Var
 * E1 B9 Gj, DFXDYV			//Deinit Dynamic Var
 
-* E1 BA Gx, MKLFUNC			//Make Lambda Function (A => C)
+* E1 BA Gj, IFXLFCN			//Init Lambda Function
+* E1 BB Gj, DFXLFCN			//Deinit Lambda Function
+
+* E1 BC Gx, MKLFCN			//Make Lambda Function (=> C)
+** Make a lambda body.
 ** Global gives the function body.
-** An array given on the stack holds any captured bindings.
+** Lambda as an array which can have its bindings assigned to.
 ** The array is of type address and holds untyped bindings.
 
-* E1 BB Zn, DSTIXUZ			//DUPA+CVTZ2U+STIXAC
-** Convert value to untyped and store in array.
+* E1 BD Zn, DSTIXUZ			//DUPA+CVTZ2U+STIXAC
+** Convert value to untyped and store in (lambda) array.
+* E1 BE Zn Ix, DSTIXUZL		//DUPA+LDZ+CVTZ2U+STIXAC
+** Load value from local and store in (lambda) array.
+* E1 BF Zn Ix, DSTIXUZRL		//DUPA+LDRL+CVTZ2U+STIXAC
+** Load reference to local and store in (lambda) array.
 
 * E1 C0 Kj, ADDISLC			//S C; => S+C
 * E1 C1 Kj, SUBISLC			//S C; => S-C

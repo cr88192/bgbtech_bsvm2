@@ -258,7 +258,7 @@ int vitype;					///< varinfo type
 int tokcnt;					///< body token count
 
 BS2CC_VarInfo *args[256];	///< function arguments, class/struct members
-BS2CC_VarInfo *iface[32];	///< class interfaces
+BS2CC_VarInfo *iface[32];	///< class interfaces, function lexenv
 BS2CC_VarInfo *super;		///< class superclass
 int nargs, niface;			///< number of arguments and interfaces
 BS2CC_CcFrame *body;		///< function body
@@ -319,6 +319,10 @@ int nlocals;				///< number of local variables
 int bargs;					///< start of arguments list
 
 byte def_rlcty;				///< default relocation type
+bool isinfer_varcapture;
+byte inf_ncapvar;
+
+char *inf_capvar[64];
 
 int *tlbl_id, *tlbl_ct;		///< temp labels
 int *trlc_id, *trlc_ct;		///< temp relocs
@@ -404,7 +408,6 @@ int nglobals;					///< number of toplevel declarations
 
 BS2CC_TypeOverflow *tyovf[4096];	///< array of overflowed types
 int ntyovf;							///< number of overflowed types
-
 
 int cwarnln[256];	///< warning line number
 u16 cwarn[256];		///< warning and hint types
