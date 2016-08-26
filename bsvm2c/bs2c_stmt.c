@@ -40,7 +40,7 @@ void BS2C_CompileStmtVarInit(
 
 void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 {
-	BS2CC_VarInfo *vi, *vi2;
+	BS2CC_VarInfo *vi, *vi2, *vi3;
 	dtVal nn, nt, ni;
 	char *name;
 	int bty, ix, ix2, sz, z;
@@ -77,6 +77,38 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 		return;
 	}
+
+#if 0
+	if(vi->vitype==BS2CC_VITYPE_LCLFUNC)
+	{
+		ix2=BS2C_LookupFrameGlobal(ctx, name);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_IFXLFCN);
+		BS2C_EmitOpcodeJx(ctx, ix, ix2);
+
+		vi2=BS2C_GetFrameGlobalInfo(ctx, ix2);
+
+		for(i=0; i<vi2->niface; i++)
+		{
+			vi3=vi->iface[i];
+			n1=BGBDT_TagStr_Symbol(vi3->name);
+
+			t0=BS2C_InferExprLocalIndex(ctx, n1);
+			if(t0<0)
+			{
+				continue;
+			}
+
+			z=BS2C_GetTypeBaseZ(ctx, vi3->bty);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXUZRL);
+			BS2C_EmitOpcodeUZx(ctx, z, i);
+			BS2C_EmitOpcodeUCx(ctx, t0);
+		}
+
+		if(ctx->frm->jcleanup<=0)
+			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
+		return;
+	}
+#endif
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{
@@ -829,6 +861,137 @@ void BS2C_CompileStmtSwitch(BS2CC_CompileContext *ctx, dtVal expr)
 	}
 }
 
+void BS2C_CompileStmtTryCatch2(
+	BS2CC_CompileContext *ctx, dtVal expr, int lblf)
+{
+	dtVal n0, n1, n2, n3;
+	dtVal cc, ln, rn, en, et;
+	BS2CC_VarInfo *vi;
+	char *tag, *ens;
+	int t0, t1, t2, t3;
+	int ty, ix;
+
+	tag=BS2P_GetAstNodeTag(expr);
+	
+	if(!tag)
+	{
+		BS2C_CaseError(ctx);
+		return;
+	}
+
+	if(!strcmp(tag, "catch"))
+	{
+		cc=BS2P_GetAstNodeAttr(expr, "cond");
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+
+		en=BS2P_GetAstNodeAttr(cc, "name");
+		et=BS2P_GetAstNodeAttr(cc, "type");
+		ty=BS2C_TypeExtType(ctx, et);
+		
+		ens=BGBDT_TagStr_GetUtf8(en);
+
+		vi=BS2C_GetTypeObject(ctx, ty);
+		ix=BS2C_IndexFrameGlobal(ctx, vi->gid);
+
+		BS2C_CompileStmtTryCatch2(ctx, ln, lblf);
+
+		t0=BS2C_GenTempLabel(ctx);
+
+		BS2C_EmitOpcode(ctx, BSVM2_OP_CATCH);
+		BS2C_EmitOpcodeUCx(ctx, ix);
+		BS2C_EmitTempJAddr(ctx, t0);
+		BS2C_CompileStoreName(ctx, ens);
+
+		BS2C_CompileStatement(ctx, rn);
+
+//		BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
+		BS2C_CompilePushDummy(ctx, BS2CC_TYZ_ADDRESS);
+		BS2C_EmitTempJump(ctx, lblf);
+//		BS2C_CompileNoexPush(ctx, BS2CC_TYZ_ADDRESS);
+		BS2C_EmitTempLabelB(ctx, t0);
+		return;
+	}
+
+	if(!strcmp(tag, "try"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "body");
+
+		t0=BS2C_GenTempLabel(ctx);
+//		t1=BS2C_GenTempLabel(ctx);
+
+		BS2C_EmitOpcode(ctx, BSVM2_OP_BEGTRY);
+		BS2C_EmitTempJAddr(ctx, t0);
+
+		BS2C_CompileStatement(ctx, ln);
+
+		BS2C_EmitTempLabelB(ctx, t0);
+		BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_ENDTRY);
+		BS2C_EmitTempJAddr(ctx, lblf);
+//		BS2C_EmitTempLabelB(ctx, t0);
+		return;
+	}
+
+	BS2C_CaseError(ctx);
+}
+
+void BS2C_CompileStmtTryCatch(BS2CC_CompileContext *ctx, dtVal expr)
+{
+	dtVal n0, n1, n2, n3;
+	dtVal cc, nt, nf, ni, ns, na;
+	s64 li, lj, lk;
+	int cty, ln, z;
+	char *tag, *fn;
+	int t0, t1, t2, t3;
+	int l0, l1, l2, l3;
+	int i, j, k, l;
+
+	tag=BS2P_GetAstNodeTag(expr);
+	
+	if(!tag)
+	{
+		BS2C_CaseError(ctx);
+		return;
+	}
+
+	if(!strcmp(tag, "finally"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "lhs");
+		n1=BS2P_GetAstNodeAttr(expr, "rhs");
+
+		t0=BS2C_GenTempLabel(ctx);
+		BS2C_CompileStmtTryCatch2(ctx, n0, t0);
+
+		BS2C_EmitTempLabelB(ctx, t0);
+//		BS2C_CompilePop(ctx);
+		BS2C_CompileStatement(ctx, n1);
+
+		BS2C_EmitOpcode(ctx, BSVM2_OP_RETHROW);
+		BS2C_EmitSetNewtrace(ctx);
+		BS2C_CompileExprPopType1(ctx);
+		
+		return;
+	}
+
+	if(!strcmp(tag, "try") ||
+		!strcmp(tag, "catch"))
+	{
+		t0=BS2C_GenTempLabel(ctx);
+		BS2C_CompileStmtTryCatch2(ctx, expr, t0);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_RETHROW);
+		BS2C_EmitSetNewtrace(ctx);
+
+		BS2C_EmitTempLabelB(ctx, t0);
+//		BS2C_CompilePop(ctx);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_RETHROW);
+		BS2C_EmitSetNewtrace(ctx);
+		return;
+	}
+
+	BS2C_CaseError(ctx);
+}
+
 void BS2C_CompileStatement(BS2CC_CompileContext *ctx, dtVal expr)
 {
 	dtVal n0, n1, n2, n3;
@@ -1301,12 +1464,328 @@ void BS2C_CompileStatement(BS2CC_CompileContext *ctx, dtVal expr)
 		return;
 	}
 
+	if(!strcmp(tag, "throw"))
+	{
+		na=BS2P_GetAstNodeAttr(expr, "value");
+		nt=BS2C_ReduceExpr(ctx, na);
+		t0=BS2C_InferExpr(ctx, nt);
+		BS2C_CompileExpr(ctx, nt, t0);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_THROW);
+		BS2C_CompileExprPopType1(ctx);
+		return;
+	}
+
+	if(	!strcmp(tag, "try") ||
+		!strcmp(tag, "catch") ||
+		!strcmp(tag, "finally"))
+	{
+		BS2C_CompileStmtTryCatch(ctx, expr);
+		return;
+	}
+
+	if(!strcmp(tag, "let_escape"))
+	{
+		cc=BS2P_GetAstNodeAttr(expr, "cond");
+		nt=BS2P_GetAstNodeAttr(expr, "then");
+
+		cc=BS2C_ReduceExpr(ctx, cc);
+
+		if(BGBDT_TagStr_IsSymbolP(cc))
+			{ ns=cc; }
+		else
+			{ ns=BS2P_GetAstNodeAttr(cc, "name"); }
+
+		t0=BS2C_GenTempLabel(ctx);
+
+		l0=BS2C_InferExprLocalIndex(ctx, ns);
+
+		BS2C_EmitOpcode(ctx, BSVM2_OP_BEGLEC);
+		BS2C_EmitOpcodeIdx(ctx, l0);
+		BS2C_EmitTempJAddr(ctx, t0);
+
+		BS2C_CompileStatement(ctx, nt);
+
+		BS2C_EmitTempLabelB(ctx, t0);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_ENDLEC);
+		BS2C_EmitOpcodeIdx(ctx, l0);
+		
+		return;
+	}
+
 	if(!strcmp(tag, "empty_block"))
 	{
 		return;
 	}
 
 	BS2C_CompileExpr(ctx, expr, BSVM2_OPZ_VOID);
+}
+
+void BS2C_CompileFuncVarExpr(BS2CC_CompileContext *ctx, dtVal expr)
+{
+	dtVal ln, rn, an, fnn;
+	dtVal n0, n1;
+	BS2CC_VarInfo *vi, *vi2;
+	char *tag, *fn, *op;
+	int i, j, k, l;
+
+	if(dtvIsFixIntP(expr))
+		{ return; }
+	if(dtvIsFixUIntP(expr))
+		{ return; }
+	if(dtvIsFixLongP(expr))
+		{ return; }
+	if(dtvIsFixFloatP(expr))
+		{ return; }
+	if(dtvIsFixDoubleP(expr))
+		{ return; }
+
+	if(BGBDT_XI128_IsInt128P(expr))
+		{ return; }
+	if(BGBDT_XF128_IsFloat128P(expr))
+		{ return; }
+
+	if(dtvIsCharP(expr))
+		{ return; }
+
+	if(BGBDT_TagStr_IsSymbolP(expr))
+		{ return; }
+
+	if(BGBDT_TagStr_IsStringP(expr))
+		{ return; }
+
+	tag=BS2P_GetAstNodeTag(expr);
+	
+	if(!tag)
+	{
+		return;
+	}
+	
+	if(!strcmp(tag, "binary"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		op=BS2P_GetAstNodeAttrS(expr, "op");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "bincmp"))
+	{
+		return;
+	}
+
+	if(!strcmp(tag, "unary"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "value");
+		op=BS2P_GetAstNodeAttrS(expr, "op");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		return;
+	}
+
+	if(!strcmp(tag, "assign"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "assignop"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "tern"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "range"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "instanceof"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "cast") || !strcmp(tag, "cast_strict") ||
+		!strcmp(tag, "prefix_cast"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+//		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+//		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "call"))
+	{
+		an=BS2P_GetAstNodeAttr(expr, "args");
+
+		fnn=BS2P_GetAstNodeAttr(expr, "func");
+		if(BGBDT_TagStr_IsSymbolP(fnn))
+		{
+//			fn=BGBDT_TagStr_GetUtf8(fnn);
+//			ty=BS2C_InferRetTypeName(ctx, fn);
+			return;
+		}
+
+		tag=BS2P_GetAstNodeTag(fnn);
+		
+		if(!tag)
+		{
+			BS2C_CaseError(ctx);
+			return;
+		}
+
+		if(!strcmp(tag, "loadslot"))
+		{
+			ln=BS2P_GetAstNodeAttr(expr, "lhs");
+			rn=BS2P_GetAstNodeAttr(expr, "rhs");
+			BS2C_CompileFuncVarExpr(ctx, ln);
+			BS2C_CompileFuncVarExpr(ctx, rn);
+			return;
+		}
+
+		BS2C_CaseError(ctx);
+		return;
+	}
+
+	if(!strcmp(tag, "new"))
+	{
+//		rn=BS2P_GetAstNodeAttr(expr, "type");
+//		ty=BS2C_TypeBaseType(ctx, rn);
+//		ty=BS2C_TypeExtType(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "loadindex"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+
+//		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+//		lt=BS2C_InferExpr(ctx, ln);
+//		ty=BS2C_TypeExtType(ctx, rn);
+//		ty=BS2C_TypeDerefType(ctx, lt);
+//		return(ty);
+	}
+
+	if(!strcmp(tag, "postinc") || !strcmp(tag, "postdec") ||
+		!strcmp(tag, "preinc") || !strcmp(tag, "predec"))
+	{
+//		ln=BS2P_GetAstNodeAttr(expr, "value");
+//		ty=BS2C_InferExpr(ctx, ln);
+		return;
+	}
+
+	if(!strcmp(tag, "loadslot"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "lhs");
+		rn=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFuncVarExpr(ctx, ln);
+		BS2C_CompileFuncVarExpr(ctx, rn);
+		return;
+	}
+
+	if(!strcmp(tag, "array"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "value");
+		fn=BS2P_GetAstNodeAttrS(expr, "sfx");
+
+		if(dtvIsArrayP(ln))
+			{ l=dtvArrayGetSize(ln); }
+		else
+			{ l=1; }
+
+		for(i=0; i<l; i++)
+		{
+			if(dtvIsArrayP(ln))
+				{ n0=dtvArrayGetIndexDtVal(ln, i); }
+			else
+				{ n0=ln; }
+			BS2C_CompileFuncVarExpr(ctx, n0);
+		}
+
+//		l=dtvArrayGetSize(ln);
+//		ty=BS2CC_TYZ_VARIANT;
+		
+		return;
+	}
+
+	if(!strcmp(tag, "object"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "value");
+
+		if(dtvIsArrayP(ln))
+		{
+			l=dtvArrayGetSize(ln);
+			for(i=0; i<l; i++)
+			{
+				n0=dtvArrayGetIndexDtVal(ln, i);
+				n1=BS2P_GetAstNodeAttr(n0, "value");
+				fn=BS2P_GetAstNodeAttrS(n0, "name");
+
+				BS2C_CompileFuncVarExpr(ctx, n1);
+			}
+		}
+
+//		return(BS2CC_TYZ_VARIANT);
+		return;
+	}
+
+	if(!strcmp(tag, "imag"))
+	{
+		return;
+	}
+
+	if(!strcmp(tag, "vector"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "value");
+		fn=BS2P_GetAstNodeAttrS(expr, "sfx");
+
+		l=dtvArrayGetSize(ln);
+
+		return;
+	}
+
+	if(!strcmp(tag, "func_dfl") ||
+		!strcmp(tag, "func_ind"))
+	{
+		return;
+	}
+
+	if(!strcmp(tag, "func_aut"))
+	{
+		BS2C_CompileFunVar(ctx, expr);
+		return;
+	}
+
+	BS2C_CaseError(ctx);
+	return;
 }
 
 void BS2C_CompileFunVarStatement(BS2CC_CompileContext *ctx, dtVal expr)
@@ -1427,13 +1906,22 @@ void BS2C_CompileFunVarStatement(BS2CC_CompileContext *ctx, dtVal expr)
 	}
 
 	if(!strcmp(tag, "assign"))
+	{
+		BS2C_CompileFuncVarExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "assignop"))
+	{
+		BS2C_CompileFuncVarExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "break"))
 		return;
 	if(!strcmp(tag, "call"))
+	{
+		BS2C_CompileFuncVarExpr(ctx, expr);
 		return;
+	}
 	if(!strcmp(tag, "case"))
 		return;
 	if(!strcmp(tag, "case_default"))
@@ -1459,12 +1947,62 @@ void BS2C_CompileFunVarStatement(BS2CC_CompileContext *ctx, dtVal expr)
 		return;
 
 	if(!strcmp(tag, "return"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_CompileFuncVarExpr(ctx, n0);
 		return;
+	}
 	if(!strcmp(tag, "throw"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_CompileFuncVarExpr(ctx, n0);
 		return;
+	}
 
 	if(!strcmp(tag, "tail"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "value");
+		BS2C_CompileFuncVarExpr(ctx, n0);
 		return;
+	}
+
+	if(!strcmp(tag, "finally"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "lhs");
+		n1=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFunVarStatement(ctx, n0);
+		BS2C_CompileFunVarStatement(ctx, n1);
+		return;
+	}
+
+	if(!strcmp(tag, "catch"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_CompileFunVar(ctx, n2);
+
+		n0=BS2P_GetAstNodeAttr(expr, "lhs");
+		n1=BS2P_GetAstNodeAttr(expr, "rhs");
+		BS2C_CompileFunVarStatement(ctx, n0);
+		BS2C_CompileFunVarStatement(ctx, n1);
+		return;
+	}
+
+	if(!strcmp(tag, "try"))
+	{
+		n0=BS2P_GetAstNodeAttr(expr, "body");
+		BS2C_CompileFunVarStatement(ctx, n0);
+		return;
+	}
+
+	if(!strcmp(tag, "let_escape"))
+	{
+		n2=BS2P_GetAstNodeAttr(expr, "cond");
+		BS2C_CompileFunVar(ctx, n2);
+
+		n0=BS2P_GetAstNodeAttr(expr, "then");
+		BS2C_CompileFunVarStatement(ctx, n0);
+		return;
+	}
 
 	if(!strcmp(tag, "empty_block"))
 		return;

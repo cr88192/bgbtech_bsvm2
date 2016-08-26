@@ -779,6 +779,10 @@ u64 BS2I_FlagsFromFlagstr(BSVM2_CodeImage *img, char *str)
 			case 't': t=t|BS2CC_TYFL_THREAD; break;
 			case 'u': t=t|BS2CC_TYFL_SYNCHRONIZED; break;
 			case 'v': t=t|BS2CC_TYFL_VOLATILE; break;
+
+			case 'w': t=t|BS2CC_TYFL_DLLIMPORT; break;
+			case 'x': t=t|BS2CC_TYFL_DLLEXPORT; break;
+			case 'y': t=t|BS2CC_TYFL_TYPEDEF; break;
 			default:
 				break;
 			}

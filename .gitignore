@@ -17,6 +17,7 @@ resource/**/*.exe
 resource/**/*.dll
 resource_dev/dump/*.*
 resource_dev2/**/*.*
+docs/doxy/*.*
 
 *.obj
 # *.pdn

@@ -431,6 +431,9 @@ char *BS2C_Image_FlagsToFlSig(BS2CC_CompileContext *ctx, s64 bmfl)
 	if(bmfl&BS2CC_TYFL_THREAD)*t++='t';
 	if(bmfl&BS2CC_TYFL_SYNCHRONIZED)*t++='u';
 	if(bmfl&BS2CC_TYFL_VOLATILE)*t++='v';
+	if(bmfl&BS2CC_TYFL_DLLIMPORT)*t++='w';
+	if(bmfl&BS2CC_TYFL_DLLEXPORT)*t++='x';
+	if(bmfl&BS2CC_TYFL_TYPEDEF)*t++='y';
 	
 	*t++=0;
 	

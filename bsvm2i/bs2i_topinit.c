@@ -31,7 +31,7 @@ byte *BSVM2_Interp_DecodeOpJAddr(BSVM2_CodeBlock *cblk)
 	return(cs);
 }
 
-void BSVM2_Interp_DecodeTOpGx(BSVM2_CodeBlock *cblk, BSVM2_TailOpcode *op)
+void BSVM2_Interp_DecodeTopGx(BSVM2_CodeBlock *cblk, BSVM2_TailOpcode *op)
 {
 //	op->i0=BSVM2_Interp_DecodeOpUCxI(cblk);
 	op->v.p=BSVM2_Interp_DecodeOpAddrPtr(cblk,
@@ -199,6 +199,7 @@ void BSVM2_Interp_SetupTopUatJmp(BSVM2_CodeBlock *cblk,
 {
 	op->jcs=BSVM2_Interp_DecodeOpJAddr(cblk);
 	op->Run=run;
+//	op->t0=cblk->stkpos;
 }
 
 void BSVM2_Interp_SetupTopUat(BSVM2_CodeBlock *cblk,
@@ -206,6 +207,33 @@ void BSVM2_Interp_SetupTopUat(BSVM2_CodeBlock *cblk,
 	BSVM2_Trace *(*run)(BSVM2_Frame *frm, BSVM2_TailOpcode *op))
 {
 	op->Run=run;
+//	op->t0=cblk->stkpos;
+}
+
+void BSVM2_Interp_SetupTopUnJmp(BSVM2_CodeBlock *cblk,
+	BSVM2_TailOpcode *op,
+	BSVM2_Trace *(*run)(BSVM2_Frame *frm, BSVM2_TailOpcode *op))
+{
+	op->jcs=BSVM2_Interp_DecodeOpJAddr(cblk);
+	op->Run=run;
+	op->t0=cblk->stkpos-1;
+}
+
+void BSVM2_Interp_SetupTopUn(BSVM2_CodeBlock *cblk,
+	BSVM2_TailOpcode *op,
+	BSVM2_Trace *(*run)(BSVM2_Frame *frm, BSVM2_TailOpcode *op))
+{
+	op->Run=run;
+	op->t0=cblk->stkpos-1;
+}
+
+void BSVM2_Interp_SetupTopUnPJmp(BSVM2_CodeBlock *cblk,
+	BSVM2_TailOpcode *op,
+	BSVM2_Trace *(*run)(BSVM2_Frame *frm, BSVM2_TailOpcode *op))
+{
+	op->jcs=BSVM2_Interp_DecodeOpJAddr(cblk);
+	op->Run=run;
+	op->t0=cblk->stkpos++;
 }
 
 void BSVM2_Interp_SetupTopPopBinJmp(BSVM2_CodeBlock *cblk,
@@ -628,7 +656,8 @@ BSVM2_TailOpcode *BSVM2_Interp_DecodeTailOpcode(
 //		BSVM2_Interp_SetupTopJCMP(cblk, tmp);
 //		break;
 	case BSVM2_OP_JMP:
-		BSVM2_Interp_SetupTopPopUnJmp(cblk, tmp, BSVM2_TrOp_JMP);
+//		BSVM2_Interp_SetupTopPopUnJmp(cblk, tmp, BSVM2_TrOp_JMP);
+		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JMP);
 		break;
 
 	case BSVM2_OP_JEQNULL:
@@ -648,27 +677,27 @@ BSVM2_TailOpcode *BSVM2_Interp_DecodeTailOpcode(
 
 	case BSVM2_OP_DCJEQIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_EQIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_EQIC);
 		break;
 	case BSVM2_OP_DCJNEIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_NEIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_NEIC);
 		break;
 	case BSVM2_OP_DCJLTIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_LTIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_LTIC);
 		break;
 	case BSVM2_OP_DCJGTIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_GTIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_GTIC);
 		break;
 	case BSVM2_OP_DCJLEIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_LEIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_LEIC);
 		break;
 	case BSVM2_OP_DCJGEIC:
 		BSVM2_Interp_DecodeTopCi(cblk, tmp);
-		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_JCMP_GEIC);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_JCMP_GEIC);
 		break;
 
 	case BSVM2_OP_CJEQIC:
@@ -792,6 +821,37 @@ BSVM2_TailOpcode *BSVM2_Interp_DecodeTailOpcode(
 		break;
 	case BSVM2_OP_CALLL:
 		BSVM2_Interp_SetupTopCallL(cblk, tmp);
+		break;
+
+	case BSVM2_OP_THROW:
+		BSVM2_Interp_SetupTopPopUn(cblk, tmp, BSVM2_TrOp_THROW);
+		break;
+	case BSVM2_OP_RETHROW:
+		BSVM2_Interp_SetupTopPopUn(cblk, tmp, BSVM2_TrOp_RETHROW);
+		break;
+
+	case BSVM2_OP_BEGTRY:
+		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_BEGTRY);
+		break;
+	case BSVM2_OP_ENDTRY:
+		BSVM2_Interp_SetupTopUnPJmp(cblk, tmp, BSVM2_TrOp_ENDTRY);
+		break;
+	case BSVM2_OP_CATCH:
+		BSVM2_Interp_DecodeTopGx(cblk, tmp);
+		BSVM2_Interp_SetupTopUnJmp(cblk, tmp, BSVM2_TrOp_CATCH);
+		break;
+
+	case BSVM2_OP_BEGLEC:
+		BSVM2_Interp_DecodeTopIx(cblk, tmp);
+		BSVM2_Interp_SetupTopUatJmp(cblk, tmp, BSVM2_TrOp_BEGLEC);
+		break;
+	case BSVM2_OP_ENDLEC:
+		BSVM2_Interp_DecodeTopIx(cblk, tmp);
+		BSVM2_Interp_SetupTopUat(cblk, tmp, BSVM2_TrOp_ENDLEC);
+		break;
+	case BSVM2_OP_ENDLEC2:
+		BSVM2_Interp_DecodeTopIx(cblk, tmp);
+		BSVM2_Interp_SetupTopUnPJmp(cblk, tmp, BSVM2_TrOp_ENDLEC2);
 		break;
 
 	default:

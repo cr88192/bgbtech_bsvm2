@@ -200,6 +200,15 @@ void BS2C_WarnNarrowingConv(BS2CC_CompileContext *ctx, int dty, int sty)
 	ctx->cwparm[ctx->ncwparm++]=sty;
 }
 
+/** Warning, not typedef. */
+void BS2C_WarnNotTypedef(BS2CC_CompileContext *ctx, char *name)
+{
+	int i, j, k;
+	i=BS2C_CompileError(ctx, BS2CC_ERRN_NOTYPEDEF);
+	j=BS2C_CompileErrorIndexName(ctx, name);
+	ctx->cwparm[ctx->ncwparm++]=j;
+}
+
 /** Allocate memory for variable. */
 BS2CC_VarInfo *BS2C_AllocVarInfo(BS2CC_CompileContext *ctx)
 {
@@ -381,6 +390,14 @@ void BS2C_CompileFuncBodyCleanupVar(
 		BS2C_EmitOpcodeJx(ctx, ix, ix2);
 		return;
 	}
+	
+	if(vi->vitype==BS2CC_VITYPE_LCLFUNC)
+	{
+		ix2=BS2C_LookupFrameGlobal(ctx, vi->name);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_DFXLFCN);
+		BS2C_EmitOpcodeJx(ctx, ix, ix2);
+		return;
+	}
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{
@@ -421,6 +438,57 @@ void BS2C_CompileFuncBodyCleanupVar(
 	}
 }
 
+/** Generate code for initializing a variable. */
+void BS2C_CompileFuncBodyInitVar(
+	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vi, int ix)
+{
+	BS2CC_VarInfo *vi2, *vi3;
+	int t0, t1, t2, t3;
+	int z, ix2;
+	dtVal n0, n1;
+	int i, j, k, l;
+	
+#if 1
+	if(vi->vitype==BS2CC_VITYPE_LCLFUNC)
+	{
+		ix2=BS2C_LookupFrameGlobal(ctx, vi->name);
+		BS2C_EmitOpcode(ctx, BSVM2_OP_IFXLFCN);
+		BS2C_EmitOpcodeJx(ctx, ix, ix2);
+
+		vi2=BS2C_GetFrameGlobalInfo(ctx, ix2);
+
+		if(vi2->niface>0)
+		{
+			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_VARIANT);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_LDA);
+			BS2C_EmitOpcodeUCx(ctx, ix);
+
+			for(i=0; i<vi2->niface; i++)
+			{
+				vi3=vi2->iface[i];
+				n1=BGBDT_TagStr_Symbol(vi3->name);
+
+				t0=BS2C_InferExprLocalIndex(ctx, n1);
+				if(t0<0)
+				{
+					continue;
+				}
+
+				z=BS2C_GetTypeBaseZ(ctx, vi3->bty);
+				BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXUZRL);
+				BS2C_EmitOpcodeUZx(ctx, z, i);
+				BS2C_EmitOpcodeUCx(ctx, t0);
+			}
+
+			BS2C_EmitOpcode(ctx, BSVM2_OP_POPA);
+			BS2C_CompileExprPopType1(ctx);
+		}
+		return;
+	}
+#endif
+
+}
+
 /** Emit cleanup and final return code for a function. */
 void BS2C_CompileFuncBodyCleanup(
 	BS2CC_CompileContext *ctx)
@@ -450,6 +518,23 @@ void BS2C_CompileFuncBodyCleanup(
 	}
 	
 	BS2C_EmitReturnVal(ctx);
+}
+
+/** Emit initialization code for a function. */
+void BS2C_CompileFuncBodyInit(
+	BS2CC_CompileContext *ctx)
+{
+	BS2CC_VarInfo *vi;
+	int i, j, k, l;
+
+	if(ctx->frm->jcleanup<=0)
+		return;
+
+	for(i=0; i<ctx->frm->nlocals; i++)
+	{
+		vi=ctx->frm->locals[i];
+		BS2C_CompileFuncBodyInitVar(ctx, vi, i);
+	}
 }
 
 /** Compile the body of a function. */
@@ -493,6 +578,8 @@ void BS2C_CompileFuncBody(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
 		k=frm->nlocals++;
 		frm->locals[k]=func->args[j];
 	}
+
+	BS2C_CompileFuncBodyInit(ctx);
 		
 	BS2C_CompileStatement(ctx,
 		func->bodyExp);
@@ -769,9 +856,13 @@ BS2VM_API char *BS2C_ErrStringForMsg(
 		s=bgbdt_mm_rstrdup(tb); break;
 	case BS2CC_ERRN_NOSEMICOLON:
 		s="Missing Expected Semicolon."; break;
+	case BS2CC_ERRN_NOTYPEDEF:
+		s="Type Not Typedef."; break;
 
 	default:
-		s="(Internal) Unknown"; break;
+		sprintf(tb, "(Internal) Unknown %04X", cn);
+		s=bgbdt_mm_rstrdup(tb); break;
+//		s="(Internal) Unknown"; break;
 	}
 	return(s);
 }
@@ -893,6 +984,7 @@ BS2VM_API int BS2C_CompileModuleList(
 			BS2C_CompileError(ctx, BS2CC_ERRN_FATALNOFILE);
 		}
 
+		ctx->srcfn=bgbdt_mm_strdup(tb);
 		v0=BS2P_ParseBuffer(ctx, tbuf, tsz);
 		
 		if(ctx->dbgprn)

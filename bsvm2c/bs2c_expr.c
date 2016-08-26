@@ -941,6 +941,7 @@ void BS2C_CompileExprCall(BS2CC_CompileContext *ctx,
 
 		BS2C_CompileExpr(ctx, fnn, BS2CC_TYZ_VARIANT);
 		BS2C_EmitOpcode(ctx, BSVM2_OP_CALLAA);
+		BS2C_EmitSetNewtrace(ctx);
 		BS2C_CompileExprPopType2(ctx);
 
 		if(dty!=BS2CC_TYZ_VOID)
@@ -974,6 +975,7 @@ void BS2C_CompileExprCall(BS2CC_CompileContext *ctx,
 //			BS2C_CompileExpr(ctx, fnn, nty);
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLL);
 			BS2C_EmitOpcodeJx(ctx, i, ix);
+			BS2C_EmitSetNewtrace(ctx);
 		}else
 		{
 //			BS2C_CompileExpr(ctx, fnn, BS2CC_TYZ_VARIANT);
@@ -981,6 +983,7 @@ void BS2C_CompileExprCall(BS2CC_CompileContext *ctx,
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLA);
 			BS2C_EmitOpcodeIdx(ctx, ix);
 			BS2C_CompileExprPopType1(ctx);
+			BS2C_EmitSetNewtrace(ctx);
 		}
 
 		if((vari->rty!=BSVM2_OPZ_VOID) && (dty!=BSVM2_OPZ_VOID))
@@ -1217,10 +1220,12 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 		{
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLTH);
 			BS2C_EmitOpcodeIdx(ctx, ix);
+			BS2C_EmitSetNewtrace(ctx);
 		}else
 		{
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLG);
 			BS2C_EmitOpcodeIdx(ctx, ix);
+			BS2C_EmitSetNewtrace(ctx);
 		}
 
 		if((vari->rty!=BSVM2_OPZ_VOID) && (dty!=BSVM2_OPZ_VOID))
@@ -1460,11 +1465,13 @@ void BS2C_CompileObjMethodCallB(BS2CC_CompileContext *ctx,
 		{
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLTH);
 			BS2C_EmitOpcodeIdx(ctx, ix);
+			BS2C_EmitSetNewtrace(ctx);
 		}else
 		{
 			BS2C_CompileExprPopType1(ctx);
 			BS2C_EmitOpcode(ctx, BSVM2_OP_CALLV);
 			BS2C_EmitOpcodeIdx(ctx, ix);
+			BS2C_EmitSetNewtrace(ctx);
 		}
 
 		if((vari->rty!=BS2CC_TYZ_VOID) && (dty!=BS2CC_TYZ_VOID))
@@ -5013,6 +5020,14 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 			BS2C_CompileExprPopType1(ctx);
 		}
 
+		return;
+	}
+	
+	if(!strcmp(tag, "func_aut"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "name");
+		lt=BS2C_InferExpr(ctx, ln);
+		BS2C_CompileExpr(ctx, ln, lt);
 		return;
 	}
 #endif

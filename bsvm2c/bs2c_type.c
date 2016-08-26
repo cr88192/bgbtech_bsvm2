@@ -1823,6 +1823,7 @@ int BS2C_TypeRefinedType(
 {
 	BS2CC_TypeOverflow tovf;
 	int asza[16];
+	BS2CC_VarInfo *vi;
 	dtVal arrs;
 	dtVal n0, n1;
 	char *tyn;
@@ -1978,7 +1979,33 @@ int BS2C_TypeRefinedType(
 		{
 			i=BS2C_LookupVariGlobal(ctx, vari, tyn);
 			if(i>=0)
-				{ bt=i+256; }
+			{
+				vi=ctx->globals[i];
+				switch(vi->vitype)
+				{
+				case BS2CC_VITYPE_GBLVAR:
+					if(!(vi->bmfl&BS2CC_TYFL_TYPEDEF))
+						BS2C_WarnNotTypedef(ctx, vi->name);
+					bt=vi->bty;
+					break;
+				case BS2CC_VITYPE_GBLFUNC:
+					if(!(vi->bmfl&BS2CC_TYFL_TYPEDEF))
+						BS2C_WarnNotTypedef(ctx, vi->name);
+					bt=i+256;
+					break;
+				case BS2CC_VITYPE_STRUCT:
+				case BS2CC_VITYPE_CLASS:
+				case BS2CC_VITYPE_IFACE:
+					bt=i+256;
+					break;
+				
+				default:
+					if(!(vi->bmfl&BS2CC_TYFL_TYPEDEF))
+						BS2C_WarnNotTypedef(ctx, vi->name);
+					bt=i+256;
+					break;
+				}
+			}
 			else
 			{
 				bt=BS2CC_TYZ_ADDRESS;

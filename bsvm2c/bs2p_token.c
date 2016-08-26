@@ -687,7 +687,8 @@ int BS2P_GetCurSourceLine(BS2CC_CompileContext *ctx,
 	cs2=BS2P_GetCurSrcPosition(ctx, 0);
 	cs1=ctx->srcbuf;
 	
-	fn="unknown";
+//	fn="unknown";
+	fn=ctx->srcfn;
 	ln=1;
 	while(cs1<cs2)
 	{

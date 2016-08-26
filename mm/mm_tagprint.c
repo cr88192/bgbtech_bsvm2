@@ -52,6 +52,28 @@ int bgbdt_mm_strprint_putstr(BGBDT_MM_ParsePrintInfo *inf, char *str)
 	return(inf->ct-inf->cts);
 }
 
+int bgbdt_mm_strprint_putdystr(BGBDT_MM_ParsePrintInfo *inf, char *str)
+{
+	char *s;
+	int i, j, k, l;
+
+	l=strlen(str);
+	if((inf->ct+l)>=inf->cte)
+	{
+		i=inf->cte-inf->cts;
+		j=inf->ct-inf->cts;
+		while((j+l)>=i)
+			i=i+(i>>1);
+		inf->cts=bgbdt_mm_realloc(inf->cts, i);
+		inf->ct=inf->cts+j;
+	}
+
+	inf->nchars+=l;
+	memcpy(inf->ct, str, l+1);
+	inf->ct+=l;
+	return(inf->ct-inf->cts);
+}
+
 int (*bgbdt_mm_puts_fp)(char *str);
 
 BS2VM_API void BGBDT_MM_SetPuts(int (*fp)(char *str))
@@ -106,6 +128,26 @@ BS2VM_API BGBDT_MM_ParsePrintInfo *BGBDT_MM_NewConsolePrinter(void)
 //	tmp->cts=strbuf;
 //	tmp->cte=strbuf+szbuf;
 	tmp->putstr=bgbdt_mm_conprint_putstr;
+	
+	return(tmp);
+}
+
+BS2VM_API BGBDT_MM_ParsePrintInfo *BGBDT_MM_NewDynamicStringPrinter(
+	int szbuf)
+{
+	BGBDT_MM_ParsePrintInfo *tmp;
+	char *strbuf;
+	
+	if(szbuf<=0)
+		szbuf=4096;
+	strbuf=bgbdt_mm_malloc(szbuf);
+
+	tmp=BGBDT_MM_AllocParsePrintInfo();
+
+	tmp->ct=strbuf;
+	tmp->cts=strbuf;
+	tmp->cte=strbuf+szbuf;
+	tmp->putstr=bgbdt_mm_strprint_putdystr;
 	
 	return(tmp);
 }

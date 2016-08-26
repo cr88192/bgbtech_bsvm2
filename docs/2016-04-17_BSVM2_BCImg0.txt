@@ -294,6 +294,10 @@ Flags String:
 * t, thread
 * u, synchronized
 * v, volatile
+* w, import
+* x, export
+* y, typedef
+* z
 
 * A*, B*, C*, D*
 ** Extended Flags

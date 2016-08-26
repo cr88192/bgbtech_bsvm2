@@ -230,6 +230,7 @@ int BS2C_InferExprObjMethodCall(BS2CC_CompileContext *ctx,
 int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr)
 {
 	dtVal ln, rn, an, fnn;
+	dtVal n0, n1;
 	BS2CC_VarInfo *vi, *vi2;
 	char *tag, *fn, *op;
 	int lt, rt, ty;
@@ -472,6 +473,7 @@ int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr)
 		rn=BS2P_GetAstNodeAttr(expr, "rhs");
 
 		lt=BS2C_InferExpr(ctx, ln);
+//		rt=BS2C_InferExpr(ctx, rn);
 		
 		vi=BS2C_GetTypeObject(ctx, lt);
 
@@ -664,13 +666,47 @@ int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr)
 			if(!strcmp(fn, "US"))
 				ty=BS2CC_TYZ_USHORT;
 		}
-		
+
+		if(ctx->frm->isinfer_varcapture)
+		{
+			ln=BS2P_GetAstNodeAttr(expr, "value");
+
+			if(dtvIsArrayP(ln))
+			{
+				l=dtvArrayGetSize(ln);
+				for(i=0; i<l; i++)
+				{
+					n0=dtvArrayGetIndexDtVal(ln, i);
+					n1=BS2P_GetAstNodeAttr(n0, "value");
+					fn=BS2P_GetAstNodeAttrS(n0, "name");
+					BS2C_InferExpr(ctx, n1);
+				}
+			}
+		}
+
 		ty=ty|BS2CC_TYI_A1;
 		return(ty);
 	}
 
 	if(!strcmp(tag, "object"))
 	{
+		if(ctx->frm->isinfer_varcapture)
+		{
+			ln=BS2P_GetAstNodeAttr(expr, "value");
+
+			if(dtvIsArrayP(ln))
+			{
+				l=dtvArrayGetSize(ln);
+				for(i=0; i<l; i++)
+				{
+					n0=dtvArrayGetIndexDtVal(ln, i);
+					n1=BS2P_GetAstNodeAttr(n0, "value");
+					fn=BS2P_GetAstNodeAttrS(n0, "name");
+					BS2C_InferExpr(ctx, n1);
+				}
+			}
+		}
+	
 		return(BS2CC_TYZ_VARIANT);
 	}
 

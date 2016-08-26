@@ -443,6 +443,10 @@ HTAC:
 * However, they are not strictly part of the core instruction set.
 ** It is concievable a VM could omit them.
 
+CTRLF:
+* Control Flow
+* Like jumps, these operations are also defined to end the current trace.
+
 
 Instructions
 * 00, ADDI			//A B => A+B
@@ -1145,6 +1149,49 @@ More Array ops:
 * E1 EE Lx, SHLILLL			//D S T; D=S<<T
 * E1 EF Lx, SARILLL			//D S T; D=S>>T
 ** (HTAC Ext) operates on locals, storing result in local.
+
+
+* E1 F0 Ax, BEGTRY			// ( => )
+** Begin Try block, encodes address of ENDTRY.
+
+* E1 F1 Ax, ENDTRY			// ( => E )
+** (CTRLF)
+** End Try block.
+** Encodes address of finally block.
+** Pushes the exception and jumps if it is null.
+
+* E1 F2 Gx Ax, CATCH		// ( E => E )
+** (CTRLF)
+** Check if exception (on stack) is the expected type (instanceof Gx)
+** If it match fails, it jumps to address.
+
+* E1 F3, THROW				// ( E => )
+** (CTRLF)
+** Throw exception object.
+** Throws NullPointerException if given null.
+
+* E1 F4 Ix Ax, BEGLEC		// ( => )
+** Begin let_escape block.
+** Address points to matching ENDLEC.
+** Gives index of continuation variable.
+*** Continuation object will be an opaque continuation handle.
+
+* E1 F5 Ix, ENDLEC			// ( => )
+** End let_escape block.
+** Gives index of continuation variable.
+** Continuation may not be used after ENDLEC.
+
+* E1 F6 Ix Ax, ENDLEC2			// ( => E )
+** End let_escape block.
+** Gives index of continuation variable.
+** Pushes continuation or exception.
+*** Pushes null if it sees target continuation.
+** Jumps to address if the exception is null.
+
+* E1 F7, RETHROW			// ( E => )
+** (CTRLF)
+** Rethrow exception object.
+** Is no-op if exception is null.
 
 
 === Vector Block (0x400) ===

@@ -19,11 +19,11 @@ Scope Levels:
 * Class
 * Function/Method
 * Lexical
-* Possible:
-** Dynamic/TLS
-*** Dynamic bindings will only be visible if the declaration is in-scope.
-** A static subset of delegate scope.
-*** Will only see into statically visible bindings.
+* Dynamic/TLS
+** Dynamic bindings will only be visible if the declaration is in-scope.
+
+** / A static subset of delegate scope.
+*** / Will only see into statically visible bindings.
 
 
 Objects
@@ -134,8 +134,8 @@ The native endianess for numbers is undefined.
  	Caller also needs to use &.
  <nowiki> </nowiki>    Passing a variable without an & operator is an error.
  
- var x:int;					//int variable (alternate)
- var arr:int[];				//int array alternate
+/ var x:int;					//int variable (alternate)
+/ var arr:int[];				//int array alternate
  
  void someMethod(int x, int y) { ... }	//method
  var fn=function(int x, int y):void { ... }		//closure
@@ -325,11 +325,46 @@ Likewise:
 ** Creates an array with a bounded lifespan.
 * type[] arr=[X, Y, Z];
 ** Creates an array with initialized contents.
-* type[] arr=const [X, Y, Z];
+
+* / type[] arr=const [X, Y, Z];
 ** Creates an array initialized to an immutable constant array.
 ** Attempts to modify the array's contents are to throw an exception.
 
-Objects may be allocated inside of "memory regions", at which point the lifetime of the object will be bound to that of the region it was allocated from. Once a region is destroyed, all objects existing within that region will be destroyed.
+/ Objects may be allocated inside of "memory regions", at which point the lifetime of the object will be bound to that of the region it was allocated from. Once a region is destroyed, all objects existing within that region will be destroyed.
+
+
+=== Exceptions and Continuations ===
+
+Exceptions will use a try/catch/finally setup.
+
+ try {
+    body...
+ }catch(Exception ex)
+ {
+    handle...
+ }finally
+ {
+    cleanup...
+ }
+
+Throwing an exception within a try block will cause any exception handlers to be checked, and failing being handled, the finally block is executed (if present) and the exception is rethrown.
+
+If no exception is thrown, then control passes from the try block to the finally block (if present), and then to any following statements.
+
+If a thrown exception is caught, then afterwards control passes to the finally block, and then on to subsequent statements.
+
+
+A form of exit-only continuations will be allowed.
+
+ let_escape(vardef)
+ {
+    body...
+ }
+
+Within body, var will be initialized to an escape continuation.
+Throwing this continuation will send control to the statement following the body (skipping over any additional statements). The escape continuation may not be used outside the enclosed block.
+
+As with exceptions, this may be used across multiple functions. However, a thrown continuation may not be caught. Like with exceptions, any finally blocks are to be executed in the process of unwinding.
 
 
 === Tokens ===
@@ -386,9 +421,10 @@ PackageStatement:
 Declaration:
 * ( ''modifier'' * ) ''typeexpression'' ''declname'' ( '=' ''expression'' ) ';'
 * ( ''modifier'' * ) ''typeexpression'' ''declname'' '''(''' ''argslist'' ''')''' ''block''
+
 * ( ''modifier'' * ) '''var''' ''declname'' ( : ''typeexpression'' ) ( '=' ''expression'' ) ';'
 * ( ''modifier'' * ) '''function''' ''declname'' '''(''' ''argslist'' ''')''' ( : ''typeexpression'' ) ''block''
-
+** May formally drop, TBD
 
 Block:
 * ''BlockStatement''
@@ -411,6 +447,7 @@ BlockStatement:
 * ''identifier'' ':'
 ** Label
 * '''try''' ''block'' ( '''catch''' '''(''' ''args'' ''')''' ''catch-block'' )* ( '''finally''' ''final-block'' )
+* '''let_escape''' '''(''' ''var'' ''')''' ''body''
 * ''statement'' ';'
 
 Statement:
@@ -481,7 +518,7 @@ ExpressionLiteral:
 * '''new''' ''typeexpression'' ( '''(''' ''argslist'' ''')''' )
 ** Create new object instance or array (Main Heap).
 
-* ''regionexpr'' '''.new''' ''typeexpression'' ( '''(''' ''argslist'' ''')''' )
+* / ''regionexpr'' '''.new''' ''typeexpression'' ( '''(''' ''argslist'' ''')''' )
 ** Create new object instance or array (Region Allocator).
 ** Note: May be absent if implementation lacks region allocation.
 
@@ -644,13 +681,6 @@ Modifier:
 ** Variable: Declares an alias for a given type.
 ** Method: Declares an type representing the method's signature.
 
-* / '''virtual'''
-** Method: VM is to allow this method to be overriden.
-*** A derived class may not override a method unless the original is virtual.
-*** Within a chain of overriden classes, the virtual may be implicit.
-*** '''final''' will override '''virtual'''
-** (Drop) This is implicit, use 'final' for non-overload case.
-
 * '''volatile'''
 ** Indicates that the variable may be modified asynchronously.
 ** This causes changes to a variable to be immediately visible between threads.
@@ -663,10 +693,11 @@ Special Number Modifiers (Possible)
 * '''bigendian'''
 ** Number is big endian.
 ** This modifier will only apply to struct members.
-* '''saturate'''
+
+* / '''saturate'''
 ** Number uses saturating arithmetic.
 ** Number will implicitly clamp to the normal range for the type.
-** '''saturate(''' ''min'', ''max'' ''')'''
+** / '''saturate(''' ''min'', ''max'' ''')'''
 *** Define the minimum and maximum values for clamping.
 *** Will add an implicit range clamp when values are stored, with clamps narrower than the range of the type.
 *** This will not have an effect on the results of intermediate calculations.
@@ -731,4 +762,4 @@ TypeExpression:
 
 * ''typeexpression'' '[' ']'
 * ''typeexpression'' '[' ''size'' ']'
-* '''typeof''' ''expression''
+* / '''typeof''' ''expression''

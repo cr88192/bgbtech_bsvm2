@@ -971,6 +971,11 @@ void BS2C_EmitTempJAddr(BS2CC_CompileContext *ctx, int tid)
 	ctx->frm->newtrace=1;
 }
 
+void BS2C_EmitSetNewtrace(BS2CC_CompileContext *ctx)
+{
+	ctx->frm->newtrace=1;
+}
+
 void BS2C_EmitTempLabelB(BS2CC_CompileContext *ctx, int tid)
 {
 	if(!ctx->frm->newtrace)

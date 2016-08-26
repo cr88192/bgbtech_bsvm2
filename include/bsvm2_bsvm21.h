@@ -569,6 +569,16 @@
 #define BSVM2_OP_SHLILLL	0x01EE	//
 #define BSVM2_OP_SARILLL	0x01EF	//
 
+#define BSVM2_OP_BEGTRY		0x01F0	//
+#define BSVM2_OP_ENDTRY		0x01F1	//
+#define BSVM2_OP_CATCH		0x01F2	//
+#define BSVM2_OP_THROW		0x01F3	//
+
+#define BSVM2_OP_BEGLEC		0x01F4	//
+#define BSVM2_OP_ENDLEC		0x01F5	//
+#define BSVM2_OP_ENDLEC2	0x01F6	//
+#define BSVM2_OP_RETHROW	0x01F7	//
+
 
 #define BSVM2_OP_MKX4I		0x0400
 #define BSVM2_OP_MKX2L		0x0401
@@ -675,6 +685,14 @@
 #define BSVM2_EXS_RUNLIMIT		0x00003		//Interpreter Run-Limit
 #define BSVM2_EXS_CASTEX		0x00004		//CastException
 #define BSVM2_EXS_CALLUNDEF		0x00005		//CallUndefinedException
+#define BSVM2_EXS_THROWLEC		0x00006		//Thrown Continuation
+#define BSVM2_EXS_THROWNEX		0x00007		//Thrown Exception
+
+#define BSVM2_VAM_STACK			0x00000		//stack var
+#define BSVM2_VAM_LOCAL			0x10000		//stack var
+#define BSVM2_VAM_LEXVAR		0x20000		//stack var
+#define BSVM2_VAM_GLOBAL		0x30000		//stack var
+#define BSVM2_VAM_MASK			0xF0000		//stack var
 
 #ifndef BSVM2_DBGTRAP
 #if defined(_M_IX86) && defined(_MSC_VER)
@@ -700,6 +718,8 @@ typedef struct BSVM2_CodeBlock_s BSVM2_CodeBlock;
 typedef struct BSVM2_CodeImage_s BSVM2_CodeImage;
 
 typedef struct BSVM2_Lambda_s BSVM2_Lambda;
+
+typedef struct BSVM2_TransContext_s BSVM2_TransContext;
 
 union BSVM2_Value_u {
 struct { s32 i, j; };
@@ -785,7 +805,12 @@ BSVM2_Frame *frame;			//current frame
 BSVM2_Trace *trace;			//current trace
 BSVM2_Value *dynenv;		//dynamic environment
 int szdynenv;				//allocated size of dynamic environment
-int status;
+int status;					//status code
+dtVal thrownex;				//thrown exception object
+
+BSVM2_Trace *ehstack_tr[256];	//exception handler stack trace
+BSVM2_Frame *ehstack_fr[256];	//exception handler stack frame
+int ehstackpos;					//exception handler stackpos
 };
 
 struct BSVM2_CodeBlock_s {
@@ -879,4 +904,14 @@ int seqid;
 BSVM2_Opcode *opfree;
 BSVM2_TailOpcode *topfree;
 BSVM2_Trace *trfree;
+};
+
+struct BSVM2_TransContext_s {
+
+BGBDT_MM_ParsePrintInfo *ob_hdr;		//header lines
+BGBDT_MM_ParsePrintInfo *ob_topvar;		//top variables (data)
+BGBDT_MM_ParsePrintInfo *ob_topfcn;		//top functions (text)
+
+BGBDT_MM_ParsePrintInfo *ob_func;		//current function
+
 };

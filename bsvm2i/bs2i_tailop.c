@@ -300,7 +300,8 @@ BSVM2_Trace *BSVM2_TrRun_ThrowN(BSVM2_Frame *frm, BSVM2_Trace *tr)
 	return(tr->top->Run(frm, tr->top));
 	exth:
 	frm->ctx->trace=tr;
-	return(NULL);
+	return(BSVM2_TrOp_ThrowStatusI(frm, frm->ctx->status));
+//	return(NULL);
 }
 
 BSVM2_Trace *BSVM2_TrRun_Next0(BSVM2_Frame *frm, BSVM2_Trace *tr)
@@ -1288,4 +1289,165 @@ BSVM2_Trace *BSVM2_TrOp_CALLL(
 
 	tr=BS2I_ImageGetFuncTrace(fvi);
 	return(tr);
+}
+
+BSVM2_Trace *BSVM2_TrOp_ThrowUnwindI(BSVM2_Frame *frm)
+{
+	BSVM2_Context *ctx;
+	BSVM2_Trace *tr1;
+	BSVM2_Frame *fr1, *frmb;
+
+	ctx=frm->ctx;
+	fr1=ctx->ehstack_fr[ctx->ehstackpos-1];
+	tr1=ctx->ehstack_tr[ctx->ehstackpos-1];
+
+	while(frm && (frm!=fr1))
+	{
+		frmb=frm->rnext;
+		frm->rnext=ctx->freeframe;
+		ctx->freeframe=frm;
+		frm=frmb;
+	}
+
+	ctx->frame=fr1;
+	return(tr1);
+}
+
+BSVM2_Trace *BSVM2_TrOp_ThrowStatusI(BSVM2_Frame *frm, int status)
+{
+	if(frm->ctx->ehstackpos<=0)
+	{
+		frm->ctx->status=status;
+		return(NULL);
+	}
+
+	frm->ctx->thrownex=dtvWrapInt(status);
+	return(BSVM2_TrOp_ThrowUnwindI(frm));
+}
+
+BSVM2_Trace *BSVM2_TrOp_ThrowI(BSVM2_Frame *frm,
+	BSVM2_TailOpcode *op, dtVal ex)
+{
+	if(dtvIsCharP(ex))
+	{
+		frm->ctx->thrownex=ex;
+		if(frm->ctx->ehstackpos>0)
+		{
+//			return(frm->ctx->ehstack[frm->ctx->ehstackpos-1]);
+			return(BSVM2_TrOp_ThrowUnwindI(frm));
+		}
+		frm->ctx->status=BSVM2_EXS_THROWLEC;
+		return(NULL);
+	}
+
+	frm->ctx->thrownex=ex;
+	if(frm->ctx->ehstackpos>0)
+	{
+//		return(frm->ctx->ehstack[frm->ctx->ehstackpos-1]);
+		return(BSVM2_TrOp_ThrowUnwindI(frm));
+	}
+	frm->ctx->status=BSVM2_EXS_THROWNEX;
+	return(NULL);
+}
+
+BSVM2_Trace *BSVM2_TrOp_THROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	dtVal ex;
+	
+	ex=frm->stack[op->t0].a;
+	return(BSVM2_TrOp_ThrowI(frm, op, ex));
+}
+
+BSVM2_Trace *BSVM2_TrOp_RETHROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	dtVal ex;
+	
+	ex=frm->stack[op->t0].a;
+	if(dtvNullP(ex))
+		{ return(op->nexttrace); }
+	return(BSVM2_TrOp_ThrowI(frm, op, ex));
+}
+
+BSVM2_Trace *BSVM2_TrOp_BEGTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	int i;
+	
+	i=frm->ctx->ehstackpos++;
+	frm->ctx->ehstack_fr[i]=frm;
+	frm->ctx->ehstack_tr[i]=op->jmptrace;
+	return(op->nexttrace);
+}
+
+BSVM2_Trace *BSVM2_TrOp_ENDTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	dtVal ex;
+	ex=frm->ctx->thrownex;
+	frm->ctx->thrownex=DTV_NULL;
+	frm->ctx->ehstackpos--;
+	frm->stack[op->t0].a=ex;
+	if(dtvNullP(ex))
+		return(op->jmptrace);
+	return(op->nexttrace);
+}
+
+BSVM2_Trace *BSVM2_TrOp_CATCH(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	BSVM2_ImageGlobal *vi;
+	void *p;
+	dtVal ex;
+	int i;
+
+	ex=frm->stack[op->t0].a;
+
+	vi=op->v.p;
+	if((vi->tag==BS2CC_ITCC_CL) ||
+		(vi->tag==BS2CC_ITCC_IF))
+	{
+		i=BGBDTC_CheckObjvInstanceof(ex, vi->objinf);
+		return(i?op->nexttrace:op->jmptrace);
+	}
+
+//	frm->stack[op->t0].i=0;
+//	return(op->nexttrace);
+	return(op->jmptrace);
+}
+
+BSVM2_Trace *BSVM2_TrOp_BEGLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	s32 v;
+	int i;
+	
+	i=frm->ctx->ehstackpos++;
+	frm->ctx->ehstack_fr[i]=frm;
+	frm->ctx->ehstack_tr[i]=op->jmptrace;
+	
+	v=(s32)(((u64)(op->jmptrace->top)*((u64)2147483647))>>32);
+	frm->local[op->i0].a=dtvWrapChar(v);
+	return(op->nexttrace);
+}
+
+BSVM2_Trace *BSVM2_TrOp_ENDLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	dtVal ex;
+	ex=frm->ctx->thrownex;
+	frm->ctx->thrownex=DTV_NULL;
+	frm->ctx->ehstackpos--;
+
+	if(!dtvEqqP(ex, frm->local[op->i0].a))
+		{ return(BSVM2_TrOp_ThrowI(frm, op, ex)); }
+	return(op->nexttrace);
+}
+
+BSVM2_Trace *BSVM2_TrOp_ENDLEC2(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+{
+	dtVal ex;
+	ex=frm->ctx->thrownex;
+	frm->ctx->thrownex=DTV_NULL;
+	frm->ctx->ehstackpos--;
+	if(dtvEqqP(ex, frm->local[op->i0].a))
+		ex=DTV_NULL;
+	frm->stack[op->t0].a=ex;
+	if(dtvNullP(ex))
+		return(op->jmptrace);
+	return(op->nexttrace);
 }

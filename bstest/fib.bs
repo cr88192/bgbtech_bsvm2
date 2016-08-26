@@ -9,7 +9,15 @@ native variant bsvm2_vm_printf(string str, ...va);
 void printf(string str, ...va)
 	{ bsvm2_vm_printf(str, va); }
 
-int fn_noArgReturnsInt();
+typedef int fn_noArgReturnsInt();
+
+public class Exception {
+	int dummy;
+	
+	public Exception()
+	{
+	}
+}
 
 package bstest {
 	public struct Foo {
@@ -159,6 +167,51 @@ package bstest {
 			z=fn();
 			printf("tst_func: %d %d %d\n", x, y, z);
 		}
+
+		public static void tst_func2()
+		{
+//			variant fn;
+			fn_noArgReturnsInt fn;
+			int x, y, z;
+			
+			x=3; y=4;
+			
+			fn=function!():int { x+y }
+			z=fn();
+			printf("tst_func2: %d %d %d\n", x, y, z);
+		}
+
+		public static void tst_tryex2()
+		{
+			throw new Exception();
+		}
+		
+		public static void tst_tryex()
+		{
+			try {
+				printf("try 1\n");
+				tst_tryex2();
+				printf("try 2\n");
+			}catch(Exception ex)
+			{
+				printf("catch\n");
+			}finally
+			{
+				printf("finally\n");
+			}
+		}
+
+		public static void tst_letlec()
+		{
+			printf("letlec A\n");
+			let_escape(variant ex)
+			{
+				printf("letlec B\n");
+				throw ex;
+				printf("letlec C\n");
+			}
+			printf("letlec D\n");
+		}
 	
 		public static void main(string[] argv)
 		{
@@ -266,6 +319,11 @@ package bstest {
 			printf("St2 i=%d, j=%d\n", i, j);
 			
 			tst_func();
+			tst_func2();
+			
+			tst_letlec();
+			
+			tst_tryex();
 		}
 	}
 }

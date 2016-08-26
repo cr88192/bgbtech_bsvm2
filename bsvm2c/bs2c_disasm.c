@@ -632,6 +632,16 @@ char *name;
 {"E1EELx",    "SHLILLL"},
 {"E1EFLx",    "SARILLL"},
 
+{"E1F0Ax",    "BEGTRY"},
+{"E1F1Ax",    "ENDTRY"},
+{"E1F2GxAx",  "CATCH"},
+{"E1F3",      "THROW"},
+{"E1F4IxAx",  "BEGLEC"},
+{"E1F5Ix",    "ENDLEC"},
+{"E1F6IxAx",  "ENDLEC2"},
+{"E1F7",      "RETHROW"},
+
+
 
 /* Vector Block (0x400) */
 {"E400",      "MKX4I"},

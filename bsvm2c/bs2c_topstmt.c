@@ -25,11 +25,13 @@ void BS2C_CompileSetupVarInfo(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vi, dtVal expr)
 {
 	char tb[256];
-	dtVal nn, nt;
+	BS2CC_VarInfo *vi2, *vi3, *vi4;
+	dtVal nn, nt, na, nb;
+	dtVal n0, n1;
 	s64 bmfl;
 	char *name, *tag;
-	int bty;
-	int i;
+	int bty, tk;
+	int i, j, k, l;
 
 	tag=BS2P_GetAstNodeTag(expr);
 
@@ -46,6 +48,9 @@ void BS2C_CompileSetupVarInfo(
 		vi->bty=bty;
 		vi->bmfl=bmfl;
 		vi->typeExp=nt;
+		
+		if(!vi->vitype)
+			vi->vitype=BS2CC_VITYPE_LCLVAR;
 		return;
 	}
 
@@ -58,6 +63,90 @@ void BS2C_CompileSetupVarInfo(
 		vi->bty=BS2CC_TYZ_VARARG;
 		vi->bmfl=0;
 //		vi->typeExp=nt;
+
+		if(!vi->vitype)
+			vi->vitype=BS2CC_VITYPE_LCLVAR;
+
+		return;
+	}
+
+	if(!strcmp(tag, "func") ||
+		!strcmp(tag, "func_aut"))
+	{
+		name=BS2P_GetAstNodeAttrS(expr, "name");
+		bmfl=BS2P_GetAstNodeAttrI(expr, "modi");
+		nt=BS2P_GetAstNodeAttr(expr, "type");
+		na=BS2P_GetAstNodeAttr(expr, "args");
+		nb=BS2P_GetAstNodeAttr(expr, "body");
+		tk=BS2P_GetAstNodeAttrI(expr, "tokcnt");
+
+//		bty=BS2C_TypeBaseType(ctx, nt);
+		bty=BS2C_TypeExtType(ctx, nt);
+
+		vi->name=BS2P_StrSym(ctx, name);
+		vi->bty=bty;
+		vi->bmfl=bmfl;
+		vi->typeExp=nt;
+
+//		if(!vi->vitype)
+			vi->vitype=BS2CC_VITYPE_LCLFUNC;
+
+#if 0
+		if(dtvIsArrayP(na))
+		{
+			vi->nargs=0;
+			l=dtvArrayGetSize(na);
+			for(i=0; i<l; i++)
+			{
+				n0=dtvArrayGetIndexDtVal(na, i);
+				BS2C_CompileTopFuncArg(ctx, vi, n0);
+			}
+		}else if(dtvTrueP(na))
+		{
+			vi->nargs=0;
+			BS2C_CompileTopFuncArg(ctx, vi, na);
+		}else
+		{
+			vi->nargs=0;
+		} 
+#endif
+
+		vi->bodyExp=nb;
+
+#if 1
+		i=BS2C_CompileTopFunc(ctx, expr);
+		vi2=ctx->globals[i];
+
+		vi->bty=256+i;
+
+		n0=BS2P_GetAstNodeAttr(expr, "body");
+		BS2C_InferCaptureFunc(ctx, vi2);
+
+		if(vi2->body->inf_ncapvar==0)
+		{
+			return;
+		}
+
+//		fn=vi2->name;
+		
+		vi2->niface=vi2->body->inf_ncapvar;
+		for(i=0; i<vi2->niface; i++)
+		{
+			vi3=BS2C_AllocVarInfo(ctx);
+			vi2->iface[i]=vi3;
+			vi3->name=BS2P_StrSym(ctx, vi2->body->inf_capvar[i]);
+			
+			k=BS2C_LookupLocal(ctx, vi3->name);
+			vi4=ctx->frm->locals[k];
+			vi3->bty=BS2C_TypeRefType(ctx, vi4->bty);
+			vi3->bmfl=vi4->bmfl;
+			vi3->typeExp=vi4->typeExp;
+		}
+#endif
+
+		if(ctx->frm->jcleanup<=0)
+			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
+
 		return;
 	}
 

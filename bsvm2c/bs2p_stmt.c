@@ -319,6 +319,56 @@ dtVal BS2P_ParseBlockStatementI(BS2CC_CompileContext *ctx, int flag)
 			return(n0);
 		}
 
+		if(!strcmp(t0, "Itry"))
+		{
+			BS2P_NextToken(ctx);
+			
+//			BS2P_ParseExpectToken(ctx, "X(");
+//			n0=BS2P_ParseExprAssignOp(ctx);
+//			BS2P_ParseExpectToken(ctx, "X)");
+			n1=BS2P_ParseBlockStatement(ctx);
+//			n0=BS2P_ParseWrapTagIf(ctx, "while", n0, n1);
+			n0=BS2P_ParseWrapTagBody(ctx, "try", n1);
+//			n0=n1;
+			
+			while(BS2P_ParseExpectOptToken(ctx, "Icatch"))
+			{
+				BS2P_ParseExpectToken(ctx, "X(");
+//				n1=BS2P_ParseExprAssignOp(ctx);
+				n1=BS2P_TryParseArgDecl(ctx);
+				BS2P_ParseExpectToken(ctx, "X)");
+				
+				n2=BS2P_ParseBlockStatement(ctx);
+				n0=BS2P_ParseWrapTagCatch(ctx, "catch", n1, n0, n2);
+//				n0=BS2P_ParseWrapTagIfElse(ctx, "ifelse", n0, n1, n2);
+			}
+
+			if(BS2P_ParseExpectOptToken(ctx, "Ifinally"))
+			{
+				n2=BS2P_ParseBlockStatement(ctx);
+				n0=BS2P_ParseWrapBinTag(ctx, "finally", n0, n2);
+			}
+			
+			return(n0);
+		}
+
+		if(!strcmp(t0, "Ilet_escape"))
+		{
+			BS2P_NextToken(ctx);
+
+			BS2P_ParseExpectToken(ctx, "X(");
+			n0=BS2P_TryParseArgDecl(ctx);
+			if(!dtvTrueP(n0))
+				n0=BS2P_ParseExprAssignOp(ctx);
+			BS2P_ParseExpectToken(ctx, "X)");
+
+			n1=BS2P_ParseBlockStatement(ctx);
+
+			n0=BS2P_ParseWrapTagIf(ctx, "let_escape", n0, n1);
+//			BS2P_ParseExpectOptToken(ctx, "X;");
+			return(n0);
+		}
+
 		if(!strcmp(t1, "X:"))
 		{
 			BS2P_NextToken(ctx);

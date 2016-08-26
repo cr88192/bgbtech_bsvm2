@@ -291,34 +291,110 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
 		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
-				BSVM2_Op_LDLXI);
+				BSVM2_Op_STLXI);
 			break;
 		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
-				BSVM2_Op_LDLXL);
+				BSVM2_Op_STLXL);
 			break;
 		case BSVM2_OPZ_FLOAT:
 		case BSVM2_OPZ_CI_FLOAT:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
-				BSVM2_Op_LDLXF);
+				BSVM2_Op_STLXF);
 			break;
 		case BSVM2_OPZ_DOUBLE:
 		case BSVM2_OPZ_CI_DOUBLE:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
-				BSVM2_Op_LDLXD);
+				BSVM2_Op_STLXD);
 			break;
 		case BSVM2_OPZ_ADDRESS:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
-				BSVM2_Op_LDLXA);
+				BSVM2_Op_STLXA);
 			break;
 		default:
 			break;
 		}
 		break;
+
+	case BSVM2_OP_LDDRLX:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDRLXI);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_LONG, BSVM2_Op_LDDRLXL);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_LDDRLXF);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_LDDRLXD);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_LDDRLXA);
+			break;
+		default:
+			break;
+		}
+		break;
+	case BSVM2_OP_STDRLX:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STDRLXI);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STDRLXL);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STDRLXF);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STDRLXD);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpPopUn(cblk, op,
+				BSVM2_Op_STDRLXA);
+			break;
+		default:
+			break;
+		}
+		break;
+
 	case BSVM2_OP_MKLFCN:
 		BSVM2_Interp_DecodeOpGx(cblk, op);
 		BSVM2_Interp_SetupOpUnP(cblk, op,
 			BSVM2_OPZ_ADDRESS, BSVM2_Op_MKLFCN);
+		break;
+	case BSVM2_OP_IFXLFCN:
+		BSVM2_Interp_DecodeOpGj(cblk, op);
+		BSVM2_Interp_SetupOpUat(cblk, op,
+			BSVM2_Op_IFXLFCN);
+		break;
+	case BSVM2_OP_DFXLFCN:
+		BSVM2_Interp_DecodeOpGj(cblk, op);
+		BSVM2_Interp_SetupOpUat(cblk, op,
+			BSVM2_Op_DFXLFCN);
 		break;
 
 	case BSVM2_OP_DSTIXUZ:
@@ -381,6 +457,39 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		case BSVM2_OPZ_ADDRESS:
 			BSVM2_Interp_SetupOpUn(cblk, op,
 				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZL_A);
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case BSVM2_OP_DSTIXUZRL:
+		BSVM2_Interp_DecodeOpZiIx(cblk, op);
+		switch(op->z)
+		{
+		case BSVM2_OPZ_INT:		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SHORT:	case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZRL_I);
+			break;
+		case BSVM2_OPZ_LONG:	case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZRL_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+		case BSVM2_OPZ_CI_FLOAT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZRL_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+		case BSVM2_OPZ_CI_DOUBLE:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZRL_D);
+			break;
+		case BSVM2_OPZ_ADDRESS:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDRESS, BSVM2_Op_DSTIXUZRL_A);
 			break;
 		default:
 			break;

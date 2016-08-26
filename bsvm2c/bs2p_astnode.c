@@ -387,6 +387,30 @@ dtVal BS2P_ParseWrapTagFor(BS2CC_CompileContext *ctx,
 	return(obj);
 }
 
+dtVal BS2P_ParseWrapTagBody(BS2CC_CompileContext *ctx,
+	char *tag, dtVal ln)
+{
+	dtVal obj;
+	char *s;
+	
+	obj=BS2P_NewAstNode(ctx, tag);
+	BS2P_SetAstNodeAttr(obj, "body", ln);
+	return(obj);
+}
+
+dtVal BS2P_ParseWrapTagCatch(BS2CC_CompileContext *ctx,
+	char *tag, dtVal cc, dtVal ln, dtVal rn)
+{
+	dtVal obj;
+	char *s;
+	
+	obj=BS2P_NewAstNode(ctx, tag);
+	BS2P_SetAstNodeAttr(obj, "cond", cc);
+	BS2P_SetAstNodeAttr(obj, "lhs", ln);
+	BS2P_SetAstNodeAttr(obj, "rhs", rn);
+	return(obj);
+}
+
 dtVal BS2P_ParseWrapTagBinary(BS2CC_CompileContext *ctx,
 	char *tag, char *op, dtVal ln, dtVal rn)
 {

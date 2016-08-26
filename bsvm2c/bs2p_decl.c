@@ -73,6 +73,7 @@ dtVal BS2P_ParseModifierList(BS2CC_CompileContext *ctx)
 		{"bigendian",		BS2CC_TYFL_BIGENDIAN},
 		{"dllimport",		BS2CC_TYFL_DLLIMPORT},
 		{"dllexport",		BS2CC_TYFL_DLLEXPORT},
+		{"typedef",			BS2CC_TYFL_TYPEDEF},
 		{NULL,				0}
 	};
 

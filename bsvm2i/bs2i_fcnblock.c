@@ -373,5 +373,11 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 		cblk->trace[i]=trsa[i];
 	}
 
+	if(cblk->stkpos!=0)
+	{
+		k=-1;
+		BSVM2_DBGTRAP
+	}
+
 	return(cblk->trace[0]);
 }
