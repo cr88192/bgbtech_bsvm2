@@ -74,6 +74,93 @@ s64 BS2C_ReduceClampConstRangeL(BS2CC_CompileContext *ctx, s64 iv, int dty)
 	return(ov);
 }
 
+dtVal BS2C_ReduceExprVariConst(BS2CC_CompileContext *ctx,
+	BS2CC_VarInfo *vari)
+{
+	dtVal n0, n1, n2, n3;
+
+	if(!vari)
+		return(DTV_UNDEFINED);
+
+	if((vari->vitype!=BS2CC_VITYPE_GBLVAR) &&
+		(vari->vitype!=BS2CC_VITYPE_LCLVAR))
+			return(DTV_UNDEFINED);
+
+	if(!(vari->bmfl&BS2CC_TYFL_FINAL))
+		return(DTV_UNDEFINED);
+
+	n0=vari->initExp;
+	if(!dtvTrueP(n0))
+		return(DTV_UNDEFINED);
+	
+	n1=BS2C_ReduceExpr(ctx, n0);
+
+	if(dtvIsFixIntP(n1))
+		{ return(n1); }
+	if(dtvIsFixUIntP(n1))
+		{ return(n1); }
+	if(dtvIsFixLongP(n1))
+		{ return(n1); }
+	if(dtvIsFixFloatP(n1))
+		{ return(n1); }
+	if(dtvIsFixDoubleP(n1))
+		{ return(n1); }
+
+	if(BGBDT_TagStr_IsStringP(n1))
+		{ return(n1); }
+
+	return(DTV_UNDEFINED);
+}
+
+dtVal BS2C_ReduceExprName(BS2CC_CompileContext *ctx, char *name)
+{
+	BS2CC_VarInfo *vari;
+	int bty;
+	int i, j, k;
+	
+	i=BS2C_LookupLocal(ctx, name);
+	if(i>=0)
+	{
+		vari=ctx->frm->locals[i];
+		return(BS2C_ReduceExprVariConst(ctx, vari));
+	}
+	
+	i=BS2C_LookupLexical(ctx, name);
+	if(i>=0)
+	{
+		vari=ctx->frm->func->iface[i];
+		return(BS2C_ReduceExprVariConst(ctx, vari));
+	}
+	
+//	if(ctx->frm->func && ctx->frm->func->obj &&
+//		(ctx->frm->func->vitype!=BS2CC_VITYPE_GBLFUNC))
+	if(ctx->frm->func && ctx->frm->func->obj)
+	{
+		vari=BS2C_LookupObjectFieldName(ctx,
+			ctx->frm->func->obj, name);
+//		if(vari)
+//			{ return(vari->bty); }
+		if(vari && (vari->vitype==BS2CC_VITYPE_STRVAR) &&
+			(ctx->frm->func->vitype!=BS2CC_VITYPE_GBLFUNC))
+		{
+			return(BS2C_ReduceExprVariConst(ctx, vari));
+		}
+		if(vari && (vari->vitype==BS2CC_VITYPE_GBLVAR))
+		{
+			return(BS2C_ReduceExprVariConst(ctx, vari));
+		}
+	}
+
+	i=BS2C_LookupFrameGlobal(ctx, name);
+	if(i>=0)
+	{
+		vari=BS2C_GetFrameGlobalInfo(ctx, i);
+		return(BS2C_ReduceExprVariConst(ctx, vari));
+	}
+
+	return(DTV_UNDEFINED);
+}
+
 dtVal BS2C_ReduceExpr(BS2CC_CompileContext *ctx, dtVal expr)
 {
 	dtVal ln, rn, cn, tn;
@@ -81,7 +168,7 @@ dtVal BS2C_ReduceExpr(BS2CC_CompileContext *ctx, dtVal expr)
 	s64 li, lj, lk;
 	double lf, lg, lh;
 	int lt, rt, cty;
-	char *tag, *op;
+	char *tag, *op, *fn;
 	int i;
 
 	if(dtvIsFixIntP(expr))
@@ -94,8 +181,16 @@ dtVal BS2C_ReduceExpr(BS2CC_CompileContext *ctx, dtVal expr)
 		{ return(expr); }
 	if(dtvIsFixDoubleP(expr))
 		{ return(expr); }
+
 	if(BGBDT_TagStr_IsSymbolP(expr))
-		{ return(expr); }
+	{
+		fn=BGBDT_TagStr_GetUtf8(expr);
+		tn=BS2C_ReduceExprName(ctx, fn);
+		if(!dtvUndefinedP(tn))
+			return(tn);
+
+		return(expr);
+	}
 
 	tag=BS2P_GetAstNodeTag(expr);
 	
@@ -387,4 +482,127 @@ dtVal BS2C_ReduceExpr(BS2CC_CompileContext *ctx, dtVal expr)
 	}
 
 	return(expr);
+}
+
+
+dtVal BS2C_ReduceEvaluateExprAs(
+	BS2CC_CompileContext *ctx, dtVal expr, int dty)
+{
+	int cty;
+	dtVal n0, n1;
+	dtVal ln, rn;
+	dtVal ni, na;
+	char *tag, *fn;
+	int z, l2;
+	int i, j, k, l;
+
+	ni=BS2C_ReduceExpr(ctx, expr);
+	if(!dtvTrueP(ni))
+		return(DTV_UNDEFINED);
+
+	if(dtvIsSmallLongP(ni) ||
+		dtvIsSmallDoubleP(ni) ||
+		BGBDT_TagStr_IsStringP(ni))
+	{
+		ni=BS2C_CompileVarInit_NormalizeValueType(ctx, ni, dty);
+		return(ni);
+	}
+
+	tag=BS2P_GetAstNodeTag(ni);
+	if(!tag)
+		{ return(DTV_UNDEFINED); }
+
+	if(!strcmp(tag, "array"))
+	{
+		ln=BS2P_GetAstNodeAttr(expr, "value");
+		fn=BS2P_GetAstNodeAttrS(expr, "sfx");
+
+		if(dtvIsArrayP(ln))
+			{ l=dtvArrayGetSize(ln); }
+		else
+			{ l=1; }
+
+		cty=BS2CC_TYZ_VARIANT;
+		
+		if(BS2C_TypeArrayP(ctx, dty))
+		{
+			cty=BS2C_TypeDerefType(ctx, dty);
+			l2=BS2C_TypeGetArraySize(ctx, dty);
+			if(!l2)l2=l;
+		}else if(fn)
+		{
+			if(!strcmp(fn, "SI"))
+				cty=BS2CC_TYZ_INT;
+			if(!strcmp(fn, "UI"))
+				cty=BS2CC_TYZ_UINT;
+			if(!strcmp(fn, "SL"))
+				cty=BS2CC_TYZ_LONG;
+			if(!strcmp(fn, "UL"))
+				cty=BS2CC_TYZ_ULONG;
+			if(!strcmp(fn, "F"))
+				cty=BS2CC_TYZ_FLOAT;
+			if(!strcmp(fn, "D"))
+				cty=BS2CC_TYZ_DOUBLE;
+			if(!strcmp(fn, "SB"))
+				cty=BS2CC_TYZ_SBYTE;
+			if(!strcmp(fn, "UB"))
+				cty=BS2CC_TYZ_UBYTE;
+			if(!strcmp(fn, "SS"))
+				cty=BS2CC_TYZ_SHORT;
+			if(!strcmp(fn, "US"))
+				cty=BS2CC_TYZ_USHORT;
+		}
+		
+		z=BS2C_GetTypeBaseZ(ctx, cty);
+
+		na=dtvNewArray(l2, z);
+		
+		if(l2<l)
+		{
+			l=l2;
+		}
+
+		for(i=0; i<l; i++)
+		{
+			if(dtvIsArrayP(ln))
+				{ n0=dtvArrayGetIndexDtVal(ln, i); }
+			else
+				{ n0=ln; }
+
+			n1=BS2C_ReduceEvaluateExprAs(ctx, n0, cty);
+
+			switch(z)
+			{
+			case BS2CC_TYZ_INT:
+				dtvArraySetIndexInt(na, i, dtvUnwrapLong(n1));
+				break;
+			case BS2CC_TYZ_LONG:
+				dtvArraySetIndexLong(na, i, dtvUnwrapLong(n1));
+				break;
+			case BS2CC_TYZ_FLOAT:
+				dtvArraySetIndexFloat(na, i, dtvUnwrapDouble(n1));
+				break;
+			case BS2CC_TYZ_DOUBLE:
+				dtvArraySetIndexDouble(na, i, dtvUnwrapDouble(n1));
+				break;
+			case BS2CC_TYZ_ADDRESS:
+				dtvArraySetIndexDtVal(na, i, n1);
+				break;
+			case BS2CC_TYZ_SBYTE:
+			case BS2CC_TYZ_UBYTE:
+				dtvArraySetIndexByte(na, i, dtvUnwrapLong(n1));
+				break;
+			case BS2CC_TYZ_SHORT:
+			case BS2CC_TYZ_USHORT:
+				dtvArraySetIndexShort(na, i, dtvUnwrapLong(n1));
+				break;
+			default:
+				BSVM2_DBGTRAP
+				break;
+			}
+		}
+		return(na);
+	}
+
+	return(DTV_UNDEFINED);
 }

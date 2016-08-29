@@ -751,6 +751,7 @@ void BSVM2_Interp_DecodeOpZx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	case BSVM2_OPZ_ULONG:
 		op->v.ul=lj; break;
 	case BSVM2_OPZ_CONST:
+		op->o=lj;
 		op->v.i=lj; break;
 
 	case BSVM2_OPZ_CI_FLOAT:

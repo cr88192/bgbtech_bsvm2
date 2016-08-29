@@ -204,6 +204,15 @@ void BS2C_CompileConvTypeI(BS2CC_CompileContext *ctx, int dty,
 		if(sty==BSVM2_OPZ_DOUBLE)
 			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTD2L); return; }
 		
+		if(sty==BSVM2_OPZ_UINT)
+		{
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L);
+			//HACK: don't have UI->L operation
+			BS2C_CompileExprPushConstInt(ctx, (1LL<<32)-1, BSVM2_OPZ_ULONG);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_ANDL);
+			return;
+		}
+
 		if(BS2C_TypeSmallIntP(ctx, sty))
 			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L); return; }
 		if(BS2C_TypeSmallLongP(ctx, sty))
@@ -434,6 +443,72 @@ void BS2C_CompileConvTypeI(BS2CC_CompileContext *ctx, int dty,
 		BS2C_CompileConvType(ctx, BS2CC_TYZ_INT);
 		ctx->frm->stack_bty[i]=BS2CC_TYZ_BOOL;
 		return;
+	}
+
+	if(dty==BS2CC_TYZ_UINT)
+	{
+		ctx->frm->stack_bty[i]=BS2CC_TYZ_UINT;
+
+		if(BS2C_TypeSmallIntP(ctx, sty))
+			return;
+
+		if(sty==BSVM2_OPZ_LONG)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTL2I); return; }
+		if(sty==BSVM2_OPZ_FLOAT)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTF2I); return; }
+		if(sty==BSVM2_OPZ_DOUBLE)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTD2I); return; }
+		
+//		if(BS2C_TypeSmallIntP(ctx, sty))
+//			{ return; }
+		if(BS2C_TypeSmallLongP(ctx, sty))
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTL2I); return; }
+
+		if(sty==BS2CC_TYZ_VARIANT)
+		{
+			if(flag&1)
+				BS2C_WarnImplicitConv(ctx, dty, sty);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTAA2I);
+			return;
+		}
+
+		BS2C_CompileConvType(ctx, BS2CC_TYZ_INT);
+		ctx->frm->stack_bty[i]=BS2CC_TYZ_UINT;
+		return;
+	}
+
+	if(dty==BSVM2_OPZ_ULONG)
+	{
+		ctx->frm->stack_bty[i]=BSVM2_OPZ_ULONG;
+		if(sty==BSVM2_OPZ_INT)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L); return; }
+		if(sty==BSVM2_OPZ_FLOAT)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTF2L); return; }
+		if(sty==BSVM2_OPZ_DOUBLE)
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTD2L); return; }
+
+		if(sty==BSVM2_OPZ_UINT)
+		{
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L);
+			//HACK: don't have UI->L operation
+			BS2C_CompileExprPushConstInt(ctx, (1LL<<32)-1, BSVM2_OPZ_ULONG);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_ANDL);
+			return;
+		}
+		
+		if(BS2C_TypeSmallIntP(ctx, sty))
+			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L); return; }
+		if(BS2C_TypeSmallLongP(ctx, sty))
+			{ return; }
+
+		if(sty==BS2CC_TYZ_VARIANT)
+		{
+			if(flag&1)
+				BS2C_WarnImplicitConv(ctx, dty, sty);
+
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTAA2L);
+			return;
+		}
 	}
 
 	if(dty==BS2CC_TYZ_HFLOAT)

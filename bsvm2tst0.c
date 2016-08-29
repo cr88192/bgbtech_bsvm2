@@ -56,6 +56,7 @@ int main()
 {
 	static char *mods[]={
 		"bstest.fib",
+		"bstest.bs_decjpg",
 		NULL
 	};
 	BGBDT_MM_ParsePrintInfo *prn;
@@ -64,7 +65,7 @@ int main()
 	BSVM2_CodeImage *img;
 	BSVM2_ImageGlobal *vi;
 
-	char tb[1<<18];
+	static char tb[1<<22];
 	char *s;
 	dtVal v0, v1, v2, v3;
 	int i, j, k;
@@ -125,7 +126,8 @@ int main()
 	
 	ctx=BS2CC_AllocCompileContext();
 //	prn=BGBDT_MM_NewStringPrinter(tb, 16383);
-	prn=BGBDT_MM_NewStringPrinter(tb, (1<<18)-1);
+//	prn=BGBDT_MM_NewStringPrinter(tb, (1<<18)-1);
+	prn=BGBDT_MM_NewStringPrinter(tb, (1<<22)-1);
 	ctx->dbgprn=prn;
 
 	BS2C_CompileModuleList(ctx, NULL, mods);
@@ -172,5 +174,7 @@ int main()
 	BS2C_DisAsmFuncs(prn, ctx);
 	printf("%s\n", tb);
 #endif
+
+	BS2J_DumpMissCounts();
 
 }

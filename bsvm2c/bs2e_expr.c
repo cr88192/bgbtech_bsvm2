@@ -252,6 +252,7 @@ dtVal BS2E_EvalExpr(BS2CC_CompileContext *ctx, dtVal expr)
 	if(!strcmp(tag, "instanceof"))
 	{
 //		return(BS2CC_TYZ_INT);
+		return(DTV_UNDEFINED);
 	}
 
 	if(!strcmp(tag, "cast") || !strcmp(tag, "cast_strict") ||

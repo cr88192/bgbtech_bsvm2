@@ -133,6 +133,33 @@ GBLS lumps:
 ** Package
 
 
+* TWOCC('Az')
+** z=0..9, a..f
+** Encodes an array of the base-type given by z.
+*** Same z values as used in the bytecode.
+** Integer types are twos complement big-endian.
+** Float types are IEEE754 big-endian.
+** Elements match their respective sizes.
+** Address is encoded as tagged indices.
+*** Element size will depend on the largest potential index.
+*** 16 bit: (ngbls<16384) && (STRS<4kB)
+*** 24 bit: (ngbls<4M) && (STRS<1MB)
+*** 32 bit: otherwise
+
+** z=g..v
+** Encodes an array of the base-type given by z.
+** Similar in premise to above, except that values are encoded as VLI values.
+** These will start with a UVLI prefix giving the array length.
+
+* TWOCC('Ax')
+* TWOCC('Ay')
+** Initialized structures.
+** Ax will be fixed-format.
+** Ay will be VLI format.
+** Both will be prefixed by a tagged-index representing the structure.
+
+
+
 PVBM:
 * RLE compressed bitmap, with 1 bit per GIX entry.
 * 000x-xxxx: Run of 1-32 0x00 bytes.

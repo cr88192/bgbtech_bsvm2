@@ -666,18 +666,35 @@
 #define BSVM2_OP_STIXXC		0x0453	//
 
 
-#define BSVM2_TRFL_TJNEXT		0x00001		//tail is simply jnext
-#define BSVM2_TRFL_CANTHROW		0x00002		//trace can throw
+#define BSVM2_TRFL_TJNEXT		0x0000000000000001	//tail is simply jnext
+#define BSVM2_TRFL_CANTHROW		0x0000000000000002	//trace can throw
 
-#define BSVM2_TRFL_SAVEDESI		0x00100		//saved ESI
-#define BSVM2_TRFL_SAVEDEDI		0x00200		//saved EDI
-#define BSVM2_TRFL_SAVEDEBX		0x00400		//saved EBX
-#define BSVM2_TRFL_SAVEDEBP		0x00800		//saved EBP
-#define BSVM2_TRFL_FRMONSTK		0x01000		//frame on stack
-#define BSVM2_TRFL_FRMINEDI		0x02000		//frame in EDI
-#define BSVM2_TRFL_OPSINESI		0x04000		//ops in ESI
-#define BSVM2_TRFL_STKINEBX		0x08000		//VM stack in EBX
-#define BSVM2_TRFL_LCLINESI		0x10000		//locals in ESI
+#define BSVM2_TRFL_SAVEDESI		0x0000000000000100	//saved ESI
+#define BSVM2_TRFL_SAVEDEDI		0x0000000000000200	//saved EDI
+#define BSVM2_TRFL_SAVEDEBX		0x0000000000000400	//saved EBX
+#define BSVM2_TRFL_SAVEDEBP		0x0000000000000800	//saved EBP
+#define BSVM2_TRFL_FRMONSTK		0x0000000000001000	//frame on stack
+#define BSVM2_TRFL_FRMINEDI		0x0000000000002000	//frame in EDI
+#define BSVM2_TRFL_OPSINESI		0x0000000000004000	//ops in ESI
+#define BSVM2_TRFL_STKINEBX		0x0000000000008000	//VM stack in EBX
+#define BSVM2_TRFL_LCLINESI		0x0000000000010000	//locals in ESI
+
+#define BSVM2_TRFL_SAVEDR12		0x0000000100000000	//saved R12
+#define BSVM2_TRFL_SAVEDR13		0x0000000200000000	//saved R13
+#define BSVM2_TRFL_SAVEDR14		0x0000000400000000	//saved R14
+#define BSVM2_TRFL_SAVEDR15		0x0000000800000000	//saved R15
+#define BSVM2_TRFL_SAVEDX04		0x0000001000000000	//saved XMM4
+#define BSVM2_TRFL_SAVEDX05		0x0000002000000000	//saved XMM5
+#define BSVM2_TRFL_SAVEDX06		0x0000004000000000	//saved XMM6
+#define BSVM2_TRFL_SAVEDX07		0x0000008000000000	//saved XMM7
+#define BSVM2_TRFL_SAVEDX08		0x0000010000000000	//saved XMM8
+#define BSVM2_TRFL_SAVEDX09		0x0000020000000000	//saved XMM9
+#define BSVM2_TRFL_SAVEDX10		0x0000040000000000	//saved XMM10
+#define BSVM2_TRFL_SAVEDX11		0x0000080000000000	//saved XMM11
+#define BSVM2_TRFL_SAVEDX12		0x0000100000000000	//saved XMM12
+#define BSVM2_TRFL_SAVEDX13		0x0000200000000000	//saved XMM13
+#define BSVM2_TRFL_SAVEDX14		0x0000400000000000	//saved XMM14
+#define BSVM2_TRFL_SAVEDX15		0x0000800000000000	//saved XMM15
 
 #define BSVM2_EXS_NONE			0x00000		//no error status
 #define BSVM2_EXS_NULLEX		0x00001		//NullPointerException
@@ -693,6 +710,12 @@
 #define BSVM2_VAM_LEXVAR		0x20000		//stack var
 #define BSVM2_VAM_GLOBAL		0x30000		//stack var
 #define BSVM2_VAM_MASK			0xF0000		//stack var
+
+#ifndef BSVM2_DBGTRAP
+#ifdef _MSC_VER
+#define BSVM2_DBGTRAP __debugbreak();
+#endif
+#endif
 
 #ifndef BSVM2_DBGTRAP
 #if defined(_M_IX86) && defined(_MSC_VER)
@@ -776,7 +799,7 @@ byte *cs;				//bytecode addr for trace
 byte *jcs;				//bytecode addr for jump
 void *t_ops[6];
 int n_ops;
-int trfl;
+u64 trfl;
 };
 
 struct BSVM2_Frame_s {

@@ -26,7 +26,7 @@ void BS2C_CompileSetupVarInfo(
 {
 	char tb[256];
 	BS2CC_VarInfo *vi2, *vi3, *vi4;
-	dtVal nn, nt, na, nb;
+	dtVal nn, nt, ni, na, nb;
 	dtVal n0, n1;
 	s64 bmfl;
 	char *name, *tag;
@@ -40,6 +40,7 @@ void BS2C_CompileSetupVarInfo(
 		name=BS2P_GetAstNodeAttrS(expr, "name");
 		bmfl=BS2P_GetAstNodeAttrI(expr, "modi");
 		nt=BS2P_GetAstNodeAttr(expr, "type");
+		ni=BS2P_GetAstNodeAttr(expr, "init");
 
 //		bty=BS2C_TypeBaseType(ctx, nt);
 		bty=BS2C_TypeExtType(ctx, nt);
@@ -48,6 +49,7 @@ void BS2C_CompileSetupVarInfo(
 		vi->bty=bty;
 		vi->bmfl=bmfl;
 		vi->typeExp=nt;
+		vi->initExp=ni;
 		
 		if(!vi->vitype)
 			vi->vitype=BS2CC_VITYPE_LCLVAR;
@@ -393,7 +395,7 @@ void BS2C_CompileSetupTopVarInfo(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vi, dtVal expr)
 {
 	char tb[256];
-	dtVal nn, nt;
+	dtVal nn, nt, ni;
 	s64 bmfl;
 	char *name;
 	int bty;
@@ -402,6 +404,7 @@ void BS2C_CompileSetupTopVarInfo(
 	name=BS2P_GetAstNodeAttrS(expr, "name");
 	bmfl=BS2P_GetAstNodeAttrI(expr, "modi");
 	nt=BS2P_GetAstNodeAttr(expr, "type");
+	ni=BS2P_GetAstNodeAttr(expr, "init");
 
 	if(!(bmfl&BS2CC_TYFL_PPP))
 		{ bmfl|=BS2CC_TYFL_PROTECTED; }
@@ -412,6 +415,7 @@ void BS2C_CompileSetupTopVarInfo(
 	vi->bty=bty;
 	vi->bmfl=bmfl;
 	vi->typeExp=nt;
+	vi->initExp=ni;
 
 	if(ctx->pkg)
 	{

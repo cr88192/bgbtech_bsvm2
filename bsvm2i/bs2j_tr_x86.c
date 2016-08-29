@@ -662,7 +662,7 @@ int BS2J_JitTraceHandleTail(BSVM2_Trace *tr)
 
 		basm_print("mov eax, 0x%08X\n", (u32)(tr->top->nexttrace));
 //		basm_print("cmp ecx, edx\n");
-		basm_print("cmp ecx, [ebx+%d]\n", tr->top->t1*8);
+//		basm_print("cmp ecx, [ebx+%d]\n", tr->top->t1*8);
 		basm_print("cmp ecx, %s\n", BS2J_GetMemRefStack(tr, tr->top->t1));
 
 		switch(tr->top->opn)
@@ -693,7 +693,7 @@ int BS2J_JitTraceHandleTail(BSVM2_Trace *tr)
 		BS2J_CheckCacheFrameEDI(tr);
 //		BS2J_CheckCacheStackEBX(tr);
 		BS2J_CheckCacheLocalsESI(tr);
-		basm_print("mov ecx, [esi+%d]\n", tr->top->i0*8);
+//		basm_print("mov ecx, [esi+%d]\n", tr->top->i0*8);
 //		basm_print("mov edx, [esi+%d]\n", tr->top->i1*8);
 
 		basm_print("mov ecx, %s\n", BS2J_GetMemRefLocal(tr, tr->top->i0));
@@ -813,6 +813,11 @@ int BS2J_CheckSetupJitTrace(BSVM2_Trace *tr)
 		tr->Run=p;
 	}
 	return(0);
+}
+
+
+BS2VM_API int BS2J_DumpMissCounts()
+{
 }
 
 #endif

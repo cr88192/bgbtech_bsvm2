@@ -29,6 +29,9 @@ int BS2C_LookupLocal(BS2CC_CompileContext *ctx, char *name)
 	for(i=0; i<ctx->frm->nlocals; i++)
 	{
 		vari=ctx->frm->locals[i];
+		if(!vari || !(vari->name))
+			continue;
+		
 		if(!strcmp(vari->name, name))
 			return(i);
 	}
@@ -43,6 +46,9 @@ int BS2C_LookupLexical(BS2CC_CompileContext *ctx, char *name)
 	for(i=0; i<ctx->frm->func->niface; i++)
 	{
 		vari=ctx->frm->func->iface[i];
+		if(!vari || !(vari->name))
+			continue;
+
 		if(!strcmp(vari->name, name))
 			return(i);
 	}
@@ -215,7 +221,16 @@ int BS2C_LookupVariGlobal(
 	BS2CC_VarInfo *vari,
 	char *name)
 {
+	char tb[256];
 	int i, j;
+
+	if(name && vari->qname)
+	{
+		sprintf(tb, "%s/%s", vari->qname, name);
+		i=BS2C_LookupGlobal(ctx, tb);
+		if(i>=0)
+			return(i);
+	}
 
 	i=BS2C_LookupPkgImpGlobal(ctx, vari->pkg, name);
 	if(i>=0)

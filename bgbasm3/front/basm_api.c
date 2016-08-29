@@ -783,13 +783,34 @@ BASM_API void BASM_BeginAssembly(char *name)
 }
 #endif
 
+FILE *basm_jitlog_fd;
+
+int basm_jitlog_printf(char *str, ...)
+{
+	static char *buf=NULL;
+	va_list lst;
+	
+	if(!basm_jitlog_fd)
+	{
+		basm_jitlog_fd=fopen("bgbasm_jitlog.txt", "wt");
+		buf=malloc(1<<16);
+	}
+	
+	va_start(lst, str);
+	vsprintf(buf, str, lst);
+	va_end(lst);
+	
+	fputs(buf, basm_jitlog_fd);
+	fflush(basm_jitlog_fd);
+}
+
 BASM_API void *BASM_EndAssembly()
 {
 	char buf[256];
 	byte *ip, *obj;
 	int sz;
 
-//	printf("%s\n", basm_asmbuf);
+	basm_jitlog_printf("%s\n", basm_asmbuf);
 
 #if 1
 	if(basm_asm->modname)

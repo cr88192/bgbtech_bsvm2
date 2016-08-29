@@ -24,11 +24,14 @@ int BGBDT_MM_AllocSObjChk()
 
 	i=bgbdt_mm_numsobjchk++;
 	chk=&(bgbdt_mm_sobjchk[i]);
-	chk->data=malloc((1<<24)+(1<<20));
-	chk->edata=chk->data+(1<<24);
-	chk->map=chk->data+(1<<24);
-	chk->ncell=1<<20;	chk->shcell=4;
-	memset(chk->data, 0, (1<<24)+(1<<20));
+	chk->data=malloc((1<<BGBDT_MM_SOBJ_TOTSHL)+
+		(1<<BGBDT_MM_SOBJ_CHKSHL));
+	chk->edata=chk->data+(1<<BGBDT_MM_SOBJ_TOTSHL);
+	chk->map=chk->data+(1<<BGBDT_MM_SOBJ_TOTSHL);
+	chk->ncell=1<<BGBDT_MM_SOBJ_CHKSHL;
+	chk->shcell=BGBDT_MM_SOBJ_CELSHL;
+	memset(chk->data, 0, (1<<BGBDT_MM_SOBJ_TOTSHL)+
+		(1<<BGBDT_MM_SOBJ_CHKSHL));
 	return(i);
 }
 
@@ -39,11 +42,14 @@ int BGBDT_MM_AllocMObjChk()
 
 	i=bgbdt_mm_nummobjchk++;
 	chk=&(bgbdt_mm_mobjchk[i]);
-	chk->data=malloc((1<<24)+(1<<16));
-	chk->edata=chk->data+(1<<24);
-	chk->map=chk->data+(1<<24);
-	chk->ncell=1<<16;	chk->shcell=8;
-	memset(chk->data, 0, (1<<24)+(1<<16));
+	chk->data=malloc((1<<BGBDT_MM_MOBJ_TOTSHL)+
+		(1<<BGBDT_MM_MOBJ_CHKSHL));
+	chk->edata=chk->data+(1<<BGBDT_MM_MOBJ_TOTSHL);
+	chk->map=chk->data+(1<<BGBDT_MM_MOBJ_TOTSHL);
+	chk->ncell=1<<BGBDT_MM_MOBJ_CHKSHL;
+	chk->shcell=BGBDT_MM_MOBJ_CELSHL;
+	memset(chk->data, 0, (1<<BGBDT_MM_MOBJ_TOTSHL)+
+		(1<<BGBDT_MM_MOBJ_CHKSHL));
 	return(i);
 }
 
@@ -262,7 +268,7 @@ byte *BGBDT_MM_LookupSObjPtrBase(byte *ptr)
 		i--;
 	if((chk->map[i]&3)!=1)
 		return(NULL);
-	ptr2=chk->data+(i<<4);
+	ptr2=chk->data+(i<<BGBDT_MM_SOBJ_CELSHL);
 	return(ptr2);
 }
 
@@ -282,7 +288,7 @@ byte *BGBDT_MM_LookupMObjPtrBase(byte *ptr)
 		i--;
 	if((chk->map[i]&3)!=1)
 		return(NULL);
-	ptr2=chk->data+(i<<8);
+	ptr2=chk->data+(i<<BGBDT_MM_MOBJ_CELSHL);
 	return(ptr2);
 }
 
@@ -437,7 +443,7 @@ byte *BGBDT_MM_AllocObjectInner(int size)
 	
 	if(sz<=16384)
 	{
-		nc=(sz+15)>>4;
+		nc=(sz+BGBDT_MM_SOBJ_CELMSK)>>BGBDT_MM_SOBJ_CELSHL;
 		
 		ptr=bgbdt_mm_freesobj[nc];
 		if(ptr)
@@ -454,7 +460,7 @@ byte *BGBDT_MM_AllocObjectInner(int size)
 
 	if(sz<=(1<<20))
 	{
-		nc=(sz+255)>>8;
+		nc=(sz+BGBDT_MM_MOBJ_CELMSK)>>BGBDT_MM_MOBJ_CELSHL;
 
 		ptr=bgbdt_mm_freemobj[nc];
 		if(ptr)
@@ -483,7 +489,7 @@ void BGBDT_MM_FreeObjectInner(byte *ptr)
 	
 	if(sz<=16384)
 	{
-		nc=(sz+15)>>4;
+		nc=(sz+BGBDT_MM_SOBJ_CELMSK)>>BGBDT_MM_SOBJ_CELSHL;
 		*(byte **)ptr=bgbdt_mm_freesobj[nc];
 		bgbdt_mm_freesobj[nc]=ptr;
 		return;
@@ -491,7 +497,7 @@ void BGBDT_MM_FreeObjectInner(byte *ptr)
 
 	if(sz<=(1<<20))
 	{
-		nc=(sz+255)>>8;
+		nc=(sz+BGBDT_MM_MOBJ_CELMSK)>>BGBDT_MM_MOBJ_CELSHL;
 		*(byte **)ptr=bgbdt_mm_freemobj[nc];
 		bgbdt_mm_freemobj[nc]=ptr;
 		return;
@@ -527,8 +533,29 @@ BS2VM_API void *BGBDT_MM_GetPtrForObjId(int objid)
 {
 	byte *ptr;
 	int t, ch, ci;
-	t=objid&3;
+
+	switch(objid&3)
+	{
+	case 0: case 2:
+		ci=(objid>>1)&((1<<BGBDT_MM_SOBJ_CHKSHL)-1);
+		ch=((u32)objid)>>(BGBDT_MM_SOBJ_CHKSHL+1);
+		ptr=bgbdt_mm_sobjchk[ch].data+
+			(ci<<BGBDT_MM_SOBJ_CELSHL);
+		return(ptr);
+	case 1:
+		ci=(objid>>2)&((1<<BGBDT_MM_MOBJ_CHKSHL)-1);
+		ch=((u32)objid)>>(BGBDT_MM_MOBJ_CHKSHL+2);
+		ptr=bgbdt_mm_mobjchk[ch].data+
+			(ci<<BGBDT_MM_MOBJ_CELSHL);
+		return(ptr);
+	case 3:
+		ci=objid>>2;
+		ptr=BGBDT_MM_GetLObjPtrForIndex(ci);
+		return(ptr);
+	}
 	
+#if 0
+	t=objid&3;
 	if((t==0) || (t==2))
 	{
 		ci=(objid>>1)&((1<<20)-1);
@@ -553,6 +580,7 @@ BS2VM_API void *BGBDT_MM_GetPtrForObjId(int objid)
 	}
 	
 	return(NULL);
+#endif
 }
 
 BS2VM_API int BGBDT_MM_GetObjIdForPtr(void *ptr)
@@ -563,14 +591,14 @@ BS2VM_API int BGBDT_MM_GetObjIdForPtr(void *ptr)
 	chi=BGBDT_MM_LookupSObjChunkCellBasePtr(ptr, &cli);
 	if(chi>=0)
 	{
-		i=(chi<<21)|(cli<<1);
+		i=(chi<<(BGBDT_MM_SOBJ_CHKSHL+1))|(cli<<1);
 		return(i);
 	}
 
 	chi=BGBDT_MM_LookupMObjChunkCellBasePtr(ptr, &cli);
 	if(chi>=0)
 	{
-		i=(chi<<18)|(cli<<2)|1;
+		i=(chi<<(BGBDT_MM_MOBJ_CHKSHL+2))|(cli<<2)|1;
 		return(i);
 	}
 	
@@ -587,9 +615,30 @@ BS2VM_API int BGBDT_MM_GetObjIdForPtr(void *ptr)
 BS2VM_API void *BGBDT_MM_GetDataPtrForObjId(int objid)
 {
 	byte *ptr;
+	int t, ch, ci;
 	
-	ptr=BGBDT_MM_GetPtrForObjId(objid);
-	if(!ptr)return(NULL);
-	
-	return(ptr+sizeof(BGBDT_MM_ObjHead));
+	switch(objid&3)
+	{
+	case 0: case 2:
+		ci=(objid>>1)&((1<<BGBDT_MM_SOBJ_CHKSHL)-1);
+		ch=((u32)objid)>>(BGBDT_MM_SOBJ_CHKSHL+1);
+		ptr=bgbdt_mm_sobjchk[ch].data+
+			(ci<<BGBDT_MM_SOBJ_CELSHL);
+		return(ptr+sizeof(BGBDT_MM_ObjHead));
+	case 1:
+		ci=(objid>>2)&((1<<BGBDT_MM_MOBJ_CHKSHL)-1);
+		ch=((u32)objid)>>(BGBDT_MM_MOBJ_CHKSHL+2);
+		ptr=bgbdt_mm_mobjchk[ch].data+
+			(ci<<BGBDT_MM_MOBJ_CELSHL);
+		return(ptr+sizeof(BGBDT_MM_ObjHead));
+	case 3:
+		ci=objid>>2;
+		if(!ci)return(NULL);
+		ptr=BGBDT_MM_GetLObjPtrForIndex(ci);
+		return(ptr+sizeof(BGBDT_MM_ObjHead));
+	}
+
+//	ptr=BGBDT_MM_GetPtrForObjId(objid);
+//	if(!ptr)return(NULL);
+//	return(ptr+sizeof(BGBDT_MM_ObjHead));
 }

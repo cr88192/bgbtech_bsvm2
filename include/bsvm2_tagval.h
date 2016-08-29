@@ -216,12 +216,16 @@ static_inline dtVal DTV_MagicNull(void)
 #define DTV_GetDataPtrForObjId(objid)	((void *)(objid))
 
 #else
-static_inline void *DTV_GetPtrForObjId(int objid)
-	{ return(BGBDT_MM_GetPtrForObjId(objid)); }
-static_inline int DTV_GetObjIdForPtr(void *ptr)
-	{ return(BGBDT_MM_GetObjIdForPtr(ptr)); }
-static_inline void *DTV_GetDataPtrForObjId(int objid)
-	{ return(BGBDT_MM_GetDataPtrForObjId(objid)); }
+//static_inline void *DTV_GetPtrForObjId(int objid)
+//	{ return(BGBDT_MM_GetPtrForObjId(objid)); }
+//static_inline int DTV_GetObjIdForPtr(void *ptr)
+//	{ return(BGBDT_MM_GetObjIdForPtr(ptr)); }
+//static_inline void *DTV_GetDataPtrForObjId(int objid)
+//	{ return(BGBDT_MM_GetDataPtrForObjId(objid)); }
+
+#define DTV_GetPtrForObjId(objid)		BGBDT_MM_GetPtrForObjId(objid)
+#define DTV_GetObjIdForPtr(ptr)			BGBDT_MM_GetObjIdForPtr(ptr)
+#define DTV_GetDataPtrForObjId(objid)	BGBDT_MM_GetDataPtrForObjId(objid)
 #endif
 
 #if defined(X86) || defined(ARM)

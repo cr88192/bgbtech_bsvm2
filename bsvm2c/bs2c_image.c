@@ -370,6 +370,36 @@ byte *BS2C_Image_EmitTagSVLI(byte *ct, u32 tag, s64 val)
 	return(ct);
 }
 
+byte *BS2C_Image_EmitTagFloat(byte *ct, u32 tag, double val)
+{
+	byte tb[64];
+	byte *ct1;
+
+	u64 ix;
+	s64 m;
+	int e;
+
+	ix=*(u64 *)(&val);
+
+	m=(s64)((ix&0x000FFFFFFFFFFFFFULL)|
+		0x0010000000000000ULL);
+	e=((ix>>52)&2047)-(1023+52);
+
+	while(!(m&255))
+		{ m=m>>8; e=e+8; }
+	while(!(m&1))
+		{ m=m>>1; e++; }
+	
+	if(ix>>63)
+		{ m=-m; }
+	
+	ct1=BS2C_Image_EmitSVLI(tb, e);
+	ct1=BS2C_Image_EmitSVLI(ct1, m);
+
+	ct=BS2C_Image_EmitTagData(ct, tag, ct1-tb, tb);
+	return(ct);
+}
+
 s64 BS2C_Image_QHashName(char *str)
 {
 	u64 h;
@@ -476,6 +506,23 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 		ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_NAMEH, li);
 	}
 
+	if((vari->vitype==BS2CC_VITYPE_GBLFUNC) ||
+		(vari->vitype==BS2CC_VITYPE_STRFUNC) ||
+		(vari->vitype==BS2CC_VITYPE_GBLVAR) ||
+		(vari->vitype==BS2CC_VITYPE_STRVAR))
+	{
+		if(!vari->sig)
+		{
+			BSVM2_DBGTRAP
+		}
+
+		i=BS2C_ImgLookupString(ctx, vari->sig);
+		if(i<=0)
+		{
+			BSVM2_DBGTRAP
+		}
+	}
+
 	i=BS2C_ImgLookupString(ctx, vari->sig);
 	if(i>0)
 		{ ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_SIG, i); }
@@ -483,7 +530,29 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 	i=BS2C_Image_FlagsToFlSigId(ctx, vari->bmfl);
 	if(i>0)
 		{ ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_FLAGS, i); }
-	
+
+	if(dtvTrueP(vari->initVal))
+	{
+		if(dtvIsSmallLongP(vari->initVal))
+		{
+			ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_VARINIT,
+				dtvUnwrapLong(vari->initVal));
+		}else if(dtvIsSmallDoubleP(vari->initVal))
+		{
+			ct=BS2C_Image_EmitTagFloat(ct, BS2CC_I1CC_VARINIT,
+				dtvUnwrapDouble(vari->initVal));
+//			BSVM2_DBGTRAP
+		}else if(dtvIsArrayP(vari->initVal))
+		{
+			ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_VARINIT,
+				(vari->initGid<<2));
+//			BSVM2_DBGTRAP
+		}else
+		{
+			BSVM2_DBGTRAP
+		}
+	}
+
 	if(	((vari->vitype==BS2CC_VITYPE_STRVAR) ||
 		(vari->vitype==BS2CC_VITYPE_STRFUNC)) &&
 		vari->obj)
@@ -964,7 +1033,13 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 			BS2C_TouchReachable_TouchReachDef(ctx, vari->args[i]);
 		}
 	}
-	
+
+	if(vari->initGid>0)
+	{
+		BS2C_TouchReachable_TouchReachDef(ctx,
+			ctx->globals[vari->initGid]);
+	}
+
 	if(vari->body)
 	{
 		frm=vari->body;

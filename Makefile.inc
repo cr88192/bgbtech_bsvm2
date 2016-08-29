@@ -59,6 +59,7 @@ export BS2VM_SRCS=\
 	$(BSVM2_BASE)bsvm2i/bs2i_topinit.c \
 	\
 	$(BSVM2_BASE)bsvm2i/bs2j_tr_x86.c \
+	$(BSVM2_BASE)bsvm2i/bs2j_tr_x64.c \
 
 
 export BGBASM_SRCS = \

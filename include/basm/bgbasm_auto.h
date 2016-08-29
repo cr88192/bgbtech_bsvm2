@@ -39,6 +39,7 @@ BASM_API void BASM_CopyLblCtx(BASM_Context *ctx);
 BASM_API void BASM_AssembleCtxBuf(BASM_Context *ctx, char *buf);
 BASM_API void BASM_AssembleCtxBufFast(BASM_Context *ctx, char *buf);
 BASM_API void BASM_BeginAssembly(char *name);
+int basm_jitlog_printf(char *str, ...);
 BASM_API void *BASM_EndAssembly();
 BASM_API void *BASM_EndAssemblyQuiet();
 BASM_API void *BASM_EndAssemblyDebug();
@@ -201,9 +202,9 @@ BASM_API void BASM_OutOpStrMem(BASM_Context *ctx, char *s,char *lbl, int breg, i
 BASM_API void BASM_OutOpStrRegReg(BASM_Context *ctx,char *s, int r0, int r1);
 BASM_API void BASM_OutOpStrRegImm(BASM_Context *ctx, char *s, int reg,long long imm, char *lbl);
 BASM_API void BASM_OutOpStrRegMem(BASM_Context *ctx, char *s, int reg,char *lbl, int breg, int ireg, int sc, int disp);
-BASM_API void BASM_OutOpStrMemImm(BASM_Context *ctx, char *s, int w,char *lbl, int breg, int ireg, int sc, int disp, long long imm, char *lbl2);
+BASM_API void BASM_OutOpStrMemImm(BASM_Context *ctx, char *s, int w,char *lbl, int breg, int ireg, int sc, int disp, long long imm, char *lbl2);
 BASM_API void BASM_OutOpStrRegRegImm(BASM_Context *ctx, char *s,int r0, int r1, long long imm, char *lbl);
-BASM_API void BASM_OutOpStrRegMemImm(BASM_Context *ctx, char *s, int reg,char *lbl, int breg, int ireg, int sc, int disp, long long imm, char *lbl2);
+BASM_API void BASM_OutOpStrRegMemImm(BASM_Context *ctx, char *s, int reg,char *lbl, int breg, int ireg, int sc, int disp, long long imm, char *lbl2);
 BASM_API void BASM_OutOpStrRegRegReg(BASM_Context *ctx, char *s,int r0, int r1, int r2);
 BASM_API void BASM_OutOpStrRegMemReg(BASM_Context *ctx, char *s, int reg,char *lbl, int breg, int ireg, int sc, int disp, int reg2);
 BASM_API int BASM_OpSingleP(int i);
@@ -236,16 +237,16 @@ BASM_API void BASM_OutOpRegReg(BASM_Context *ctx, int op, int r0, int r1);
 BASM_API void BASM_OutOpRegImm(BASM_Context *ctx, int op,int reg, long long imm, char *lbl);
 BASM_API void BASM_OutOpRegMem(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp);
 BASM_API void BASM_OutOpMemReg(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp);
-BASM_API void BASM_OutOpMemImm(BASM_Context *ctx, int op, int w,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
-BASM_API void BASM_OutOpRegRegImm(BASM_Context *ctx,int op, int r0, int r1, long long imm, char *lbl2);
-BASM_API void BASM_OutOpRegMemImm(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
-BASM_API void BASM_OutOpMemRegImm(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
+BASM_API void BASM_OutOpMemImm(BASM_Context *ctx, int op, int w,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
+BASM_API void BASM_OutOpRegRegImm(BASM_Context *ctx,int op, int r0, int r1, long long imm, char *lbl2);
+BASM_API void BASM_OutOpRegMemImm(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
+BASM_API void BASM_OutOpMemRegImm(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, long long imm, char *lbl2);
 BASM_API void BASM_OutOpRegRegReg(BASM_Context *ctx,int op, int r0, int r1, int r2);
-BASM_API void BASM_OutOpRegMemReg(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, int reg2);
-BASM_API void BASM_OutOpMemRegReg(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, int reg2);
+BASM_API void BASM_OutOpRegMemReg(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, int reg2);
+BASM_API void BASM_OutOpMemRegReg(BASM_Context *ctx, int op, int reg,char *lbl, int breg, int ireg, int sc, long long disp, int reg2);
 BASM_API void BASM_OutOpGeneric1(BASM_Context *ctx, int op, int w,char *lbl, int breg, int ireg, int sc, long long disp);
-BASM_API void BASM_OutOpGeneric2(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1);
-BASM_API void BASM_OutOpGeneric3(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1, char *lbl2, int breg2, int ireg2, int sc2, long long disp2);
+BASM_API void BASM_OutOpGeneric2(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1);
+BASM_API void BASM_OutOpGeneric3(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1, char *lbl2, int breg2, int ireg2, int sc2, long long disp2);
 BASM_API void BASM_EmitLabelPos(BASM_Context *ctx, char *name, int pos);
 BASM_API void BASM_EmitGotoPos(BASM_Context *ctx, char *name, int ty, int pos);
 BASM_API void BASM_EmitLabel(BASM_Context *ctx, char *name);

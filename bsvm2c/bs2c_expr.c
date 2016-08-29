@@ -1065,154 +1065,6 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 
 		stp=ctx->frm->stackpos;
 
-#if 0
-		if(vari->nargs>=1)
-		{
-			i=vari->nargs-1;
-			vai=vari->args[i];
-		}else { vai=NULL; }
-
-		if(vai && (vai->bty==BS2CC_TYZ_VARARG) && dtvIsArrayP(an))
-		{
-			l=dtvArrayGetSize(an);
-			l2=vari->nargs-1;
-			if(l<l2)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-				l=l2;
-			}
-			
-			for(i=0; i<l2; i++)
-			{
-				vai=vari->args[i];
-				n0=dtvArrayGetIndexDtVal(an, i);
-				n0=BS2C_ReduceExpr(ctx, n0);
-				BS2C_CompileCallArg(ctx, vai, n0);
-			}
-
-			n1=DTV_NULL;
-			if(l==(l2+1))
-			{
-				vai=vari->args[l2];
-				n0=dtvArrayGetIndexDtVal(an, l2);
-				n0=BS2C_ReduceExpr(ctx, n0);
-//				BS2C_CompileCallArg(ctx, vai, n0);
-				rt=BS2C_InferExpr(ctx, n0);
-				if((rt==BS2CC_TYZ_VARIANT_ARR) ||
-					(rt==BS2CC_TYZ_VARARG))
-						n1=n0;
-			}
-
-			if(!dtvNullP(n1))
-			{
-				BS2C_CompileExpr(ctx, n1,
-					BS2CC_TYZ_VARIANT_ARR);
-			}else if(l>l2)
-			{
-				BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-				BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
-				BS2C_EmitOpcodeUZx(ctx, BS2CC_TYZ_ADDRESS, l-l2);
-
-				for(i=l2; i<l; i++)
-				{
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_DUPA);
-//					BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-
-					n0=dtvArrayGetIndexDtVal(an, i);
-					n0=BS2C_ReduceExpr(ctx, n0);
-					BS2C_CompileExpr(ctx, n0, BS2CC_TYZ_VARIANT);
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_STIXAC);
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_RSTIXAC);
-					BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXAC);
-					BS2C_EmitOpcodeSCx(ctx, i-l2);
-//					BS2C_CompileExprPopType2(ctx);
-					BS2C_CompileExprPopType1(ctx);
-				}
-
-				BS2C_CompileExprPopType1(ctx);
-			}else
-			{
-				BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-				BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
-			}
-		}else if(dtvIsArrayP(an))
-		{
-			l=dtvArrayGetSize(an);
-			if(l<vari->nargs)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-			}else if(l>vari->nargs)
-			{
-				BS2C_ErrTooManyArgs(ctx);
-				l=vari->nargs;
-			}
-			
-			for(i=0; i<l; i++)
-			{
-				vai=vari->args[i];
-				n0=dtvArrayGetIndexDtVal(an, i);
-				n0=BS2C_ReduceExpr(ctx, n0);
-				BS2C_CompileCallArg(ctx, vai, n0);
-
-#if 0
-				if(BS2C_TypeVarRefP(ctx, vai->bty))
-				{
-					if(BGBDT_TagStr_IsSymbolP(fnn))
-					{
-						fn1=BGBDT_TagStr_GetUtf8(n0);
-						BS2C_CompileLoadRefName(ctx, fn1);
-						continue;
-					}
-					BS2C_CaseError(ctx);
-					return;
-				}
-
-				BS2C_CompileExpr(ctx, n0, vai->bty);
-#endif
-			}
-		}else if(vai && (vai->bty==BS2CC_TYZ_VARARG))
-		{
-			l=1;
-			l2=vari->nargs-1;
-			if(l<l2)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-			}else if(l>l2)
-			{
-				BS2C_ErrTooManyArgs(ctx);
-				l=vari->nargs;
-			}
-
-			vai=vari->args[0];
-//			BS2C_CompileExpr(ctx, an, vai->bty);
-			an=BS2C_ReduceExpr(ctx, an);
-			BS2C_CompileCallArg(ctx, vai, an);
-
-			BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
-			BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-		}else if(dtvTrueP(an))
-		{			
-			l=1;
-			if(l<vari->nargs)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-			}else if(l>vari->nargs)
-			{
-				BS2C_ErrTooManyArgs(ctx);
-				l=vari->nargs;
-			}
-
-			vai=vari->args[0];
-			an=BS2C_ReduceExpr(ctx, an);
-//			BS2C_CompileExpr(ctx, an, vai->bty);
-			BS2C_CompileCallArg(ctx, vai, an);
-		}else
-		{
-			if(vari->nargs)
-				BS2C_ErrTooFewArgs(ctx);
-		}
-#endif
-
 		BS2C_CompileCallVariArgs(ctx, vari, an);
 
 		ctx->frm->stackpos=stp;
@@ -1240,12 +1092,6 @@ void BS2C_CompileCall(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 		{
 			BS2C_CompileError(ctx, BS2CC_ERRN_ERRBADCONV);
 		}
-
-//		BS2C_EmitOpcode(ctx, BSVM2_OP_LDGS);
-//		BS2C_EmitOpcodeIdx(ctx, i);
-//		j=ctx->frm->stackpos++;
-//		ctx->frm->stack_bty[j]=bty;
-
 		return;
 	}
 
@@ -1345,118 +1191,6 @@ void BS2C_CompileObjMethodCallB(BS2CC_CompileContext *ctx,
 
 		bty=vari->bty;
 
-#if 0
-		if(vari->nargs>=1)
-		{
-			i=vari->nargs-1;
-			vai=vari->args[i];
-		}else { vai=NULL; }
-
-		if(vai && (vai->bty==BS2CC_TYZ_VARARG) && dtvIsArrayP(an))
-		{
-			l=dtvArrayGetSize(an);
-			l2=vari->nargs-1;
-			if(l<l2)
-			{
-				l=l2;
-				BS2C_ErrTooFewArgs(ctx);
-			}
-			
-			for(i=0; i<l2; i++)
-			{
-				vai=vari->args[i];
-				n0=dtvArrayGetIndexDtVal(an, i);
-				n0=BS2C_ReduceExpr(ctx, n0);
-//				BS2C_CompileExpr(ctx, n0, vai->bty);
-				BS2C_CompileCallArg(ctx, vai, n0);
-			}
-
-			n1=DTV_NULL;
-			if(l==(l2+1))
-			{
-				vai=vari->args[l2];
-				n0=dtvArrayGetIndexDtVal(an, l2);
-				n0=BS2C_ReduceExpr(ctx, n0);
-//				BS2C_CompileCallArg(ctx, vai, n0);
-				rt=BS2C_InferExpr(ctx, n0);
-				if(rt==BS2CC_TYZ_VARIANT_ARR)
-					n1=n0;
-			}
-
-			if(!dtvNullP(n1))
-			{
-				BS2C_CompileExpr(ctx, n1,
-					BS2CC_TYZ_VARIANT_ARR);
-			}else if(l>l2)
-			{
-				BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-				BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
-				BS2C_EmitOpcodeUZx(ctx, BS2CC_TYZ_ADDRESS, l-l2);
-
-				for(i=l2; i<l; i++)
-				{
-//					BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_DUPA);
-
-					n0=dtvArrayGetIndexDtVal(an, i);
-					n0=BS2C_ReduceExpr(ctx, n0);
-					BS2C_CompileExpr(ctx, n0, BS2CC_TYZ_VARIANT);
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_STIXAC);
-//					BS2C_EmitOpcode(ctx, BSVM2_OP_RSTIXAC);
-					BS2C_EmitOpcode(ctx, BSVM2_OP_DSTIXAC);
-					BS2C_EmitOpcodeSCx(ctx, i-l2);
-					BS2C_CompileExprPopType2(ctx);
-				}
-				BS2C_CompileExprPopType1(ctx);
-			}else
-			{
-				BS2C_EmitOpcode(ctx, BSVM2_OP_PUSHA);
-				BS2C_CompileExprPushType(ctx, BS2CC_TYZ_ADDRESS);
-			}
-		}else if(dtvIsArrayP(an))
-		{
-			l=dtvArrayGetSize(an);
-			if(l<vari->nargs)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-			}else if(l>vari->nargs)
-			{
-				BS2C_ErrTooManyArgs(ctx);
-				l=vari->nargs;
-			}
-			
-			for(i=0; i<l; i++)
-			{
-				vai=vari->args[i];
-				n0=dtvArrayGetIndexDtVal(an, i);
-				n0=BS2C_ReduceExpr(ctx, n0);
-//				BS2C_CompileExpr(ctx, n0, vai->bty);
-				BS2C_CompileCallArg(ctx, vai, n0);
-			}
-		}else if(dtvTrueP(an))
-		{
-			l=1;
-			if(l<vari->nargs)
-			{
-				BS2C_ErrTooFewArgs(ctx);
-			}else if(l>vari->nargs)
-			{
-				BS2C_ErrTooManyArgs(ctx);
-				l=vari->nargs;
-			}
-
-			an=BS2C_ReduceExpr(ctx, an);
-
-			vai=vari->args[0];
-//			BS2C_CompileExpr(ctx, an, vai->bty);
-			BS2C_CompileCallArg(ctx, vai, an);
-		}else
-		{
-			if(vari->nargs)
-				BS2C_ErrTooFewArgs(ctx);
-		}
-#endif
-
 		BS2C_CompileCallVariArgs(ctx, vari, an);
 
 		ctx->frm->stackpos=stp;
@@ -1544,7 +1278,7 @@ void BS2C_CompileExprNew(BS2CC_CompileContext *ctx, dtVal expr, int dty)
 	tyn=BS2P_GetAstNodeAttr(expr, "type");
 	arn=BS2P_GetAstNodeAttr(expr, "args");
 	
-	cty=BS2C_TypeExtType(ctx, tyn);
+	cty=BS2C_TypeExtTypeNew(ctx, tyn);
 	
 	if(BS2C_TypeSizedArrayP(ctx, cty))
 	{
@@ -1958,21 +1692,6 @@ void BS2C_CompileStoreExpr(BS2CC_CompileContext *ctx, dtVal expr)
 
 		ln=BS2C_ReduceExpr(ctx, ln);
 		lt=BS2C_InferExpr(ctx, ln);
-
-#if 0
-		if(!strcmp(op, "&"))
-		{
-			if(BGBDT_TagStr_IsSymbolP(ln))
-			{
-				fn=BGBDT_TagStr_GetUtf8(ln);
-				BS2C_CompileLoadRefName(ctx, fn);
-				return;
-			}
-
-			BS2C_CaseError(ctx);
-			return;
-		}
-#endif
 
 		if(!strcmp(op, "*"))
 		{
@@ -2799,15 +2518,6 @@ void BS2C_CompileExprPushConstInt(
 		return;
 	}
 
-#if 0
-	if(BS2C_TypeArrayP(ctx, dty) ||
-		BS2C_TypePointerP(ctx, dty))
-	{
-		BS2C_CompileExprPushConstInt(ctx, val, BS2CC_TYZ_INT);
-		return;
-	}
-#endif
-
 	BS2C_CaseError(ctx);
 }
 
@@ -3196,40 +2906,6 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 		BS2C_CompileExpr(ctx, ln, cty);
 		BS2C_CompileExpr(ctx, rn, cty);
 
-#if 0
-		z=BS2C_GetTypeBaseZ(ctx, cty);
-		if(!strcmp(op, "=="))
-			o=BSVM2_OPRC_EQ;
-		if(!strcmp(op, "!="))
-			o=BSVM2_OPRC_NE;
-		if(!strcmp(op, "<"))
-			o=BSVM2_OPRC_LT;
-		if(!strcmp(op, ">"))
-			o=BSVM2_OPRC_GT;
-		if(!strcmp(op, "<="))
-			o=BSVM2_OPRC_LE;
-		if(!strcmp(op, ">="))
-			o=BSVM2_OPRC_GE;
-		if(!strcmp(op, "==="))
-			o=BSVM2_OPRC_EQQ;
-		if(!strcmp(op, "!=="))
-			o=BSVM2_OPRC_NEQ;
-
-		BS2C_CompileExprPopType2(ctx);
-
-		BS2C_EmitOpcode(ctx, BSVM2_OP_CMPOP);
-		BS2C_EmitByte(ctx, (z<<4)|o);
-
-		if(BS2C_TypeSmallIntP(ctx, dty))
-		{
-			BS2C_CompileExprPushType(ctx, dty);
-			return;
-		}
-
-		BS2C_CompileExprPushType(ctx, BSVM2_OPZ_INT);
-		BS2C_CompileConvType(ctx, dty);
-#endif
-
 #if 1
 		o=-1;
 		if(!strcmp(op, "=="))
@@ -3430,10 +3106,10 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 
 			if(o>=0)
 			{
+				BS2C_CompileExpr(ctx, ln, lt);
+
 				BS2C_CompileExprPopType1(ctx);
 				BS2C_CompileExprPushType(ctx, bty);
-
-				BS2C_CompileExpr(ctx, ln, lt);
 
 				if(BS2C_TypePointerP(ctx, lt))
 					BS2C_EmitOpcode(ctx, BSVM2_OP_HPTR);
@@ -3441,44 +3117,6 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 				BS2C_CompileConvType(ctx, dty);
 				return;
 			}
-
-#if 0
-			o=-1;
-			if((z==BSVM2_OPZ_INT) || (z==BSVM2_OPZ_UINT))
-				o=BSVM2_OP_LDIXIC;
-			if((z==BSVM2_OPZ_LONG) || (z==BSVM2_OPZ_ULONG))
-				o=BSVM2_OP_LDIXLC;
-			if(z==BSVM2_OPZ_FLOAT)
-				o=BSVM2_OP_LDIXFC;
-			if(z==BSVM2_OPZ_DOUBLE)
-				o=BSVM2_OP_LDIXDC;
-			if(z==BSVM2_OPZ_ADDRESS)
-				o=BSVM2_OP_LDIXAC;
-			if(z==BSVM2_OPZ_SBYTE)
-				o=BSVM2_OP_LDIXSBC;
-			if(z==BSVM2_OPZ_UBYTE)
-				o=BSVM2_OP_LDIXUBC;
-			if(z==BSVM2_OPZ_SHORT)
-				o=BSVM2_OP_LDIXSSC;
-			if(z==BSVM2_OPZ_USHORT)
-				o=BSVM2_OP_LDIXUSC;
-
-			if(o>=0)
-			{
-				BS2C_CompileExprPopType1(ctx);
-				BS2C_CompileExprPushType(ctx, bty);
-
-				BS2C_CompileExpr(ctx, ln, lt);
-
-				if(BS2C_TypePointerP(ctx, lt))
-					BS2C_EmitOpcode(ctx, BSVM2_OP_HPTR);
-
-				BS2C_EmitOpcode(ctx, o);
-				BS2C_EmitOpcodeSCx(ctx, 0);
-				BS2C_CompileConvType(ctx, dty);
-				return;
-			}
-#endif
 
 			BS2C_CaseError(ctx);
 			return;
@@ -4568,18 +4206,6 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 		lt=BS2C_InferExpr(ctx, ln);
 		cty=BS2C_TypeExtType(ctx, rn);
 
-#if 0
-		if(dtvIsSmallDoubleP(ln))
-		{
-//			if(BS2C_TypeSmallLongP(ctx, cty))
-			if(BS2C_TypeSmallDoubleP(ctx, cty))
-			{
-				BS2C_CompileExpr(ctx, ln, cty);
-				return;
-			}
-		}
-#endif
-
 		if(!BS2C_TypeAddressP(ctx, lt))
 		{
 			if(BS2C_TypeSmallDoubleP(ctx, lt) &&
@@ -4671,42 +4297,6 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 		
 		z=BS2C_GetTypeBaseZ(ctx, cty);
 
-#if 0
-		switch(z)
-		{
-		case BS2CC_TYZ_INT:			o=BSVM2_OP_STIXIC; break;
-		case BS2CC_TYZ_UINT:		o=BSVM2_OP_STIXIC; break;
-		case BS2CC_TYZ_LONG:		o=BSVM2_OP_STIXLC; break;
-		case BS2CC_TYZ_ULONG:		o=BSVM2_OP_STIXLC; break;
-		case BS2CC_TYZ_FLOAT:		o=BSVM2_OP_STIXFC; break;
-		case BS2CC_TYZ_DOUBLE:		o=BSVM2_OP_STIXDC; break;
-		case BS2CC_TYZ_ADDRESS:		o=BSVM2_OP_STIXAC; break;
-		case BS2CC_TYZ_SBYTE:		o=BSVM2_OP_STIXBC; break;
-		case BS2CC_TYZ_UBYTE:		o=BSVM2_OP_STIXBC; break;
-		case BS2CC_TYZ_SHORT:		o=BSVM2_OP_STIXSC; break;
-		case BS2CC_TYZ_USHORT:		o=BSVM2_OP_STIXSC; break;
-		default:					o=BSVM2_OP_STIXAC; break;
-		}
-#endif
-
-#if 0
-		switch(z)
-		{
-		case BS2CC_TYZ_INT:			o=BSVM2_OP_RSTIXIC; break;
-		case BS2CC_TYZ_UINT:		o=BSVM2_OP_RSTIXIC; break;
-		case BS2CC_TYZ_LONG:		o=BSVM2_OP_RSTIXLC; break;
-		case BS2CC_TYZ_ULONG:		o=BSVM2_OP_RSTIXLC; break;
-		case BS2CC_TYZ_FLOAT:		o=BSVM2_OP_RSTIXFC; break;
-		case BS2CC_TYZ_DOUBLE:		o=BSVM2_OP_RSTIXDC; break;
-		case BS2CC_TYZ_ADDRESS:		o=BSVM2_OP_RSTIXAC; break;
-		case BS2CC_TYZ_SBYTE:		o=BSVM2_OP_RSTIXBC; break;
-		case BS2CC_TYZ_UBYTE:		o=BSVM2_OP_RSTIXBC; break;
-		case BS2CC_TYZ_SHORT:		o=BSVM2_OP_RSTIXSC; break;
-		case BS2CC_TYZ_USHORT:		o=BSVM2_OP_RSTIXSC; break;
-		default:					o=BSVM2_OP_RSTIXAC; break;
-		}
-#endif
-
 #if 1
 		switch(z)
 		{
@@ -4758,14 +4348,10 @@ void BS2C_CompileExpr(BS2CC_CompileContext *ctx,
 				continue;
 			}
 
-//			BS2C_CompileExprPushType(ctx, bty);
-//			BS2C_EmitOpcode(ctx, BSVM2_OP_DUPA);
 			BS2C_CompileExpr(ctx, n0, cty);
-//			BS2C_EmitOpcode(ctx, BSVM2_OP_STIXAC);
 			BS2C_EmitOpcode(ctx, o);
 			BS2C_EmitOpcodeSCx(ctx, i);
 			BS2C_CompileExprPopType1(ctx);
-//			BS2C_CompileExprPopType2(ctx);
 		}
 		return;
 	}

@@ -59,13 +59,16 @@ int main()
 	vc=BGBDT_XD128_AddX(va, vb);
 	vc=BGBDT_XD128_MulX(va, vb);
 
-#if 1
+#if 0
 	printf("F128 Add:\n");
 	t0=clock(); t1=t0; t2=t0+1*CLOCKS_PER_SEC; n=0;
 	while(t1<t2)
 	{
 		for(i=0; i<100000; i++)
-			{ vc=BGBDT_XF128_AddX(va, vb); n++; }
+		{
+//			__asm { nop }
+			vc=BGBDT_XF128_AddX(va, vb); n++;
+		}
 		t1=clock();
 		dt=(t1-t0)/((double)CLOCKS_PER_SEC);
 		printf("%f %d %.3f M/s  \r", dt, n, (n/1000000.0)/(dt+0.0001));
@@ -129,7 +132,18 @@ int main()
 	while(t1<t2)
 	{
 		for(i=0; i<100000; i++)
-			{ vc=BGBDT_XI128_AddX(va, vb); n++; }
+		{
+#if 0
+			__asm {
+				nop
+				mov esi, eax
+				mul ecx
+				adc eax, edx
+				nop
+			}
+#endif
+			vc=BGBDT_XI128_AddX(va, vb); n++;
+		}
 		t1=clock();
 		dt=(t1-t0)/((double)CLOCKS_PER_SEC);
 		printf("%f %d %.3f M/s  \r", dt, n, (n/1000000.0)/(dt+0.0001));

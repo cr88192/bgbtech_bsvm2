@@ -51,6 +51,8 @@
 
 #define BS2CC_ERRN_ERRSTACKMISAL	(BS2CC_ERRN_ERROR|9)
 #define BS2CC_ERRN_ERRSTACKUFLOW	(BS2CC_ERRN_ERROR|10)
+#define BS2CC_ERRN_ERRSYNTAX		(BS2CC_ERRN_ERROR|11)
+#define BS2CC_ERRN_ERRSZNOTCONST	(BS2CC_ERRN_ERROR|12)
 
 #define BS2CC_ERRN_CONSTRANGE		(BS2CC_ERRN_WARNING|1)
 #define BS2CC_ERRN_CONVIMPLICIT		(BS2CC_ERRN_WARNING|2)
@@ -73,6 +75,8 @@
 #define BS2CC_VITYPE_LXLVAR			9		//Lexical Var
 #define BS2CC_VITYPE_PACKAGE		10		//Package
 #define BS2CC_VITYPE_LCLFUNC		11		//Local Func
+#define BS2CC_VITYPE_INITARR		12		//Initialized Array
+#define BS2CC_VITYPE_INITSTR		13		//Initialized Struct
 
 //Type IDs:
 //  0..   15: Core Types
@@ -270,6 +274,8 @@ dtVal bodyExp;				///< AST for function body
 dtVal initExp;				///< AST for variable initialization
 dtVal extsExp;				///< AST for extends
 dtVal implExp;				///< AST for implements
+dtVal initVal;				///< Initial Value (Computed)
+int initGid;				///< global ID for init value (array/struct)
 };
 
 /** Represents an "overflowed" type.

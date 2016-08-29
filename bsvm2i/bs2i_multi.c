@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 #include <bsvm2.h>
 
-#if defined(X86)
+#if defined(X86) || (defined(X86_64) && defined(WIN64))
 #define BS2I_USE_BASM
 
 #ifndef BGBASM_DLL
@@ -51,3 +51,4 @@ THE SOFTWARE.
 #include "bs2i_topinit.c"
 
 #include "bs2j_tr_x86.c"
+#include "bs2j_tr_x64.c"

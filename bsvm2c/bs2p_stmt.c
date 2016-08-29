@@ -40,6 +40,11 @@ void BS2P_WarnExpectSemi(BS2CC_CompileContext *ctx)
 	BS2P_ParseError(ctx, BS2CC_ERRN_NOSEMICOLON);
 }
 
+void BS2P_ErrSyntaxError(BS2CC_CompileContext *ctx)
+{
+	BS2P_ParseError(ctx, BS2CC_ERRN_ERRSYNTAX);
+}
+
 
 dtVal BS2P_ParseInnerStatement(BS2CC_CompileContext *ctx)
 {
@@ -505,6 +510,12 @@ dtVal BS2P_ParsePackageStatementBlock(BS2CC_CompileContext *ctx)
 		BS2P_GetCurSourceLine(ctx, &lfn, &lln);
 		n0=BS2P_ParsePackageStatement(ctx);
 		
+		if(dtvNullP(n0))
+		{
+			BS2P_ErrSyntaxError(ctx);
+			return(DTV_NULL);
+		}
+		
 		if(BGBDT_MapObj_IsObjectP(n0))
 		{
 			BS2P_SetAstNodeAttrStr(n0, "fn", lfn);
@@ -513,6 +524,7 @@ dtVal BS2P_ParsePackageStatementBlock(BS2CC_CompileContext *ctx)
 		
 		if(nstmt>=4096)
 		{
+			BS2P_ErrSyntaxError(ctx);
 			BSVM2_DBGTRAP
 			return(DTV_NULL);
 		}

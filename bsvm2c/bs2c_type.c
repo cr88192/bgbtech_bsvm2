@@ -81,28 +81,111 @@ int BS2C_GetTypeVecZ(BS2CC_CompileContext *ctx, int ty)
 char *BS2C_GetTypeSig(BS2CC_CompileContext *ctx, int ty)
 {
 	char tb[256];
+	BS2CC_TypeOverflow tovf;
+	BS2CC_TypeOverflow *ovf;
 	BS2CC_VarInfo *vi;
 	char *t;
 	int al, asz, bty;
 	int i, j, k;
-	
+
 	if((ty&BS2CC_TYT_MASK)==BS2CC_TYT_BASIC)
 	{
 		al =(ty>>BS2CC_TYI_SHR)&BS2CC_TYI_MASK2;
 		asz=(ty>>BS2CC_TYS_SHR)&BS2CC_TYS_MASK2;
 		bty=(ty>>BS2CC_TYE_SHR)&BS2CC_TYE_MASK2;
+		
+		ovf=&tovf;
+		memset(ovf, 0, sizeof(BS2CC_TypeOverflow));
+
+		if((al>=1) && (al<=3))
+		{
+			ovf->al=al;
+		}else if((al>=5) && (al<=7))
+		{
+			i=al-4;
+			ovf->pl=i;
+		}else if(al==4)
+		{
+			ovf->rf=1;
+		}
+		
+		ovf->base=bty;
+//		ovf->al=al;
+		if(asz)
+		{
+			ovf->asz[0]=asz;
+			ovf->an=1;
+		}
+	}else if((ty&BS2CC_TYT_MASK)==BS2CC_TYT_OVF)
+	{
+		ovf=ctx->tyovf[ty&BS2CC_TYO_MASK];
+		al=ovf->al;
+		bty=ovf->base;
 	}else
 	{
+		BSVM2_DBGTRAP
 		return(NULL);
 	}
 	
 	t=tb;
+
+	if(ovf->rf)
+	{
+		*t++='R';
+		*t=0;
+	}
+
+#if 0
 	if(asz)
 	{
 		sprintf(t, "A%d", asz);
 		t+=strlen(t);
 	}
+#endif
+
+	switch(ovf->an)
+	{
+	case 0:
+		break;
+	case 1:
+		sprintf(t, "A%d", ovf->asz[0]);
+		t+=strlen(t);
+		break;
+	case 2:
+		sprintf(t, "A%d,%d;", ovf->asz[0], ovf->asz[1]);
+		t+=strlen(t);
+		break;
+	case 3:
+		sprintf(t, "A%d,%d,%d;", ovf->asz[0], ovf->asz[1], ovf->asz[2]);
+		t+=strlen(t);
+		break;
+	case 4:
+		sprintf(t, "A%d,%d,%d,%d;", ovf->asz[0],
+			ovf->asz[1], ovf->asz[2], ovf->asz[3]);
+		t+=strlen(t);
+		break;
+	default:
+		BSVM2_DBGTRAP
+		break;
+	}
+
+	if(ovf->al>ovf->an)
+	{
+		i=ovf->al-ovf->an;
+		while(i--)
+			*t++='Q';
+		*t=0;
+	}
 	
+	if(ovf->pl)
+	{
+		i=ovf->pl;
+		while(i--)
+			*t++='P';
+		*t=0;
+	}
+
+#if 0
 	if((al>=1) && (al<=3))
 	{
 		i=al;
@@ -119,7 +202,8 @@ char *BS2C_GetTypeSig(BS2CC_CompileContext *ctx, int ty)
 	{
 		*t++='R';
 	}
-	
+#endif
+
 	if(bty<256)
 	{
 		switch(bty)
@@ -197,6 +281,7 @@ char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 		bty=(ty>>BS2CC_TYE_SHR)&BS2CC_TYE_MASK2;
 	}else
 	{
+		BSVM2_DBGTRAP
 		return(NULL);
 	}
 	
@@ -1721,6 +1806,20 @@ int BS2C_TypeExtType(BS2CC_CompileContext *ctx, dtVal expr)
 	return(cty);
 }
 
+int BS2C_TypeExtTypeNew(BS2CC_CompileContext *ctx, dtVal expr)
+{
+	int cty;
+
+	if(!ctx->frm || !ctx->frm->func)
+	{
+		cty=BS2C_TypeBaseType(ctx, expr);
+		return(cty);
+	}
+	
+	cty=BS2C_TypeRefinedType2(ctx, ctx->frm->func, expr, 1);
+	return(cty);
+}
+
 int BS2C_TypeLookupTypeOverflow(
 	BS2CC_CompileContext *ctx, BS2CC_TypeOverflow *tovf)
 {
@@ -1821,6 +1920,14 @@ int BS2C_TypeRefinedType(
 	BS2CC_VarInfo *vari,
 	dtVal expr)
 {
+	return(BS2C_TypeRefinedType2(ctx, vari, expr, 0));
+}
+
+int BS2C_TypeRefinedType2(
+	BS2CC_CompileContext *ctx,
+	BS2CC_VarInfo *vari,
+	dtVal expr, int flag)
+{
 	BS2CC_TypeOverflow tovf;
 	int asza[16];
 	BS2CC_VarInfo *vi;
@@ -1837,15 +1944,30 @@ int BS2C_TypeRefinedType(
 
 	if(dtvIsArrayP(arrs))
 	{
-		l=dtvArrayGetSize(expr); an=0;
+		l=dtvArrayGetSize(arrs); an=0;
 		for(i=0; i<l; i++)
 		{
-			n0=dtvArrayGetIndexDtVal(expr, i);
+			n0=dtvArrayGetIndexDtVal(arrs, i);
 
 			tag=BS2P_GetAstNodeTag(n0);
 		
 			if(tag && !strcmp(tag, "arrdef"))
-				{ asza[i]=BS2P_GetAstNodeAttrI(n0, "value"); an=i+1; }
+			{
+				n1=BS2P_GetAstNodeAttr(n0, "value");
+				n1=BS2C_ReduceExpr(ctx, n1);
+				if(dtvIsSmallIntP(n1))
+				{
+					j=dtvUnwrapInt(n1);
+					asza[i]=j;
+				}else
+				{
+					if(!(flag&1))
+						BS2C_CompileError(ctx, BS2CC_ERRN_ERRSZNOTCONST);
+					asza[i]=0;
+				}
+//				asza[i]=n1;
+				an=i+1;
+			}
 			else
 				{ asza[i]=0; }
 			if(ctx->ncfatal)
@@ -1865,12 +1987,15 @@ int BS2C_TypeRefinedType(
 //			asz=BS2P_GetAstNodeAttrI(arrs, "value");
 
 			n1=BS2P_GetAstNodeAttr(arrs, "value");
+			n1=BS2C_ReduceExpr(ctx, n1);
 			if(dtvIsSmallIntP(n1))
 			{
 				al=0; asz=dtvUnwrapInt(n1);
 				asza[0]=asz; an=1;
 			}else
 			{
+				if(!(flag&1))
+					BS2C_CompileError(ctx, BS2CC_ERRN_ERRSZNOTCONST);
 				al=1; asz=0; an=0;
 			}
 		}else

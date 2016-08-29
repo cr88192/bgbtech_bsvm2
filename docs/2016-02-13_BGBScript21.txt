@@ -356,7 +356,7 @@ If a thrown exception is caught, then afterwards control passes to the finally b
 
 A form of exit-only continuations will be allowed.
 
- let_escape(vardef)
+ let_escape(var-def)
  {
     body...
  }

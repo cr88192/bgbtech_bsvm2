@@ -446,7 +446,7 @@ int BS2C_InferExpr(BS2CC_CompileContext *ctx, dtVal expr)
 	{
 		rn=BS2P_GetAstNodeAttr(expr, "type");
 //		ty=BS2C_TypeBaseType(ctx, rn);
-		ty=BS2C_TypeExtType(ctx, rn);
+		ty=BS2C_TypeExtTypeNew(ctx, rn);
 		return(ty);
 	}
 

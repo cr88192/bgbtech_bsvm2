@@ -612,6 +612,99 @@ void BS2C_CompileFuncBody(BS2CC_CompileContext *ctx, BS2CC_VarInfo *func)
 	ctx->frmstackpos=i;
 }
 
+BS2CC_VarInfo *BS2C_GetNewGlobalVari(
+	BS2CC_CompileContext *ctx)
+{
+	BS2CC_VarInfo *vi;
+	int i;
+	
+	vi=BS2C_AllocVarInfo(ctx);
+	i=ctx->nglobals++;
+	ctx->globals[i]=vi;
+	vi->gid=i;
+//	vi->vitype=BS2CC_VITYPE_PACKAGE;
+//	vi->pkg=pkg;
+//	vi->qname=pkg->qname;
+
+	return(vi);
+}
+
+dtVal BS2C_CompileVarInit_NormalizeValueType(
+	BS2CC_CompileContext *ctx, dtVal ni, int ty)
+{
+	int z;
+
+	z=BS2C_GetTypeBaseZ(ctx, ty);
+	switch(z)
+	{
+	case BSVM2_OPZ_INT:
+		ni=dtvWrapInt(dtvUnwrapLong(ni)); break;
+	case BSVM2_OPZ_LONG:
+		ni=dtvWrapLong(dtvUnwrapLong(ni)); break;
+	case BSVM2_OPZ_FLOAT:
+		ni=dtvWrapFloat(dtvUnwrapDouble(ni)); break;
+	case BSVM2_OPZ_DOUBLE:
+		ni=dtvWrapDouble(dtvUnwrapDouble(ni)); break;
+	case BSVM2_OPZ_UINT:
+		ni=dtvWrapUInt(dtvUnwrapLong(ni)); break;
+	case BSVM2_OPZ_UBYTE:
+		ni=dtvWrapInt((byte)dtvUnwrapInt(ni)); break;
+	case BSVM2_OPZ_SBYTE:
+		ni=dtvWrapInt((sbyte)dtvUnwrapInt(ni)); break;
+	case BSVM2_OPZ_USHORT:
+		ni=dtvWrapInt((u16)dtvUnwrapInt(ni)); break;
+	case BSVM2_OPZ_SHORT:
+		ni=dtvWrapInt((s16)dtvUnwrapInt(ni)); break;
+	default: break;
+	}
+	return(ni);
+}
+
+void BS2C_CompileVarInit(BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
+{
+	BS2CC_VarInfo *vi;
+	char *tag;
+	dtVal ni, nv;
+	int z;
+
+	ni=BS2C_ReduceExpr(ctx, vari->initExp);
+	if(!dtvTrueP(ni))
+		return;
+
+	if(dtvIsSmallLongP(ni) ||
+		dtvIsSmallDoubleP(ni) ||
+		BGBDT_TagStr_IsStringP(ni))
+	{
+		ni=BS2C_CompileVarInit_NormalizeValueType(ctx, ni, vari->bty);
+		vari->initVal=ni;
+		return;
+	}
+	
+	nv=BS2C_ReduceEvaluateExprAs(ctx, ni, vari->bty);
+	if(dtvTrueP(nv))
+	{
+		vari->initVal=nv;
+		
+		if(dtvIsArrayP(nv))
+		{
+			vi=BS2C_GetNewGlobalVari(ctx);
+			vi->vitype=BS2CC_VITYPE_INITARR;
+			vi->initVal=nv;
+			vari->initGid=vi->gid;
+		}
+		return;
+	}
+	
+//	nv=BS2E_EvalExpr(ctx, ni);
+//	if(dtvTrueP(nv))
+//	{
+//		vari->initVal=nv;
+//		return;
+//	}
+
+	BSVM2_DBGTRAP
+}
+
 /** Rebuild types for a variable. */
 void BS2C_CompileRebuildVarType(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
@@ -626,6 +719,11 @@ void BS2C_CompileRebuildVarType(
 	s=BS2C_GetTypeSig(ctx, vari->bty);
 	if((vari->bty==BS2CC_TYZ_VARARG) && vari->name)
 		{ s="Cz"; }
+	if(!s)
+	{
+		BSVM2_DBGTRAP
+		s=BS2C_GetTypeSig(ctx, vari->bty);
+	}
 	vari->sig=BS2P_StrSym(ctx, s);
 }
 
@@ -723,6 +821,11 @@ void BS2C_CompileRebuildStructType(
 		vari->iface[0]=vi2;
 		vari->niface=1;
 	}
+
+	for(i=0; i<vari->nargs; i++)
+	{
+		BS2C_CompileRebuildVarType(ctx, vari->args[i]);
+	}
 }
 
 /** Compile the functions within a context. */
@@ -738,39 +841,42 @@ BS2VM_API void BS2C_CompileFuncs2(
 {
 	BS2CC_VarInfo *vari;
 	int ongbl;
-	int i;
+	int i, j;
 
 	ongbl=ctx->nglobals;
 //	for(i=base; i<ctx->nglobals; i++)
-	for(i=base; i<ongbl; i++)
+	for(j=0; j<4; j++)
 	{
-		vari=ctx->globals[i];
-		if(!vari)
-			continue;
-
-//		if(!dtvTrueP(vari->typeExp))
-//			continue;
-
-		if((vari->vitype==BS2CC_VITYPE_GBLVAR) ||
-			(vari->vitype==BS2CC_VITYPE_STRVAR))
+		for(i=base; i<ongbl; i++)
 		{
-			BS2C_CompileRebuildVarType(ctx, vari);
-			continue;
-		}
+			vari=ctx->globals[i];
+			if(!vari)
+				continue;
 
-		if((vari->vitype==BS2CC_VITYPE_GBLFUNC) ||
-			(vari->vitype==BS2CC_VITYPE_STRFUNC))
-		{
-			BS2C_CompileRebuildFuncType(ctx, vari);
-			continue;
-		}
+	//		if(!dtvTrueP(vari->typeExp))
+	//			continue;
 
-		if((vari->vitype==BS2CC_VITYPE_STRUCT) ||
-			(vari->vitype==BS2CC_VITYPE_CLASS) ||
-			(vari->vitype==BS2CC_VITYPE_IFACE))
-		{
-			BS2C_CompileRebuildStructType(ctx, vari);
-			continue;
+			if((vari->vitype==BS2CC_VITYPE_GBLVAR) ||
+				(vari->vitype==BS2CC_VITYPE_STRVAR))
+			{
+				BS2C_CompileRebuildVarType(ctx, vari);
+				continue;
+			}
+
+			if((vari->vitype==BS2CC_VITYPE_GBLFUNC) ||
+				(vari->vitype==BS2CC_VITYPE_STRFUNC))
+			{
+				BS2C_CompileRebuildFuncType(ctx, vari);
+				continue;
+			}
+
+			if((vari->vitype==BS2CC_VITYPE_STRUCT) ||
+				(vari->vitype==BS2CC_VITYPE_CLASS) ||
+				(vari->vitype==BS2CC_VITYPE_IFACE))
+			{
+				BS2C_CompileRebuildStructType(ctx, vari);
+				continue;
+			}
 		}
 	}
 	
@@ -789,6 +895,14 @@ BS2VM_API void BS2C_CompileFuncs2(
 			if(!dtvTrueP(vari->bodyExp))
 				continue;
 			BS2C_CompileFuncBody(ctx, vari);
+		}
+
+		if((vari->vitype==BS2CC_VITYPE_GBLVAR) ||
+			(vari->vitype==BS2CC_VITYPE_STRVAR))
+		{
+			if(!dtvTrueP(vari->initExp))
+				continue;
+			BS2C_CompileVarInit(ctx, vari);
 		}
 	}
 	
