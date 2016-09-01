@@ -507,6 +507,9 @@ int BSVM2_NatCall_GetSigOpZ(char *sig)
 		i=BSVM2_OPZ_ADDR; break;
 //		i=5; break;
 
+	case 'A':
+		i=BSVM2_OPZ_ADDR; break;
+
 	default:
 		i=-1; break;
 	}
@@ -679,10 +682,17 @@ int BSVM2_NatCall_GetSigIndexG1(char *sig,
 	if(*s==')')
 	{
 		s++;
-		j=BSVM2_NatCall_GetSigBType(s);
-		if(j<0)
-			return(-1);
-		i=i*6+j;
+		
+		if(*s=='P')
+		{
+			i=i*6+5;
+		}else
+		{
+			j=BSVM2_NatCall_GetSigBType(s);
+			if(j<0)
+				return(-1);
+			i=i*6+j;
+		}
 	}
 	return(i);
 }

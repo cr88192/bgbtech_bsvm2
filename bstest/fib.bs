@@ -214,6 +214,52 @@ package bstest {
 			}
 			printf("letlec D\n");
 		}
+
+		public static void tst_decjpg()
+		{
+			PDJPG_Context ctx;
+			byte[] rgba;
+			byte[] buf;
+			*byte cs;
+			int t0, t1, t2;
+			int sz, xs, ys;
+			int i, j, k, n;
+
+			printf("ATst %d\n", pdjpg_zigzag2[23]);
+			
+			buf=readfile("NanoITX_4_1.jpg", sz);
+			printf("JP: %02X %02X sz=%d\n", buf[0], buf[1], sz);
+			
+			ctx=PDJPG_AllocContext();
+			
+			cs=buf;
+			cs++;
+			
+			t0=clock();
+			PDJPG_DecodeBasic(ctx, buf, sz, &xs, &ys);
+			t1=clock();
+			
+			t2=t1-t0;
+			printf("DecJPG %d\n", t2);
+			
+			printf("Image Dec %d x %d\n", xs, ys);
+			
+			rgba=new byte[xs*ys*4];
+			PDJPG_GetImageRGBA(ctx, rgba, xs, ys);
+			PDJPG_StoreTGA("fibtst0.tga", rgba, xs, ys);
+
+ /*
+			t0=clock(); t1=clock(); t2=t0+30000; n=0;
+			while(t1<t2)
+			{
+				PDJPG_DecodeBasic(ctx, buf, sz, &xs, &ys);
+				n++;
+				printf("Dt=%d Cnt=%d\r", t1-t0, n);
+				t1=clock();
+			}
+			printf("\n");
+ */
+		}
 	
 		public static void main(string[] argv)
 		{
@@ -222,12 +268,29 @@ package bstest {
 			Foo2 fobj;
 			vec2f v0, v1, v2;
 			vec3f w0, w1, w2;
+			uint u0, u1, u2;
 			int[] a1, a2;
 			*int p1, p2;
 			int i, j;
-			int t0, t1, t2;
+			int t0, t1, t2, sz;
 
 			printf("%f\n", 3.14159);
+
+			i=8;
+
+			u0=0xDECAF000;
+			u1=u0>>8;
+//			u2=u0>>i;
+//			u2=u0<<i;
+			u2=(u0<<i)|u1;
+			j=(u2>>8)&15;
+			printf("%08X %08X %08X %d\n", u0, u1, u2, j);
+
+			j=-1;
+			if(j<=0)
+				{ printf("T\n"); }
+			else
+				{ printf("F\n"); }
 
 			t0=clock();
 //			printf("BS Fib %d\n", fib(32));
@@ -244,15 +307,15 @@ package bstest {
 
 			t0=clock();
 //			sorttst(1<<16);
-//			sorttst(1<<13);
-			sorttst(1<<15);
+			sorttst(1<<13);
+//			sorttst(1<<15);
 			t1=clock();
 			printf("Bs SortTst Dt %d\n", t1-t0);
 
 			t0=clock();
 //			sorttst(1<<16);
-//			bsvm2_natsorttst(1<<13);
-			bsvm2_natsorttst(1<<15);
+			bsvm2_natsorttst(1<<13);
+//			bsvm2_natsorttst(1<<15);
 			t1=clock();
 			printf("Na SortTst Dt %d\n", t1-t0);
 
@@ -326,6 +389,8 @@ package bstest {
 			tst_letlec();
 			
 			tst_tryex();
+
+//			tst_decjpg();
 		}
 	}
 }

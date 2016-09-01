@@ -81,8 +81,9 @@ The type-tag for a TT Pointer will primarily serve as a hint for cases where a p
 #define BGBDT_TAG_INT32		0x1C000000
 #define BGBDT_TAG_FLOAT32	0x1C000001
 #define BGBDT_TAG_UINT32	0x1C000002
-#define BGBDT_TAG_MCONST	0x1C000003
-#define BGBDT_TAG_MCHAR		0x1C000004
+#define BGBDT_TAG_MCONST	0x1C000003	//Magic Constant
+#define BGBDT_TAG_MCHAR		0x1C000004	//Character Codepoint
+#define BGBDT_TAG_MCONTIDX	0x1C000005	//Context-Dependent Index
 
 /* Logical Base Types
  * Note that these need not necessarily match up with C's types.
@@ -425,6 +426,15 @@ static_inline bool dtvIsCharP(dtVal val)
 	return(0);
 }
 
+static_inline bool dtvIsContIdxP(dtVal val)
+{
+	int ret;
+	
+	if(val.hi==BGBDT_TAG_MCONTIDX)
+		return(1);
+	return(0);
+}
+
 
 static_inline int dtvEqqP(dtVal val1, dtVal val2)
 {
@@ -455,6 +465,8 @@ static_inline dtVal dtvWrapUInt(s32 v)
 
 static_inline dtVal dtvWrapChar(s32 v)
 	{ dtVal val; val.lo=(u32)v; val.hi=BGBDT_TAG_MCHAR; return(val); }
+static_inline dtVal dtvWrapContIdx(s32 v)
+	{ dtVal val; val.lo=(u32)v; val.hi=BGBDT_TAG_MCONTIDX; return(val); }
 
 static_inline dtVal dtvWrapBool(int v)
 	{ dtVal val; val.lo=v?3:2; val.hi=BGBDT_TAG_MCONST; return(val); }
@@ -564,6 +576,7 @@ static_inline int dtvIsSmallIntP(dtVal val)
 			}
 			break;
 		}
+//		if(val.hi==BGBDT_TAG_MCHAR)
 		if(val.hi==BGBDT_TAG_MCHAR)
 			{ v=1; break; }
 		if((val.hi>>24)==0x10)
@@ -697,6 +710,8 @@ static_inline s64 dtvUnwrapLong(dtVal val)
 		}
 		if(val.hi==BGBDT_TAG_MCHAR)
 			{ v=(s32)val.lo; break; }
+		if(val.hi==BGBDT_TAG_MCONTIDX)
+			{ v=(s32)val.lo; break; }
 		if((val.hi>>24)==0x10)
 			{ v=BGBDT_TagTy_DecodeRotLong(val); break; }
 
@@ -767,6 +782,11 @@ static_inline float dtvUnwrapFloat(dtVal val)
 }
 
 static_inline int dtvUnwrapChar(dtVal val)
+{
+	return(dtvUnwrapInt(val));
+}
+
+static_inline int dtvUnwrapContIdx(dtVal val)
 {
 	return(dtvUnwrapInt(val));
 }

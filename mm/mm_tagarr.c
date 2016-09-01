@@ -48,7 +48,8 @@ BS2VM_API dtVal BGBDT_TagArr_NewArray(int size, int bty)
 	}
 	
 	sz=size*str;
-	if(sz<=256)
+//	if(sz<=256)
+	if(sz<=4096)
 	{
 		szh=sizeof(BGBDT_TagArrHead);
 		szh=(szh+(str-1))&(~(str-1));
@@ -77,6 +78,22 @@ BS2VM_API dtVal BGBDT_TagArr_NewArray(int size, int bty)
 	arv.lo=DTV_GetObjIdForPtr(arh);
 	arv.hi=0xC0000000UL;
 	return(arv);
+}
+
+BS2VM_API int BGBDT_TagArr_FreeArray(dtVal objv)
+{
+	BGBDT_TagArrHead *arr;
+
+	arr=DTV_GetDataPtrForObjId(objv.lo);
+	
+	if(arr->scsz<=4096)
+	{
+		dtmFree(arr);
+	}else
+	{
+		dtmFree(arr->data);
+		dtmFree(arr);
+	}
 }
 
 int BGBDT_TagArr_IsArrayP(dtVal objv)

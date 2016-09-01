@@ -1044,6 +1044,82 @@ void BSVM2_Op_NEWARR_A(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].a=dtvNewArray(
 		frm->stack[op->t0].i, BGBDT_BASETY_ADDRESS);	}
 
+#if 1
+void BSVM2_Op_IFXARR_IC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_INT); }
+void BSVM2_Op_IFXARR_UIC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_UINT); }
+
+void BSVM2_Op_IFXARR_SBC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_SBYTE); }
+void BSVM2_Op_IFXARR_UBC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_UBYTE); }
+void BSVM2_Op_IFXARR_SSC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_SHORT); }
+void BSVM2_Op_IFXARR_USC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_USHORT); }
+
+void BSVM2_Op_IFXARR_LC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_LONG); }
+void BSVM2_Op_IFXARR_ULC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_ULONG); }
+
+void BSVM2_Op_IFXARR_FC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_FLOAT); }
+void BSVM2_Op_IFXARR_DC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_DOUBLE); }
+void BSVM2_Op_IFXARR_AC(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->local[op->i1].a=dtvNewArray(op->i0, BGBDT_BASETY_ADDRESS); }
+
+void BSVM2_Op_IFXARR_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_INT);		}
+void BSVM2_Op_IFXARR_UI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{ 	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_UINT);		}
+void BSVM2_Op_IFXARR_SB(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_SBYTE);		}
+void BSVM2_Op_IFXARR_UB(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_UBYTE);		}
+void BSVM2_Op_IFXARR_SS(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_SHORT);		}
+void BSVM2_Op_IFXARR_US(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_USHORT);		}
+void BSVM2_Op_IFXARR_L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_LONG);		}
+void BSVM2_Op_IFXARR_UL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_ULONG);		}
+void BSVM2_Op_IFXARR_F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_FLOAT);		}
+void BSVM2_Op_IFXARR_D(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_DOUBLE);		}
+void BSVM2_Op_IFXARR_A(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{	frm->local[op->i1].a=dtvNewArray(
+		frm->stack[op->t0].i, BGBDT_BASETY_ADDRESS);	}
+
+void BSVM2_Op_DFXARR(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	dtVal a;
+	void *p;
+
+	a=frm->local[op->i1].a;
+	BGBDT_TagArr_FreeArray(a);
+
+//	p=dtvUnwrapPtr(a);
+//	if(p)
+//	{
+//		dtmFree(p);
+//	}
+}
+#endif
 
 void BSVM2_Op_LDIXILL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].i=dtvArrayGetIndexInt(

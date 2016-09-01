@@ -133,6 +133,7 @@ int main()
 	BS2C_CompileModuleList(ctx, NULL, mods);
 
 	printf("%s\n", tb);
+	basm_jitlog_puts(tb);
 
 	i=BS2C_FlattenImage(ctx, tb, 1<<18);
 //	vf_storefile("bstest0.bsi", tb, i);

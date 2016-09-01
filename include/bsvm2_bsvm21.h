@@ -441,7 +441,8 @@
 #define BSVM2_OP_SHRL		0x0175	//
 #define BSVM2_OP_UDIVI		0x0176	//
 #define BSVM2_OP_UDIVL		0x0177	//
-#define BSVM2_OP_CMIEQ		0x0178	//
+#define BSVM2_OP_CVTUI2L	0x0178	//
+// #define BSVM2_OP_CMIEQ		0x0178	//
 #define BSVM2_OP_CMINE		0x0179	//
 #define BSVM2_OP_CMILT		0x017A	//
 #define BSVM2_OP_CMIGT		0x017B	//

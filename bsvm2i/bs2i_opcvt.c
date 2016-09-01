@@ -105,6 +105,9 @@ void BSVM2_Op_CVTSS2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 void BSVM2_Op_CVTUS2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=(u16)frm->stack[op->t0].i; }
 
+void BSVM2_Op_CVTUI2L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+	{ frm->stack[op->t0].l=frm->stack[op->t0].ui; }
+
 void BSVM2_Op_CVTI2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=dtvWrapInt(frm->stack[op->t0].i); }
 void BSVM2_Op_CVTL2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)

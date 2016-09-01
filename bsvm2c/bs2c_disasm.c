@@ -114,6 +114,8 @@ char *name;
 {"365ECi",      "STIXBC.B"},
 {"365FCi",      "STIXSC.B"},
 
+{"8C3C",        "CMPA.P"},
+
 {"8C40",        "LDIXI.P"},
 {"8C41",        "LDIXL.P"},
 {"8C42",        "LDIXF.P"},
@@ -431,9 +433,9 @@ char *name;
 {"E13FCi",    "LEASTC"},
 
 {"E140Gj",    "IFXOBJ"},
-{"E141IxZn",  "IFXARR"},
+{"E141ZnIx",  "IFXARR"},
 {"E142Gj",    "DFXOBJ"},
-{"E143IxZn",  "DFXARR"},
+{"E143ZnIx",  "DFXARR"},
 {"E144",      "LBLCLNP"},
 {"E145ZnCx",  "STIXNC"},
 {"E146ZnCx",  "DSTIXNC"},
@@ -505,7 +507,9 @@ char *name;
 {"E175",      "SHRL"},
 {"E176",      "UDIVI"},
 {"E177",      "UDIVL"},
-{"E178",      "CMIEQ"},
+{"E178",      "CVTUI2L"},
+
+// {"E178",      "CMIEQ"},
 {"E179",      "CMINE"},
 {"E17A",      "CMILT"},
 {"E17B",      "CMIGT"},

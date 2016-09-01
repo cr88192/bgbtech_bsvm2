@@ -140,19 +140,17 @@ GBLS lumps:
 ** Integer types are twos complement big-endian.
 ** Float types are IEEE754 big-endian.
 ** Elements match their respective sizes.
-** Address is encoded as tagged indices.
-*** Element size will depend on the largest potential index.
-*** 16 bit: (ngbls<16384) && (STRS<4kB)
-*** 24 bit: (ngbls<4M) && (STRS<1MB)
-*** 32 bit: otherwise
+** Address is encoded as 32-bit tagged indices.
 
 ** z=g..v
 ** Encodes an array of the base-type given by z.
 ** Similar in premise to above, except that values are encoded as VLI values.
 ** These will start with a UVLI prefix giving the array length.
 
-* TWOCC('Ax')
+** z=w: Address with 16-bit tagged elements
+
 * TWOCC('Ay')
+* TWOCC('Az')
 ** Initialized structures.
 ** Ax will be fixed-format.
 ** Ay will be VLI format.

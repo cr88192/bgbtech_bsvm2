@@ -390,6 +390,12 @@ dtVal BSVM2_Interp_DecodeOpAddrConst(BSVM2_CodeBlock *cblk, int ix)
 	if(!(i&3))
 	{
 		vi=BS2I_ImageGetGlobal(cblk->img, i>>2);
+
+		j=vi->tag;
+		if(	((i>=BS2CC_ITCC_A0) && (i<=BS2CC_ITCC_A9)) ||
+			((i>=BS2CC_ITCC_Aa) && (i<=BS2CC_ITCC_Az)) )
+				{ return(vi->gvalue->a); }
+
 		return(dtvWrapPtr(vi));
 	}
 	

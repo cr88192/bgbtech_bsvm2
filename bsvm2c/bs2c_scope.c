@@ -26,6 +26,9 @@ int BS2C_LookupLocal(BS2CC_CompileContext *ctx, char *name)
 	BS2CC_VarInfo *vari;
 	int i, j;
 	
+	if(!ctx->frm)
+		return(-1);
+	
 	for(i=0; i<ctx->frm->nlocals; i++)
 	{
 		vari=ctx->frm->locals[i];
@@ -43,6 +46,9 @@ int BS2C_LookupLexical(BS2CC_CompileContext *ctx, char *name)
 	BS2CC_VarInfo *vari;
 	int i, j;
 	
+	if(!ctx->frm)
+		return(-1);
+
 	for(i=0; i<ctx->frm->func->niface; i++)
 	{
 		vari=ctx->frm->func->iface[i];
@@ -80,6 +86,9 @@ void BS2C_CheckExpandFrameGlobals(BS2CC_CompileContext *ctx)
 {
 	int l;
 
+	if(!ctx->frm)
+		return;
+
 	if(!ctx->frm->gbltab)
 	{
 		ctx->frm->gbltab=ctx->frm->t_gbltab;
@@ -116,6 +125,9 @@ int BS2C_IndexFrameLiteral(BS2CC_CompileContext *ctx, int gix)
 	BS2CC_VarInfo *vari;
 	int i, j;
 	
+	if(!ctx->frm)
+		return(-1);
+
 	for(i=0; i<ctx->frm->ngbl; i++)
 	{
 		j=ctx->frm->gbltab[i];
@@ -137,6 +149,9 @@ int BS2C_LookupFrameGlobal(BS2CC_CompileContext *ctx, char *name)
 {
 	BS2CC_VarInfo *vari;
 	int i, j;
+	
+	if(!ctx->frm)
+		return(-1);
 	
 	for(i=0; i<ctx->frm->ngbl; i++)
 	{

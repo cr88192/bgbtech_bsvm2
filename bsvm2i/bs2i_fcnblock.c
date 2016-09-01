@@ -242,7 +242,8 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 		}
 	
 		opn=BSVM2_Interp_ReadOpcodeNumber(cblk);
-		
+
+#if 1
 		if(opn==BSVM2_OP_JMP)
 		{
 			jcs=BSVM2_Interp_DecodeOpJAddr(cblk);
@@ -255,6 +256,7 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 			csa=cblk->cs; nopsa=0;
 			continue;
 		}
+#endif
 		
 		if((opn==BSVM2_OP_LABEL) || (opn==BSVM2_OP_LBLCLNP))
 		{
@@ -348,11 +350,21 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 		
 		if(tr->top)
 			{ tr->top->nexttrace=tr1; }
+			
+		tr1=NULL;
 		for(j=0; j<ntrsa; j++)
 		{
 			tr1=trsa[j];
 			if(tr->jcs==tr1->cs)
 				break;
+		}
+
+		if((j>=ntrsa) &&
+			!(((i+1)==ntrsa)&&
+				(tr->jcs==cblk->cse)))
+		{
+			k=-1;
+			BSVM2_DBGTRAP
 		}
 
 		tr->jnext=tr1;

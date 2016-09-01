@@ -134,7 +134,7 @@ dtVal BS2C_ReduceExprName(BS2CC_CompileContext *ctx, char *name)
 	
 //	if(ctx->frm->func && ctx->frm->func->obj &&
 //		(ctx->frm->func->vitype!=BS2CC_VITYPE_GBLFUNC))
-	if(ctx->frm->func && ctx->frm->func->obj)
+	if(ctx->frm && ctx->frm->func && ctx->frm->func->obj)
 	{
 		vari=BS2C_LookupObjectFieldName(ctx,
 			ctx->frm->func->obj, name);
@@ -155,6 +155,13 @@ dtVal BS2C_ReduceExprName(BS2CC_CompileContext *ctx, char *name)
 	if(i>=0)
 	{
 		vari=BS2C_GetFrameGlobalInfo(ctx, i);
+		return(BS2C_ReduceExprVariConst(ctx, vari));
+	}
+	
+	i=BS2C_LookupGlobal(ctx, name);
+	if(i>=0)
+	{
+		vari=ctx->globals[i];
 		return(BS2C_ReduceExprVariConst(ctx, vari));
 	}
 
@@ -506,6 +513,28 @@ dtVal BS2C_ReduceEvaluateExprAs(
 	{
 		ni=BS2C_CompileVarInit_NormalizeValueType(ctx, ni, dty);
 		return(ni);
+	}
+
+	if(BGBDT_TagStr_IsSymbolP(ni))
+	{
+		fn=BGBDT_TagStr_GetUtf8(expr);
+		
+		if(BS2C_TypeSmallLongP(ctx, dty))
+		{
+			if(!strcmp(fn, "false"))
+				return(dtvWrapInt(0));
+			if(!strcmp(fn, "true"))
+				return(dtvWrapInt(1));
+			if(!strcmp(fn, "null"))
+				return(dtvWrapInt(0));
+		}
+
+//		tn=BS2C_ReduceExprName(ctx, fn);
+//		if(!dtvUndefinedP(tn))
+//			return(tn);
+
+		return(DTV_UNDEFINED);
+//		return(ni);
 	}
 
 	tag=BS2P_GetAstNodeTag(ni);

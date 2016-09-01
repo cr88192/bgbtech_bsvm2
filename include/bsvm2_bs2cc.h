@@ -212,6 +212,15 @@
 #define BS2CC_ITCC_SV	BS2CC_IMG_TWOCC('S', 'V')
 // #define BS2CC_ITCC_SA	BS2C_IMG_TWOCC('S', 'A')
 
+#define BS2CC_ITCC_A0	BS2CC_IMG_TWOCC('A', '0')
+#define BS2CC_ITCC_A9	BS2CC_IMG_TWOCC('A', '9')
+
+#define BS2CC_ITCC_Aa	BS2CC_IMG_TWOCC('A', 'a')
+#define BS2CC_ITCC_Af	BS2CC_IMG_TWOCC('A', 'f')
+#define BS2CC_ITCC_Ag	BS2CC_IMG_TWOCC('A', 'g')
+#define BS2CC_ITCC_Av	BS2CC_IMG_TWOCC('A', 'v')
+#define BS2CC_ITCC_Az	BS2CC_IMG_TWOCC('A', 'z')
+
 #define BS2CC_I1CC_NULL		' '
 
 #define BS2CC_I1CC_NARGS	'A'

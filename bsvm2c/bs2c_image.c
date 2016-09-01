@@ -38,7 +38,7 @@ byte *BS2C_Image_EmitTag(byte *ct, u64 tag, s64 sz)
 		if(sz<0x1FFD)
 		{
 			sz1=sz+3;
-			*ct++=0x60+((sz>>8)&0x3F);
+			*ct++=0x60+((sz1>>8)&0x3F);
 			*ct++=sz1&255;
 			*ct++=tag;
 			return(ct);
@@ -322,6 +322,31 @@ byte *BS2C_Image_EmitSVLI(byte *ct, s64 v)
 	return(BS2C_Image_EmitUVLI(ct, (v<<1)^(v>>63)));
 }
 
+byte *BS2C_Image_EmitFVLI(byte *ct, double val)
+{
+	u64 ix;
+	s64 m;
+	int e;
+
+	ix=*(u64 *)(&val);
+
+	m=(s64)((ix&0x000FFFFFFFFFFFFFULL)|
+		0x0010000000000000ULL);
+	e=((ix>>52)&2047)-(1023+52);
+
+	while(!(m&255))
+		{ m=m>>8; e=e+8; }
+	while(!(m&1))
+		{ m=m>>1; e++; }
+	
+	if(ix>>63)
+		{ m=-m; }
+	
+	ct=BS2C_Image_EmitSVLI(ct, e);
+	ct=BS2C_Image_EmitSVLI(ct, m);
+	return(ct);
+}
+
 byte *BS2C_Image_EmitTagUVLI(byte *ct, u32 tag, u64 val)
 {
 	byte tb[16];
@@ -375,27 +400,7 @@ byte *BS2C_Image_EmitTagFloat(byte *ct, u32 tag, double val)
 	byte tb[64];
 	byte *ct1;
 
-	u64 ix;
-	s64 m;
-	int e;
-
-	ix=*(u64 *)(&val);
-
-	m=(s64)((ix&0x000FFFFFFFFFFFFFULL)|
-		0x0010000000000000ULL);
-	e=((ix>>52)&2047)-(1023+52);
-
-	while(!(m&255))
-		{ m=m>>8; e=e+8; }
-	while(!(m&1))
-		{ m=m>>1; e++; }
-	
-	if(ix>>63)
-		{ m=-m; }
-	
-	ct1=BS2C_Image_EmitSVLI(tb, e);
-	ct1=BS2C_Image_EmitSVLI(ct1, m);
-
+	ct1=BS2C_Image_EmitFVLI(tb, val);
 	ct=BS2C_Image_EmitTagData(ct, tag, ct1-tb, tb);
 	return(ct);
 }
@@ -542,11 +547,18 @@ byte *BS2C_Image_FlattenGlobalInfo_GblDefI(
 			ct=BS2C_Image_EmitTagFloat(ct, BS2CC_I1CC_VARINIT,
 				dtvUnwrapDouble(vari->initVal));
 //			BSVM2_DBGTRAP
-		}else if(dtvIsArrayP(vari->initVal))
+		}else if(BGBDT_TagStr_IsStringP(vari->initVal))
 		{
+			i=BS2C_ImgLookupString(ctx,
+				BGBDT_TagStr_GetUtf8(vari->initVal));
 			ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_VARINIT,
-				(vari->initGid<<2));
+				(i<<4)|1);
 //			BSVM2_DBGTRAP
+		}else if(dtvIsContIdxP(vari->initVal))
+		{
+			j=dtvUnwrapContIdx(vari->initVal);
+			ct=BS2C_Image_EmitTagSVLI(ct, BS2CC_I1CC_VARINIT,
+				(j<<2));
 		}else
 		{
 			BSVM2_DBGTRAP
@@ -803,6 +815,213 @@ byte *BS2C_Image_FlattenGlobalInfo_Package(
 	return(ct);
 }
 
+int BS2C_Image_FlattenInitMapTagVal(
+	BS2CC_CompileContext *ctx,
+	dtVal val)
+{
+	int i, j, k, l;
+
+	if(dtvIsContIdxP(val))
+	{
+		j=dtvUnwrapContIdx(val);
+		return(j<<2);
+	}
+
+	if(BGBDT_TagStr_IsStringP(val))
+	{
+		j=BS2C_ImgGetString(ctx,
+			BGBDT_TagStr_GetUtf8(val));
+		return((j<<4)|1);
+	}
+
+	BSVM2_DBGTRAP
+}
+
+int BS2C_Image_BaseTypePackSize(int bty)
+{
+	int sz;
+	switch(bty)
+	{
+	case BSVM2_OPZ_INT:			sz=4; break;
+	case BSVM2_OPZ_LONG:		sz=8; break;
+	case BSVM2_OPZ_FLOAT:		sz=4; break;
+	case BSVM2_OPZ_DOUBLE:		sz=8; break;
+	case BSVM2_OPZ_ADDRESS:		sz=4; break;
+	case BSVM2_OPZ_UINT:		sz=4; break;
+	case BSVM2_OPZ_UBYTE:		sz=1; break;
+	case BSVM2_OPZ_SHORT:		sz=2; break;
+	case BSVM2_OPZ_SBYTE:		sz=1; break;
+	case BSVM2_OPZ_USHORT:		sz=2; break;
+	case BSVM2_OPZ_ULONG:		sz=8; break;
+	case BSVM2_OPZ_NLONG:		sz=4; break;
+	case BSVM2_OPZ_UNLONG:		sz=4; break;
+	case BSVM2_OPZ_X128:		sz=16; break;
+
+	default: sz=8; break;
+	}
+	return(sz);
+}
+
+byte *BS2C_Image_FlattenGlobalInfo_InitArr(
+	BS2CC_CompileContext *ctx,
+	BS2CC_VarInfo *vari,
+	byte *obuf)
+{
+	byte tb1[4096];
+	dtVal n0, n1;
+	byte *sbuf, *tbuf, *ct, *cs1, *ct1;
+	u64 uli;
+	int z, l, str, tcc1, tcc2;
+	int i, j, k;
+	
+	if(!dtvTrueP(vari->initVal) ||
+		!dtvIsArrayP(vari->initVal))
+	{
+		BSVM2_DBGTRAP
+	}
+
+	z=dtvArrayGetBaseType(vari->initVal);
+	l=dtvArrayGetSize(vari->initVal);
+	str=BS2C_Image_BaseTypePackSize(z);
+	sbuf=dtvArrayGetIndexAddrB1(vari->initVal, 0);
+		
+	if(z<10)
+		{ tcc1=BS2CC_IMG_TWOCC('A', '0'+z); }
+	else
+		{ tcc1=BS2CC_IMG_TWOCC('A', 'a'+(z-10)); }
+	tcc2=BS2CC_IMG_TWOCC('A', 'g'+z);
+
+	if((z==BSVM2_OPZ_UBYTE) || (z==BSVM2_OPZ_SBYTE))
+	{
+		cs1=dtvArrayGetIndexAddrB1(vari->initVal, 0);
+		ct=BS2C_Image_EmitTagData(obuf, tcc1, l, sbuf);
+		return(ct);
+	}
+	
+	if((2*l*str)<=4096)
+	{
+		tbuf=tb1;
+	}else
+	{
+		tbuf=bgbdt_mm_malloc(2*l*str);
+	}
+
+	if((z==BSVM2_OPZ_USHORT) || (z==BSVM2_OPZ_SHORT))
+	{
+		cs1=sbuf; ct1=tbuf;
+		ct1=BS2C_Image_EmitUVLI(ct1, l);
+		for(i=0; i<l; i++)
+		{
+			if(z==BSVM2_OPZ_USHORT)
+				{ ct1=BS2C_Image_EmitUVLI(ct1, *(u16 *)cs1); }
+			else
+				{ ct1=BS2C_Image_EmitSVLI(ct1, *(s16 *)cs1); }
+			cs1+=2;
+		}
+		k=ct1-tbuf;
+		if(k<(l*str))
+			{ ct=BS2C_Image_EmitTagData(obuf, tcc2, k, tbuf); return(ct); }
+		cs1=sbuf; ct1=tbuf;
+		for(i=0; i<l; i++)
+		{
+			j=*(u16 *)cs1;
+			ct1[0]=j>>8;	ct1[1]=j;
+			cs1+=2; ct1+=2;
+		}
+		ct=BS2C_Image_EmitTagData(obuf, tcc1, l, tbuf);
+		return(ct);
+	}
+
+	if((z==BSVM2_OPZ_INT) || (z==BSVM2_OPZ_UINT) || (z==BSVM2_OPZ_FLOAT))
+	{
+		cs1=sbuf; ct1=tbuf;
+		ct1=BS2C_Image_EmitUVLI(ct1, l);
+		for(i=0; i<l; i++)
+		{
+			if(z==BSVM2_OPZ_FLOAT)
+				{ ct1=BS2C_Image_EmitFVLI(ct1, *(f32 *)cs1); }
+			else if(z==BSVM2_OPZ_UINT)
+				{ ct1=BS2C_Image_EmitUVLI(ct1, *(u32 *)cs1); }
+			else
+				{ ct1=BS2C_Image_EmitSVLI(ct1, *(s32 *)cs1); }
+			cs1+=4;
+		}
+		k=ct1-tbuf;
+		if(k<(l*str))
+			{ ct=BS2C_Image_EmitTagData(obuf, tcc2, k, tbuf); return(ct); }
+		cs1=sbuf; ct1=tbuf;
+		for(i=0; i<l; i++)
+		{
+			j=*(u32 *)cs1;
+			ct1[0]=j>>24;	ct1[1]=j>>16;
+			ct1[2]=j>>8;	ct1[3]=j;
+			cs1+=4; ct1+=4;
+		}
+		ct=BS2C_Image_EmitTagData(obuf, tcc1, l, tbuf);
+		return(ct);
+	}
+
+	if((z==BSVM2_OPZ_LONG) || (z==BSVM2_OPZ_ULONG) ||
+		(z==BSVM2_OPZ_DOUBLE))
+	{
+		cs1=sbuf; ct1=tbuf;
+		ct1=BS2C_Image_EmitUVLI(ct1, l);
+		for(i=0; i<l; i++)
+		{
+			if(z==BSVM2_OPZ_DOUBLE)
+				{ ct1=BS2C_Image_EmitFVLI(ct1, *(f64 *)cs1); }
+			else if(z==BSVM2_OPZ_ULONG)
+				{ ct1=BS2C_Image_EmitUVLI(ct1, *(u64 *)cs1); }
+			else
+				{ ct1=BS2C_Image_EmitSVLI(ct1, *(s64 *)cs1); }
+			cs1+=8;
+		}
+		k=ct1-tbuf;
+		if(k<(l*str))
+			{ ct=BS2C_Image_EmitTagData(obuf, tcc2, k, tbuf); return(ct); }
+		cs1=sbuf; ct1=tbuf;
+		for(i=0; i<l; i++)
+		{
+			uli=*(u64 *)cs1;
+			ct1[0]=uli>>56;	ct1[1]=uli>>48;
+			ct1[0]=uli>>40;	ct1[1]=uli>>32;
+			ct1[0]=uli>>24;	ct1[1]=uli>>16;
+			ct1[2]=uli>> 8;	ct1[3]=uli    ;
+			cs1+=8; ct1+=8;
+		}
+		ct=BS2C_Image_EmitTagData(obuf, tcc1, l, tbuf);
+		return(ct);
+	}
+	
+	if(z==BSVM2_OPZ_ADDRESS)
+	{
+		cs1=sbuf; ct1=tbuf;
+		ct1=BS2C_Image_EmitUVLI(ct1, l);
+		for(i=0; i<l; i++)
+		{
+			n0=dtvArrayGetIndexDtVal(vari->initVal, i);
+			j=BS2C_Image_FlattenInitMapTagVal(ctx, n0);
+			ct1=BS2C_Image_EmitUVLI(ct1, j);
+		}
+		k=ct1-tbuf;
+		if(k<(l*str))
+			{ ct=BS2C_Image_EmitTagData(obuf, tcc2, k, tbuf); return(ct); }
+		cs1=sbuf; ct1=tbuf;
+		for(i=0; i<l; i++)
+		{
+			n0=dtvArrayGetIndexDtVal(vari->initVal, i);
+			j=BS2C_Image_FlattenInitMapTagVal(ctx, n0);
+			ct1[0]=j>>24;	ct1[1]=j>>16;
+			ct1[2]=j>>8;	ct1[3]=j;
+			cs1+=4; ct1+=4;
+		}
+		ct=BS2C_Image_EmitTagData(obuf, tcc1, l, tbuf);
+		return(ct);
+	}
+
+	BSVM2_DBGTRAP
+}
+
 byte *BS2C_Image_FlattenGlobalInfo(
 	BS2CC_CompileContext *ctx,
 	BS2CC_VarInfo *vari,
@@ -853,6 +1072,12 @@ byte *BS2C_Image_FlattenGlobalInfo(
 	if(vari->vitype==BS2CC_VITYPE_PACKAGE)
 	{
 		ct=BS2C_Image_FlattenGlobalInfo_Package(ctx, vari, ct);
+		return(ct);
+	}
+
+	if(vari->vitype==BS2CC_VITYPE_INITARR)
+	{
+		ct=BS2C_Image_FlattenGlobalInfo_InitArr(ctx, vari, ct);
 		return(ct);
 	}
 
@@ -960,8 +1185,10 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 {
 	BS2CC_CcFrame *frm;
 	BS2CC_VarInfo *vi;
+	dtVal n0, n1, n2;
 	char *s;
-	int i, j, k;
+	int z;
+	int i, j, k, l;
 
 //	if(vari->bmfl&BS2CC_TYFL_REACHDONE)
 //		return;
@@ -984,6 +1211,8 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 		return;
 	}
 #endif
+
+//	vari->bmfl|=BS2CC_TYFL_PUBVISIBLE;	//DEBUG
 
 	if(vari->vitype==BS2CC_VITYPE_GBLFUNC)
 	{
@@ -1034,11 +1263,56 @@ BS2VM_API void BS2C_TouchReachable_TouchReachDef(
 		}
 	}
 
-	if(vari->initGid>0)
+
+	if(dtvTrueP(vari->initVal))
 	{
-		BS2C_TouchReachable_TouchReachDef(ctx,
-			ctx->globals[vari->initGid]);
+		if(BGBDT_TagStr_IsStringP(vari->initVal))
+		{
+			BS2C_ImgGetString(ctx,
+				BGBDT_TagStr_GetUtf8(vari->initVal));
+		}
+		
+		if(dtvIsArrayP(vari->initVal))
+		{
+			z=dtvArrayGetBaseType(vari->initVal);
+			l=dtvArrayGetSize(vari->initVal);
+			
+			if(z==BSVM2_OPZ_ADDRESS)
+			{
+				for(i=0; i<l; i++)
+				{
+					n0=dtvArrayGetIndexDtVal(vari->initVal, i);
+					
+					if(BGBDT_TagStr_IsStringP(n0))
+					{
+						BS2C_ImgGetString(ctx,
+							BGBDT_TagStr_GetUtf8(n0));
+					}
+					
+					if(dtvIsContIdxP(n0))
+					{
+						j=dtvUnwrapContIdx(n0);
+						BS2C_TouchReachable_TouchReachDef(ctx,
+							ctx->globals[j]);
+					}
+				}
+			}
+		}
+		
+		if(dtvIsContIdxP(vari->initVal))
+		{
+			j=dtvUnwrapContIdx(vari->initVal);
+			BS2C_TouchReachable_TouchReachDef(ctx,
+				ctx->globals[j]);
+		}
+
 	}
+
+//	if(vari->initGid>0)
+//	{
+//		BS2C_TouchReachable_TouchReachDef(ctx,
+//			ctx->globals[vari->initGid]);
+//	}
 
 	if(vari->body)
 	{

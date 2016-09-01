@@ -129,6 +129,12 @@ dtVal BGBDTC_SlotI_GetA_DflA(dtcObject obj, dtcField fi)
 dtVal BGBDTC_SlotI_GetA_DflP(dtcObject obj, dtcField fi)
 	{ return(dtvWrapPtr(*(void **)(((byte *)obj)+fi->offs))); }
 
+dtVal BGBDTC_SlotI_GetA_DflPF(dtcObject obj, dtcField fi)
+	{ return(dtvWrapTyTagPtrF(*(void **)(((byte *)obj)+fi->offs), 0)); }
+
+dtVal BGBDTC_SlotI_GetA_DflArr(dtcObject obj, dtcField fi)
+	{ return(dtvWrapTyTagPtrF((((byte *)obj)+fi->offs), 0)); }
+
 u16 bgbdtc_bswap_us(u16 v)
 {
 	return(((v>>8)&0x00FF)|((v<<8)&0xFF00));
@@ -215,6 +221,9 @@ void BGBDTC_SlotI_SetA_DflA(dtcObject obj, dtcField fi, dtVal v)
 	{ *(dtVal *)(((byte *)obj)+fi->offs)=v; }
 void BGBDTC_SlotI_SetA_DflP(dtcObject obj, dtcField fi, dtVal v)
 	{ *(void **)(((byte *)obj)+fi->offs)=dtvUnwrapPtr(v); }
+
+void BGBDTC_SlotI_SetA_DflPF(dtcObject obj, dtcField fi, dtVal v)
+	{ *(void **)(((byte *)obj)+fi->offs)=dtvUnwrapPtrF(v); }
 
 void BGBDTC_SlotI_SetI_DeL(dtcObject obj, dtcField fi, s32 v)
 	{ fi->SetL(obj, fi, v); }
@@ -501,6 +510,8 @@ int BGBDTC_SlotSetupVtGetSet(
 	case 'p':	case 'q':	case 'r':
 	case 'Q':	case 'L':
 	case 'C':
+	case 'X':
+//	case 'A':
 		vi->GetI=BGBDTC_SlotI_GetI_DeA;
 		vi->GetL=BGBDTC_SlotI_GetL_DeA;
 		vi->GetF=BGBDTC_SlotI_GetF_DeA;
@@ -512,6 +523,20 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeA;
 		vi->SetD=BGBDTC_SlotI_SetD_DeA;
 		vi->SetA=BGBDTC_SlotI_SetA_DflA;
+		break;
+
+	case 'A':
+//		vi->GetI=BGBDTC_SlotI_GetI_DeA;
+//		vi->GetL=BGBDTC_SlotI_GetL_DeA;
+//		vi->GetF=BGBDTC_SlotI_GetF_DeA;
+//		vi->GetD=BGBDTC_SlotI_GetD_DeA;
+		vi->GetA=BGBDTC_SlotI_GetA_DflArr;
+
+//		vi->SetI=BGBDTC_SlotI_SetI_DeA;
+//		vi->SetL=BGBDTC_SlotI_SetL_DeA;
+//		vi->SetF=BGBDTC_SlotI_SetF_DeA;
+//		vi->SetD=BGBDTC_SlotI_SetD_DeA;
+//		vi->SetA=BGBDTC_SlotI_SetA_DflA;
 		break;
 
 	case 'P':
@@ -526,6 +551,22 @@ int BGBDTC_SlotSetupVtGetSet(
 		vi->SetF=BGBDTC_SlotI_SetF_DeA;
 		vi->SetD=BGBDTC_SlotI_SetD_DeA;
 		vi->SetA=BGBDTC_SlotI_SetA_DflP;
+		
+		switch(vi->sig[1])
+		{
+		case 'a':	case 'b':	case 'c':	case 'd':
+		case 'e':	case 'f':	case 'g':	case 'h':
+		case 'i':	case 'j':	case 'k':	case 'l':
+		case 'm':	case 'n':	case 'o':
+		case 's':	case 't':
+		case 'w':	case 'x':	case 'y':
+			vi->GetA=BGBDTC_SlotI_GetA_DflPF;
+			vi->SetA=BGBDTC_SlotI_SetA_DflPF;
+			break;
+		}
+		break;
+	default:
+		BSVM2_DBGTRAP
 		break;
 	}
 
@@ -612,6 +653,7 @@ BS2VM_API int BGBDTC_FinishLayoutClass(
 				vi->SetA=BGBDTC_SlotI_SetA_IfaceA;
 			}else
 			{
+				BSVM2_DBGTRAP
 			}
 		}
 	}

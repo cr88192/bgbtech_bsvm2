@@ -785,23 +785,31 @@ BASM_API void BASM_BeginAssembly(char *name)
 
 FILE *basm_jitlog_fd;
 
-int basm_jitlog_printf(char *str, ...)
+BASM_API int basm_jitlog_puts(char *str)
+{
+	if(!basm_jitlog_fd)
+		basm_jitlog_fd=fopen("bgbasm_jitlog.txt", "wt");
+
+	fputs(str, basm_jitlog_fd);
+	fflush(basm_jitlog_fd);
+}
+
+BASM_API int basm_jitlog_printf(char *str, ...)
 {
 	static char *buf=NULL;
 	va_list lst;
 	
 	if(!basm_jitlog_fd)
-	{
 		basm_jitlog_fd=fopen("bgbasm_jitlog.txt", "wt");
+
+	if(!buf)
 		buf=malloc(1<<16);
-	}
 	
 	va_start(lst, str);
 	vsprintf(buf, str, lst);
 	va_end(lst);
 	
-	fputs(buf, basm_jitlog_fd);
-	fflush(basm_jitlog_fd);
+	basm_jitlog_puts(buf);
 }
 
 BASM_API void *BASM_EndAssembly()

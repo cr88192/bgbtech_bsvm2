@@ -279,6 +279,7 @@ char *BS2J_GetMemRefStackP(BSVM2_Trace *tr, int idx, int ofs)
 int BS2J_TryJitOpcode(BSVM2_Trace *tr, BSVM2_Opcode *op)
 {
 	char *s0, *s1, *s2;
+	int i, j, k;
 
 	if(op->opn==BSVM2_OP_LABEL)
 	{
@@ -664,7 +665,11 @@ int BS2J_TryJitOpcode(BSVM2_Trace *tr, BSVM2_Opcode *op)
 			(op->opn2==BSVM2_OP_LDIXL) ||
 			(op->opn2==BSVM2_OP_LDIXF) ||
 			(op->opn2==BSVM2_OP_LDIXD) ||
-			(op->opn2==BSVM2_OP_LDIXA))
+			(op->opn2==BSVM2_OP_LDIXA) ||
+			(op->opn2==BSVM2_OP_LDIXSS) ||
+			(op->opn2==BSVM2_OP_LDIXUS) ||
+			(op->opn2==BSVM2_OP_LDIXSB) ||
+			(op->opn2==BSVM2_OP_LDIXUB))
 		{
 			BS2J_CheckCacheLocalsESI(tr);
 			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t0));
@@ -694,13 +699,31 @@ int BS2J_TryJitOpcode(BSVM2_Trace *tr, BSVM2_Opcode *op)
 					BS2J_GetMemRefStack(tr, op->t0));
 				return(1);
 			}
+
+			s2=NULL;
+			if(op->opn2==BSVM2_OP_LDIXSS) { s2="movsxw"; j=2; }
+			if(op->opn2==BSVM2_OP_LDIXUS) { s2="movzxw"; j=2; }
+			if(op->opn2==BSVM2_OP_LDIXSB) { s2="movsxb"; j=1; }
+			if(op->opn2==BSVM2_OP_LDIXUB) { s2="movzxb"; j=1; }
+			if(s2)
+			{
+				if(j>1)
+					basm_print("%s edx, [rax+rcx*%d]\n", s2, j);
+				else
+					basm_print("%s edx, [rax+rcx]\n", s2);
+				basm_print("mov %s, edx\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				return(1);
+			}
 		}
 
 		if(	(op->opn2==BSVM2_OP_STIXI) ||
 			(op->opn2==BSVM2_OP_STIXL) ||
 			(op->opn2==BSVM2_OP_STIXF) ||
 			(op->opn2==BSVM2_OP_STIXD) ||
-			(op->opn2==BSVM2_OP_STIXA))
+			(op->opn2==BSVM2_OP_STIXA) ||
+			(op->opn2==BSVM2_OP_STIXS) ||
+			(op->opn2==BSVM2_OP_STIXB))
 		{
 			BS2J_CheckCacheLocalsESI(tr);
 			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t1));
@@ -730,7 +753,229 @@ int BS2J_TryJitOpcode(BSVM2_Trace *tr, BSVM2_Opcode *op)
 				basm_print("mov [rax+rcx*8], rdx\n");
 				return(1);
 			}
+
+			if(op->opn2==BSVM2_OP_STIXS)
+			{
+				basm_print("mov edx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+rcx*2], dx\n");
+				return(1);
+			}
+
+			if(op->opn2==BSVM2_OP_STIXB)
+			{
+				basm_print("mov edx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+rcx], dl\n");
+				return(1);
+			}
 		}
+
+
+#if 1
+		if(	(op->opn2==BSVM2_OP_LDIXIC) ||
+			(op->opn2==BSVM2_OP_LDIXLC) ||
+			(op->opn2==BSVM2_OP_LDIXFC) ||
+			(op->opn2==BSVM2_OP_LDIXDC) ||
+			(op->opn2==BSVM2_OP_LDIXAC) ||
+			(op->opn2==BSVM2_OP_LDIXSSC) ||
+			(op->opn2==BSVM2_OP_LDIXUSC) ||
+			(op->opn2==BSVM2_OP_LDIXSBC) ||
+			(op->opn2==BSVM2_OP_LDIXUBC))
+		{
+			BS2J_CheckCacheLocalsESI(tr);
+			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t0));
+//			basm_print("movsxd rcx, %s\n", BS2J_GetMemRefStack(tr, op->t1));
+
+//			basm_print("shl rax, 16\n");
+//			basm_print("sar rax, 16\n");
+
+			basm_print("mov rdx, 0x0000FFFFFFFFFFFF\n");
+			basm_print("and rax, rdx\n");
+			
+			if((op->opn2==BSVM2_OP_LDIXIC) ||
+				(op->opn2==BSVM2_OP_LDIXFC))
+			{
+				basm_print("mov edx, [rax+%d]\n", op->v.i*4);
+				basm_print("mov %s, edx\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				return(1);
+			}
+
+			if((op->opn2==BSVM2_OP_LDIXLC) ||
+				(op->opn2==BSVM2_OP_LDIXDC) ||
+				(op->opn2==BSVM2_OP_LDIXAC))
+			{
+				basm_print("mov rdx, [rax+%d]\n", op->v.i*8);
+				basm_print("mov %s, rdx\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				return(1);
+			}
+
+			s2=NULL;
+			if(op->opn2==BSVM2_OP_LDIXSSC) { s2="movsxw"; j=op->v.i*2; }
+			if(op->opn2==BSVM2_OP_LDIXUSC) { s2="movzxw"; j=op->v.i*2; }
+			if(op->opn2==BSVM2_OP_LDIXSBC) { s2="movsxb"; j=op->v.i; }
+			if(op->opn2==BSVM2_OP_LDIXUBC) { s2="movzxb"; j=op->v.i; }
+			if(s2)
+			{
+				basm_print("%s edx, [rax+%d]\n", s2, j);
+				basm_print("mov %s, edx\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				return(1);
+			}
+		}
+
+		if(	(op->opn2==BSVM2_OP_STIXIC) ||
+			(op->opn2==BSVM2_OP_STIXLC) ||
+			(op->opn2==BSVM2_OP_STIXFC) ||
+			(op->opn2==BSVM2_OP_STIXDC) ||
+			(op->opn2==BSVM2_OP_STIXAC) ||
+			(op->opn2==BSVM2_OP_STIXSC) ||
+			(op->opn2==BSVM2_OP_STIXBC))
+		{
+			BS2J_CheckCacheLocalsESI(tr);
+			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t1));
+//			basm_print("movsxd rcx, %s\n", BS2J_GetMemRefStack(tr, op->t2));
+			
+//			basm_print("shl rax, 16\n");
+//			basm_print("sar rax, 16\n");
+
+			basm_print("mov rdx, 0x0000FFFFFFFFFFFF\n");
+			basm_print("and rax, rdx\n");
+			
+			if((op->opn2==BSVM2_OP_STIXIC) ||
+				(op->opn2==BSVM2_OP_STIXFC))
+			{
+				basm_print("mov edx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+%d], edx\n", op->v.i*4);
+				return(1);
+			}
+
+			if((op->opn2==BSVM2_OP_STIXLC) ||
+				(op->opn2==BSVM2_OP_STIXDC) ||
+				(op->opn2==BSVM2_OP_STIXAC))
+			{
+				basm_print("mov rdx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+%d], rdx\n", op->v.i*8);
+				return(1);
+			}
+
+			if(op->opn2==BSVM2_OP_STIXSC)
+			{
+				basm_print("mov edx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+%d], dx\n", op->v.i*2);
+				return(1);
+			}
+
+			if(op->opn2==BSVM2_OP_STIXBC)
+			{
+				basm_print("mov edx, %s\n",
+					BS2J_GetMemRefStack(tr, op->t0));
+				basm_print("mov [rax+%d], dl\n", op->v.i);
+				return(1);
+			}
+		}
+
+		if(op->opn2==BSVM2_OP_CMPA)
+		{
+			BS2J_CheckCacheLocalsESI(tr);
+			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t0));
+			basm_print("mov rcx, %s\n", BS2J_GetMemRefStack(tr, op->t1));
+			basm_print("sub rax, rcx\n");
+			basm_print("sub rcx, %s\n", BS2J_GetMemRefStack(tr, op->t0));
+			basm_print("sar rax, 63\n");
+			basm_print("shr rcx, 63\n");
+			basm_print("or eax, ecx\n");
+			basm_print("mov %s, eax\n", BS2J_GetMemRefStack(tr, op->t0));
+			return(1);
+		}
+#endif
+
+#if 1
+		if(	(op->opn2==BSVM2_OP_LEARI) ||
+			(op->opn2==BSVM2_OP_LEARL) ||
+			(op->opn2==BSVM2_OP_LEARF) ||
+			(op->opn2==BSVM2_OP_LEARD) ||
+			(op->opn2==BSVM2_OP_LEARA) ||
+			(op->opn2==BSVM2_OP_LEARS) ||
+			(op->opn2==BSVM2_OP_LEARB))
+		{
+			BS2J_CheckCacheLocalsESI(tr);
+			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t0));
+			basm_print("movsxd rcx, %s\n", BS2J_GetMemRefStack(tr, op->t1));
+			
+//			basm_print("shl rax, 16\n");
+//			basm_print("sar rax, 16\n");
+
+//			basm_print("mov rdx, 0x0000FFFFFFFFFFFF\n");
+//			basm_print("and rax, rdx\n");
+			
+			j=0;
+			if((op->opn2==BSVM2_OP_LEARI) ||
+				(op->opn2==BSVM2_OP_LEARF))
+					j=4;
+			if((op->opn2==BSVM2_OP_LEARL) ||
+				(op->opn2==BSVM2_OP_LEARD) ||
+				(op->opn2==BSVM2_OP_LEARA))
+					j=8;
+			if(op->opn2==BSVM2_OP_LEARS)
+				j=2;
+			if(op->opn2==BSVM2_OP_LEARB)
+				j=1;
+
+			if(j>1)
+				basm_print("lea rdx, [rax+rcx*%d]\n", j);
+			else
+				basm_print("lea rdx, [rax+rcx]\n");
+			basm_print("mov %s, rdx\n",
+				BS2J_GetMemRefStack(tr, op->t0));
+			return(1);
+		}
+#endif
+
+#if 1
+		if(	(op->opn2==BSVM2_OP_LEARIC) ||
+			(op->opn2==BSVM2_OP_LEARLC) ||
+			(op->opn2==BSVM2_OP_LEARFC) ||
+			(op->opn2==BSVM2_OP_LEARDC) ||
+			(op->opn2==BSVM2_OP_LEARAC) ||
+			(op->opn2==BSVM2_OP_LEARSC) ||
+			(op->opn2==BSVM2_OP_LEARBC))
+		{
+			BS2J_CheckCacheLocalsESI(tr);
+			basm_print("mov rax, %s\n", BS2J_GetMemRefStack(tr, op->t0));
+//			basm_print("movsxd rcx, %s\n", BS2J_GetMemRefStack(tr, op->t1));
+			
+//			basm_print("shl rax, 16\n");
+//			basm_print("sar rax, 16\n");
+
+//			basm_print("mov rdx, 0x0000FFFFFFFFFFFF\n");
+//			basm_print("and rax, rdx\n");
+			
+			j=0;
+			if((op->opn2==BSVM2_OP_LEARIC) ||
+				(op->opn2==BSVM2_OP_LEARFC))
+					j=op->v.i*4;
+			if((op->opn2==BSVM2_OP_LEARLC) ||
+				(op->opn2==BSVM2_OP_LEARDC) ||
+				(op->opn2==BSVM2_OP_LEARAC))
+					j=op->v.i*8;
+			if(op->opn2==BSVM2_OP_LEARSC)
+				j=op->v.i*2;
+			if(op->opn2==BSVM2_OP_LEARBC)
+				j=op->v.i*1;
+
+			basm_print("lea rdx, [rax+%d]\n", j);
+			basm_print("mov %s, rdx\n",
+				BS2J_GetMemRefStack(tr, op->t0));
+			return(1);
+		}
+#endif
+		k=-1;
 	}
 #endif
 

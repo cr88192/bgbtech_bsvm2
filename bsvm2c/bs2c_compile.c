@@ -378,7 +378,7 @@ void BS2C_CompileFuncBodyCleanupVar(
 	BS2CC_CompileContext *ctx, BS2CC_VarInfo *vi, int ix)
 {
 	BS2CC_VarInfo *vi2;
-	int bty, sz, z, ix2;
+	int bty, cty, sz, z, ix2;
 	int i;
 
 	bty=vi->bty;
@@ -401,12 +401,13 @@ void BS2C_CompileFuncBodyCleanupVar(
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{
+		cty=BS2C_TypeDerefType(ctx, bty);
 		sz=BS2C_TypeGetArraySize(ctx, bty);
-		z=BS2C_GetTypeBaseZ(ctx, bty);
+		z=BS2C_GetTypeBaseZ(ctx, cty);
 
 		BS2C_EmitOpcode(ctx, BSVM2_OP_DFXARR);
-		BS2C_EmitOpcodeUCx(ctx, ix);
 		BS2C_EmitOpcodeUZx(ctx, z, sz);
+		BS2C_EmitOpcodeUCx(ctx, ix);
 
 //		BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
 //		BS2C_EmitOpcodeUZx(ctx, z, sz);
@@ -504,7 +505,8 @@ void BS2C_CompileFuncBodyCleanup(
 
 	if(ctx->frm->func->rty!=BS2CC_TYZ_VOID)
 	{
-		BS2C_CompileExprPushType(ctx, ctx->frm->func->rty);
+//		BS2C_CompileExprPushType(ctx, ctx->frm->func->rty);
+		BS2C_CompileNoexPush(ctx, ctx->frm->func->rty);
 	}
 
 	BS2C_EmitOpcode(ctx, BSVM2_OP_LBLCLNP);
@@ -681,7 +683,8 @@ void BS2C_CompileVarInit(BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 	}
 	
 	nv=BS2C_ReduceEvaluateExprAs(ctx, ni, vari->bty);
-	if(dtvTrueP(nv))
+//	if(dtvTrueP(nv))
+	if(!dtvUndefinedP(nv))
 	{
 		vari->initVal=nv;
 		
@@ -690,6 +693,8 @@ void BS2C_CompileVarInit(BS2CC_CompileContext *ctx, BS2CC_VarInfo *vari)
 			vi=BS2C_GetNewGlobalVari(ctx);
 			vi->vitype=BS2CC_VITYPE_INITARR;
 			vi->initVal=nv;
+
+			vari->initVal=dtvWrapContIdx(vi->gid);
 			vari->initGid=vi->gid;
 		}
 		return;

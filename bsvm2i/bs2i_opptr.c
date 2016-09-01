@@ -104,6 +104,18 @@ void BSVM2_Op_DIFFPTR_X(BSVM2_Frame *frm, BSVM2_Opcode *op)
 }
 
 
+void BSVM2_Op_CMPA_P(BSVM2_Frame *frm, BSVM2_Opcode *op)
+{
+	byte *p1, *p2;
+	int i;
+	p1=dtvUnwrapPtr(frm->stack[op->t0].a);
+	p2=dtvUnwrapPtr(frm->stack[op->t1].a);
+	i=0;
+	if(p1>p2)i= 1;
+	if(p1<p2)i=-1;
+	frm->stack[op->t0].i=i;
+}
+
 void BSVM2_Op_LDIXI_P(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	void *p;

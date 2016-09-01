@@ -979,6 +979,7 @@ void BS2C_EmitSetNewtrace(BS2CC_CompileContext *ctx)
 void BS2C_EmitTempLabelB(BS2CC_CompileContext *ctx, int tid)
 {
 	if(!ctx->frm->newtrace)
+//	if(1)
 	{
 		BS2C_EmitOpcode(ctx, BSVM2_OP_LABEL);
 		ctx->frm->newtrace=1;

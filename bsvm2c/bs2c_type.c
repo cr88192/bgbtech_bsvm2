@@ -269,6 +269,8 @@ char *BS2C_GetTypeSig(BS2CC_CompileContext *ctx, int ty)
 char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 {
 	char tb[256];
+	BS2CC_TypeOverflow tovf;
+	BS2CC_TypeOverflow *ovf;
 	BS2CC_VarInfo *vi;
 	char *t;
 	int al, asz, bty;
@@ -279,6 +281,34 @@ char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 		al =(ty>>BS2CC_TYI_SHR)&BS2CC_TYI_MASK2;
 		asz=(ty>>BS2CC_TYS_SHR)&BS2CC_TYS_MASK2;
 		bty=(ty>>BS2CC_TYE_SHR)&BS2CC_TYE_MASK2;
+		
+		ovf=&tovf;
+		memset(ovf, 0, sizeof(BS2CC_TypeOverflow));
+
+		if((al>=1) && (al<=3))
+		{
+			ovf->al=al;
+		}else if((al>=5) && (al<=7))
+		{
+			i=al-4;
+			ovf->pl=i;
+		}else if(al==4)
+		{
+			ovf->rf=1;
+		}
+		
+		ovf->base=bty;
+//		ovf->al=al;
+		if(asz)
+		{
+			ovf->asz[0]=asz;
+			ovf->an=1;
+		}
+	}else if((ty&BS2CC_TYT_MASK)==BS2CC_TYT_OVF)
+	{
+		ovf=ctx->tyovf[ty&BS2CC_TYO_MASK];
+		al=ovf->al;
+		bty=ovf->base;
 	}else
 	{
 		BSVM2_DBGTRAP
@@ -286,7 +316,30 @@ char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 	}
 	
 	t=tb;
+
+	if(ovf->rf)
+	{
+		*t++='&';
+		*t=0;
+	}
+
+#if 0
+	if(asz)
+	{
+		sprintf(t, "A%d", asz);
+		t+=strlen(t);
+	}
+#endif
 	
+	if(ovf->pl)
+	{
+		i=ovf->pl;
+		while(i--)
+			*t++='*';
+		*t=0;
+	}
+
+#if 0
 	if((al>=1) && (al<=3))
 	{
 		i=al;
@@ -306,7 +359,8 @@ char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 	{
 		*t++='&';
 	}
-	
+#endif	
+
 	if(bty<256)
 	{
 		switch(bty)
@@ -403,10 +457,51 @@ char *BS2C_GetTypeNameStr(BS2CC_CompileContext *ctx, int ty)
 		}
 	}
 
+#if 0
 	if(asz)
 	{
 		sprintf(t, "[%d]", asz);
 		t+=strlen(t);
+	}
+#endif
+
+#if 1
+	switch(ovf->an)
+	{
+	case 0:
+		break;
+	case 1:
+		sprintf(t, "[%d]", ovf->asz[0]);
+		t+=strlen(t);
+		break;
+	case 2:
+		sprintf(t, "[%d,%d]", ovf->asz[0], ovf->asz[1]);
+		t+=strlen(t);
+		break;
+	case 3:
+		sprintf(t, "[%d,%d,%d]", ovf->asz[0], ovf->asz[1], ovf->asz[2]);
+		t+=strlen(t);
+		break;
+	case 4:
+		sprintf(t, "[%d,%d,%d,%d]", ovf->asz[0],
+			ovf->asz[1], ovf->asz[2], ovf->asz[3]);
+		t+=strlen(t);
+		break;
+	default:
+		BSVM2_DBGTRAP
+		break;
+	}
+#endif
+
+	if(ovf->al>ovf->an)
+	{
+		i=ovf->al-ovf->an;
+		while(i--)
+		{
+			*t++='[';
+			*t++=']';
+		}
+		*t=0;
 	}
 
 	return(bgbdt_mm_rstrdup(tb));
@@ -638,6 +733,19 @@ int BS2C_TypeUnsignedP(BS2CC_CompileContext *ctx, int ty)
 	return(0);
 }
 
+int BS2C_TypeUnsigned2P(BS2CC_CompileContext *ctx, int ty)
+{
+	if(ty==BS2CC_TYZ_UINT)
+		return(1);
+	if(ty==BS2CC_TYZ_ULONG)
+		return(1);
+	if(ty==BS2CC_TYZ_UNLONG)
+		return(1);
+	if(ty==BS2CC_TYZ_UINT128)
+		return(1);
+	return(0);
+}
+
 int BS2C_TypeAddressP(BS2CC_CompileContext *ctx, int ty)
 {
 	BS2CC_TypeOverflow *ovf;
@@ -798,11 +906,21 @@ int BS2C_TypePointerP(BS2CC_CompileContext *ctx, int ty)
 	if((ty&BS2CC_TYT_MASK)==BS2CC_TYT_OVF)
 	{
 		ovf=ctx->tyovf[ty&BS2CC_TYO_MASK];
-		if(ovf->pl)
+//		if(ovf->pl)
+		if(ovf->pl && !(ovf->al || ovf->an))
 			return(1);
 		return(0);
 	}
 	
+	return(0);
+}
+
+int BS2C_TypeArrayOrPointerP(BS2CC_CompileContext *ctx, int ty)
+{
+	if(BS2C_TypeArrayP(ctx, ty))
+		return(1);
+	if(BS2C_TypePointerP(ctx, ty))
+		return(1);
 	return(0);
 }
 
@@ -1513,6 +1631,15 @@ int BS2C_TypeBinarySuperType(
 		return(BS2CC_TYZ_INT);
 	}
 
+	if(BS2C_TypeSmallInt128P(ctx, lty) &&
+		BS2C_TypeSmallIntP(ctx, rty) &&
+			(!strcmp(op, "<<") ||
+			 !strcmp(op, ">>") ||
+			 !strcmp(op, ">>>")))
+	{
+		return(lty);
+	}
+
 #if 0
 	if(BS2C_TypeArrayP(ctx, lty) && BS2C_TypeArrayP(ctx, rty))
 	{
@@ -1602,7 +1729,7 @@ int BS2C_TypeCompatibleP(
 		rsz=(sty>>BS2CC_TYS_SHR)&BS2CC_TYS_MASK2;
 	}else if((sty&BS2CC_TYT_MASK)==BS2CC_TYT_OVF)
 	{
-		ovf=ctx->tyovf[dty&BS2CC_TYO_MASK];
+		ovf=ctx->tyovf[sty&BS2CC_TYO_MASK];
 		rbt=ovf->base;
 		ral=ovf->al;
 		rsz=ovf->asz[0];
@@ -1895,7 +2022,8 @@ int BS2C_TypeFromTypeOverflow(
 
 	if((bt>=0x0000) && (bt<=BS2CC_TYE_MASK2) &&
 		(al2>=0) && (al2<=7) &&
-		(asz>=0) && (asz<=BS2CC_TYS_MASK2))
+		(asz>=0) && (asz<=BS2CC_TYS_MASK2) &&
+		!((ovf->pl>0) && (asz>0)))
 	{
 		ty=(bt<<BS2CC_TYE_SHR)|(al2<<BS2CC_TYI_SHR)|
 			(asz<<BS2CC_TYS_SHR);

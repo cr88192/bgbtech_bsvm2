@@ -863,9 +863,9 @@ Instructions
 ** Accesses are required to be within the bounds of the original array.
 
 * E1 40 Gj, IFXOBJ			//Init Fixed Object (Struct)
-* E1 41 Ix Zn, IFXARR		//Init Fixed Array
+* E1 41 Zn Ix, IFXARR		//Init Fixed Array
 * E1 42 Gj, DFXOBJ			//Deinit Fixed Object (Struct)
-* E1 43 Ix Zn, DFXARR		//Deinit Fixed Array
+* E1 43 Zn Ix, DFXARR		//Deinit Fixed Array
 ** Init and Deinit fixed objects.
 ** These are used for structs and fixed arrays stored in local variables.
 ** These are not used for class instances (which use NEWOBJ/DELETE).
@@ -959,8 +959,9 @@ Instructions
 * E1 75, SHRL				//Bitwise Shift Right Long
 * E1 76, UDIVI				//Unsigned Divide Int
 * E1 77, UDIVL				//Unsigned Divide Long
+* E1 78, CVTUI2L			//Convert UInt to Long
 
-* E1 78, CMIEQ				//A==0 (Same as LNTI)
+* / E1 78, CMIEQ				//A==0 (Same as LNTI)
 * E1 79, CMINE				//A!=0
 * E1 7A, CMILT				//A< 0
 * E1 7B, CMIGT				//A> 0

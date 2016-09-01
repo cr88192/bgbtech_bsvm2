@@ -24,6 +24,9 @@ LObj managed via AVL Trees.
 #define UNDEFINED ((void *)(-1))
 #endif
 
+#define BGBDT_MM_CHKMAG1		0x31415927
+#define BGBDT_MM_CHKMAG2		0x72951413
+
 #define BGBDT_MM_SOBJ_CHKSHL	20
 #define BGBDT_MM_SOBJ_CELSHL	 4
 #define BGBDT_MM_SOBJ_TOTSHL	24
@@ -73,12 +76,14 @@ typedef struct BIPRO_RegisterState_s BIPRO_RegisterState;
 #define bgbdt_mm_max(x, y) (((x)>(y))?(x):(y))
 
 struct BGBDT_MM_ChunkInfo_s {
+u32 magic1;
 byte *data;		//data region
 byte *edata;	//end of data region
 byte *map;		//map region
 int ncell;		//number of cells
 int shcell;		//cell shift
 int rov;
+u32 magic2;
 };
 
 struct BGBDT_MM_LObjInfo_s {

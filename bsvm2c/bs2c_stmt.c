@@ -43,7 +43,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 	BS2CC_VarInfo *vi, *vi2, *vi3;
 	dtVal nn, nt, ni;
 	char *name;
-	int bty, ix, ix2, sz, z;
+	int bty, cty, ix, ix2, sz, z;
 	int i;
 
 	name=BS2P_GetAstNodeAttrS(expr, "name");
@@ -112,12 +112,13 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 
 	if(BS2C_TypeSizedArrayP(ctx, bty))
 	{
+		cty=BS2C_TypeDerefType(ctx, bty);
 		sz=BS2C_TypeGetArraySize(ctx, bty);
-		z=BS2C_GetTypeBaseZ(ctx, bty);
+		z=BS2C_GetTypeBaseZ(ctx, cty);
 
 		BS2C_EmitOpcode(ctx, BSVM2_OP_IFXARR);
-		BS2C_EmitOpcodeUCx(ctx, ix);
 		BS2C_EmitOpcodeUZx(ctx, z, sz);
+		BS2C_EmitOpcodeUCx(ctx, ix);
 
 //		BS2C_EmitOpcode(ctx, BSVM2_OP_NEWARR);
 //		BS2C_EmitOpcodeUZx(ctx, z, sz);
@@ -1124,16 +1125,20 @@ void BS2C_CompileStatement(BS2CC_CompileContext *ctx, dtVal expr)
 
 		t0=BS2C_GenTempLabel(ctx);
 		t1=BS2C_GenTempLabel(ctx);
+		t2=BS2C_GenTempLabel(ctx);
 
 		l0=ctx->frm->constkpos++;
 		l1=ctx->frm->brkstkpos++;
-		ctx->frm->constk[l0]=t0;
+		ctx->frm->constk[l0]=t2;
 		ctx->frm->brkstk[l1]=t1;
 
 		BS2C_CompileExpr(ctx, ni, BSVM2_OPZ_VOID);
+
 		BS2C_EmitTempLabelB(ctx, t0);
 		BS2C_CompileTempJmpElse(ctx, cc, t1);
 		BS2C_CompileStatement(ctx, nt);
+
+		BS2C_EmitTempLabelB(ctx, t2);
 		BS2C_CompileExpr(ctx, ns, BSVM2_OPZ_VOID);
 		BS2C_EmitTempJump(ctx, t0);
 		BS2C_EmitTempLabelB(ctx, t1);

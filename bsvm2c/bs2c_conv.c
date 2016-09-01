@@ -70,6 +70,15 @@ void BS2C_CompileConvTypeI(BS2CC_CompileContext *ctx, int dty,
 		if(sty==BSVM2_OPZ_DOUBLE)
 			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTD2AA); return; }
 
+		if(sty==BSVM2_OPZ_UINT)
+		{
+//			ctx->frm->stack_bty[i]=sty;
+//			BS2C_CompileConvType(ctx, BSVM2_OPZ_LONG);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTUI2L);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTL2AA);
+			return;
+		}
+
 		if(BS2C_TypeSmallIntP(ctx, sty))
 			{ BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2AA); return; }
 		if(BS2C_TypeSmallLongP(ctx, sty))
@@ -206,10 +215,11 @@ void BS2C_CompileConvTypeI(BS2CC_CompileContext *ctx, int dty,
 		
 		if(sty==BSVM2_OPZ_UINT)
 		{
-			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L);
+//			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTI2L);
+			BS2C_EmitOpcode(ctx, BSVM2_OP_CVTUI2L);
 			//HACK: don't have UI->L operation
-			BS2C_CompileExprPushConstInt(ctx, (1LL<<32)-1, BSVM2_OPZ_ULONG);
-			BS2C_EmitOpcode(ctx, BSVM2_OP_ANDL);
+//			BS2C_CompileExprPushConstInt(ctx, (1LL<<32)-1, BSVM2_OPZ_ULONG);
+//			BS2C_EmitOpcode(ctx, BSVM2_OP_ANDL);
 			return;
 		}
 

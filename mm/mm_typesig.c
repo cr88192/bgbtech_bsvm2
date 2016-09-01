@@ -126,7 +126,11 @@ int BGBDTC_GetSigOpZ(char *sig)
 		i=BSVM2_OPZ_ADDR; break;
 //		i=5; break;
 
+	case 'A':
+		i=BSVM2_OPZ_ADDR; break;
+
 	default:
+		BSVM2_DBGTRAP
 		i=-1; break;
 	}
 	
@@ -182,7 +186,8 @@ int BGBDTC_GetSigBType(char *sig)
 
 int BGBDTC_GetSigSizeAlign(char *sig, int *rsz, int *ral)
 {
-	int sz, al;
+	char *s;
+	int sz, al, sz2, al2, n;
 	int i;
 
 	switch(*sig)
@@ -239,8 +244,27 @@ int BGBDTC_GetSigSizeAlign(char *sig, int *rsz, int *ral)
 		sz=sizeof(void *);
 		al=sz;
 		break;
+	
+	case 'A':
+		s=sig+1;
+
+		n=1;
+		while((*s>='0') && (*s<='9'))
+		{
+			n=n*atoi(s);
+			while((*s>='0') && (*s<='9'))
+				s++;
+			if(*s==',')s++;
+			if(*s==';')
+				{ s++; break; }
+		}
+		BGBDTC_GetSigSizeAlign(s, &sz2, &al2);
+		al=al2;
+		sz=n*sz2;
+		break;
 
 	default:
+		BSVM2_DBGTRAP
 		sz=-1;
 		al=0;
 		break;

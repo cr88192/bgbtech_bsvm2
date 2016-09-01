@@ -32,6 +32,12 @@ int BGBDT_MM_AllocSObjChk()
 	chk->shcell=BGBDT_MM_SOBJ_CELSHL;
 	memset(chk->data, 0, (1<<BGBDT_MM_SOBJ_TOTSHL)+
 		(1<<BGBDT_MM_SOBJ_CHKSHL));
+	chk->magic1=BGBDT_MM_CHKMAG1;
+	chk->magic2=BGBDT_MM_CHKMAG2;
+	
+	printf("BGBDT_MM_AllocSObjChk: %d %p..%p\n",
+		i, chk->data, chk->edata);
+	
 	return(i);
 }
 
@@ -50,6 +56,12 @@ int BGBDT_MM_AllocMObjChk()
 	chk->shcell=BGBDT_MM_MOBJ_CELSHL;
 	memset(chk->data, 0, (1<<BGBDT_MM_MOBJ_TOTSHL)+
 		(1<<BGBDT_MM_MOBJ_CHKSHL));
+	chk->magic1=BGBDT_MM_CHKMAG1;
+	chk->magic2=BGBDT_MM_CHKMAG2;
+
+	printf("BGBDT_MM_AllocMObjChk: %d %p..%p\n",
+		i, chk->data, chk->edata);
+
 	return(i);
 }
 
@@ -62,6 +74,10 @@ int BGBDT_FindFreeCellsChk(BGBDT_MM_ChunkInfo *chk, int cells)
 		return(-1);
 	if(cells<=0)
 		return(-1);
+	
+	if((chk->magic1!=BGBDT_MM_CHKMAG1) ||
+		(chk->magic2!=BGBDT_MM_CHKMAG2))
+			{ BSVM2_DBGTRAP }
 	
 	i=chk->rov;
 	while(i<chk->ncell)
@@ -101,7 +117,11 @@ int BGBDT_FindFreeCellsChk(BGBDT_MM_ChunkInfo *chk, int cells)
 int BGBDT_MM_AllocCellsChk(BGBDT_MM_ChunkInfo *chk, int cells)
 {
 	int i, j, k, l;
-	
+
+	if((chk->magic1!=BGBDT_MM_CHKMAG1) ||
+		(chk->magic2!=BGBDT_MM_CHKMAG2))
+			{ BSVM2_DBGTRAP }
+
 	i=BGBDT_FindFreeCellsChk(chk, cells);
 	if(i<0)return(i);
 	
@@ -116,7 +136,11 @@ int BGBDT_MM_AllocCellsChk(BGBDT_MM_ChunkInfo *chk, int cells)
 int BGBDT_FreeCellsChk(BGBDT_MM_ChunkInfo *chk, int idx, int cells)
 {
 	int i, j, k, l;
-	
+
+	if((chk->magic1!=BGBDT_MM_CHKMAG1) ||
+		(chk->magic2!=BGBDT_MM_CHKMAG2))
+			{ BSVM2_DBGTRAP }
+
 //	i=BGBDT_FindFreeCellsChk(chk, cells);
 //	if(i<0)return(i);
 	
@@ -441,7 +465,7 @@ byte *BGBDT_MM_AllocObjectInner(int size)
 	
 	sz=size+16;
 	
-	if(sz<=16384)
+	if((sz+BGBDT_MM_SOBJ_CELMSK)<=16384)
 	{
 		nc=(sz+BGBDT_MM_SOBJ_CELMSK)>>BGBDT_MM_SOBJ_CELSHL;
 		
@@ -458,7 +482,7 @@ byte *BGBDT_MM_AllocObjectInner(int size)
 		return(ptr);
 	}
 
-	if(sz<=(1<<20))
+	if((sz+BGBDT_MM_MOBJ_CELMSK)<=(1<<20))
 	{
 		nc=(sz+BGBDT_MM_MOBJ_CELMSK)>>BGBDT_MM_MOBJ_CELSHL;
 
@@ -487,17 +511,25 @@ void BGBDT_MM_FreeObjectInner(byte *ptr)
 	oh=(BGBDT_MM_ObjHead *)ptr;
 	sz=oh->sz;
 	
-	if(sz<=16384)
+	if(*(u32 *)ptr==BGBDT_MM_CHKMAG1)
+		{ BSVM2_DBGTRAP }
+	
+	if((sz+BGBDT_MM_MOBJ_CELMSK)<=16384)
 	{
 		nc=(sz+BGBDT_MM_SOBJ_CELMSK)>>BGBDT_MM_SOBJ_CELSHL;
+		if(nc>>10)
+			{ BSVM2_DBGTRAP }
 		*(byte **)ptr=bgbdt_mm_freesobj[nc];
 		bgbdt_mm_freesobj[nc]=ptr;
 		return;
 	}
 
-	if(sz<=(1<<20))
+	if((sz+BGBDT_MM_MOBJ_CELMSK)<=(1<<20))
 	{
 		nc=(sz+BGBDT_MM_MOBJ_CELMSK)>>BGBDT_MM_MOBJ_CELSHL;
+		if(nc>>12)
+			{ BSVM2_DBGTRAP }
+
 		*(byte **)ptr=bgbdt_mm_freemobj[nc];
 		bgbdt_mm_freemobj[nc]=ptr;
 		return;

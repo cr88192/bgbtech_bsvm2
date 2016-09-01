@@ -152,7 +152,7 @@ BS2VM_API dtVal bsvm2_vm_printf(dtVal str, dtVal va)
 		if((*s=='x') || (*s=='X'))
 		{
 			li=dtvUnwrapLong(vn);
-			if(w)	sprintf(t, "%*llX", w, li);
+			if(w)	sprintf(t, "%0*llX", w, li);
 			else	sprintf(t, "%llX", li);
 			s++; t+=strlen(t);
 			continue;
@@ -169,8 +169,15 @@ BS2VM_API dtVal bsvm2_vm_printf(dtVal str, dtVal va)
 		if(*s=='s')
 		{
 			s0=BGBDT_TagStr_GetUtf8(vn);
-			if(w)	sprintf(t, "%*s", w, s0);
-			else	sprintf(t, "%s", s0);
+			if(w)
+			{
+				if(fl&1)
+					sprintf(t, "%-*s", w, s0);
+				else
+					sprintf(t, "%*s", w, s0);
+			}
+			else
+				{ sprintf(t, "%s", s0); }
 			s++; t+=strlen(t);
 			continue;
 		}

@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 int BS2C_CompileGetCondBool(BS2CC_CompileContext *ctx, dtVal cc)
 {
+	char *fn;
 	int i;
 
 	if(dtvIsBoolP(cc))
@@ -34,6 +35,15 @@ int BS2C_CompileGetCondBool(BS2CC_CompileContext *ctx, dtVal cc)
 		i=dtvUnwrapInt(cc);
 		return(i!=0);
 	}
+
+	if(BGBDT_TagStr_IsSymbolP(cc))
+	{
+		fn=BGBDT_TagStr_GetUtf8(cc);
+		if(!strcmp(fn, "true"))return(1);
+		if(!strcmp(fn, "false"))return(0);
+		if(!strcmp(fn, "null"))return(0);
+	}
+
 	return(-1);
 }
 
@@ -287,25 +297,26 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 			if(!strcmp(op, "!="))
 				{ o=BSVM2_OP_JNE; o2=o; }
 			if(!strcmp(op, "<"))
-				{ o=BSVM2_OP_JLT; o=BSVM2_OP_JGT; }
+				{ o=BSVM2_OP_JLT; o2=BSVM2_OP_JGT; }
 			if(!strcmp(op, ">"))
-				{ o=BSVM2_OP_JGT; o=BSVM2_OP_JLT; }
+				{ o=BSVM2_OP_JGT; o2=BSVM2_OP_JLT; }
 			if(!strcmp(op, "<="))
-				{ o=BSVM2_OP_JLE; o=BSVM2_OP_JGE; }
+				{ o=BSVM2_OP_JLE; o2=BSVM2_OP_JGE; }
 			if(!strcmp(op, ">="))
-				{ o=BSVM2_OP_JGE; o=BSVM2_OP_JLE; }
+				{ o=BSVM2_OP_JGE; o2=BSVM2_OP_JLE; }
 			if(!strcmp(op, "==="))
 				{ o=BSVM2_OP_JEQ; o2=o; }
 			if(!strcmp(op, "!=="))
 				{ o=BSVM2_OP_JNE; o2=o; }
 
-			if(dtvIsSmallLongP(rn))
+			if(dtvIsSmallLongP(rn) && !BS2C_TypeUnsigned2P(ctx, cty))
 			{
 				li=dtvUnwrapLong(rn);
 			
 				t0=BS2C_InferExprLocalIndex(ctx, ln);
 				if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0))
 				{
+					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILC);
 					BS2C_EmitOpcodeSKx(ctx, t0, li);
 					BS2C_EmitOpcode(ctx, o);
@@ -317,6 +328,7 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 				{
 					BS2C_CompileExpr(ctx, ln, cty);
 
+//					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPIC);
 					BS2C_EmitOpcodeSCx(ctx, li);
 
@@ -327,13 +339,14 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 				}
 			}
 
-			if(dtvIsSmallLongP(ln))
+			if(dtvIsSmallLongP(ln) && !BS2C_TypeUnsigned2P(ctx, cty))
 			{
 				li=dtvUnwrapLong(ln);
 			
 				t0=BS2C_InferExprLocalIndex(ctx, rn);
 				if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0))
 				{
+					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILC);
 					BS2C_EmitOpcodeSKx(ctx, t0, li);
 					BS2C_EmitOpcode(ctx, o2);
@@ -345,6 +358,7 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 				{
 					BS2C_CompileExpr(ctx, rn, cty);
 
+//					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPIC);
 					BS2C_EmitOpcodeSCx(ctx, li);
 
@@ -358,8 +372,10 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 #if 1
 			t0=BS2C_InferExprLocalIndex(ctx, ln);
 			t1=BS2C_InferExprLocalIndex(ctx, rn);
-			if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0) && (t1>=0))
+			if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0) && (t1>=0) &&
+				!BS2C_TypeUnsigned2P(ctx, cty))
 			{
+				BS2C_CompileExprResvPush(ctx, 1);
 				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILL);
 				BS2C_EmitOpcodeJx(ctx, t0, t1);
 				BS2C_EmitOpcode(ctx, o);
@@ -373,7 +389,10 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 
 			if(BS2C_TypeSmallIntP(ctx, cty))
 			{
-				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPI);
+				if(BS2C_TypeUnsigned2P(ctx, cty))
+					BS2C_EmitOpcode(ctx, BSVM2_OP_UCMPI);
+				else
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPI);
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tt);
 				BS2C_CompileExprPopType2(ctx);
@@ -382,7 +401,10 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 
 			if(BS2C_TypeSmallLongP(ctx, cty))
 			{
-				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPL);
+				if(BS2C_TypeUnsigned2P(ctx, cty))
+					BS2C_EmitOpcode(ctx, BSVM2_OP_UCMPL);
+				else
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPL);
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tt);
 				BS2C_CompileExprPopType2(ctx);
@@ -430,7 +452,11 @@ void BS2C_CompileTempJmpThen2(BS2CC_CompileContext *ctx,
 				if(!strcmp(op, "===") || !strcmp(op, "!=="))
 					{ BS2C_EmitOpcode(ctx, BSVM2_OP_CMP2A); }
 				else
-					{ BS2C_EmitOpcode(ctx, BSVM2_OP_CMPA); }
+				{
+					if(BS2C_TypePointerP(ctx, cty))
+						BS2C_EmitOpcode(ctx, BSVM2_OP_HPTR);
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPA);
+				}
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tt);
 				BS2C_CompileExprPopType2(ctx);
@@ -587,13 +613,14 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 			if(!strcmp(op, "!=="))
 				{ o=BSVM2_OP_JEQ; o2=o; }
 
-			if(dtvIsSmallLongP(rn))
+			if(dtvIsSmallLongP(rn) && !BS2C_TypeUnsigned2P(ctx, cty))
 			{
 				li=dtvUnwrapLong(rn);
 
 				t0=BS2C_InferExprLocalIndex(ctx, ln);
 				if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0))
 				{
+					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILC);
 					BS2C_EmitOpcodeSKx(ctx, t0, li);
 					BS2C_EmitOpcode(ctx, o);
@@ -615,13 +642,14 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 				}
 			}
 
-			if(dtvIsSmallLongP(ln))
+			if(dtvIsSmallLongP(ln) && !BS2C_TypeUnsigned2P(ctx, cty))
 			{
 				li=dtvUnwrapLong(ln);
 			
 				t0=BS2C_InferExprLocalIndex(ctx, rn);
 				if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0))
 				{
+					BS2C_CompileExprResvPush(ctx, 1);
 					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILC);
 					BS2C_EmitOpcodeSKx(ctx, t0, li);
 					BS2C_EmitOpcode(ctx, o2);
@@ -646,8 +674,10 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 #if 1
 			t0=BS2C_InferExprLocalIndex(ctx, ln);
 			t1=BS2C_InferExprLocalIndex(ctx, rn);
-			if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0) && (t1>=0))
+			if(BS2C_TypeSmallIntP(ctx, cty) && (t0>=0) && (t1>=0) &&
+				!BS2C_TypeUnsigned2P(ctx, cty))
 			{
+				BS2C_CompileExprResvPush(ctx, 1);
 				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPILL);
 				BS2C_EmitOpcodeJx(ctx, t0, t1);
 				BS2C_EmitOpcode(ctx, o);
@@ -661,7 +691,10 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 
 			if(BS2C_TypeSmallIntP(ctx, cty))
 			{
-				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPI);
+				if(BS2C_TypeUnsigned2P(ctx, cty))
+					BS2C_EmitOpcode(ctx, BSVM2_OP_UCMPI);
+				else
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPI);
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tf);
 				BS2C_CompileExprPopType2(ctx);
@@ -670,7 +703,10 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 
 			if(BS2C_TypeSmallLongP(ctx, cty))
 			{
-				BS2C_EmitOpcode(ctx, BSVM2_OP_CMPL);
+				if(BS2C_TypeUnsigned2P(ctx, cty))
+					BS2C_EmitOpcode(ctx, BSVM2_OP_UCMPL);
+				else
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPL);
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tf);
 				BS2C_CompileExprPopType2(ctx);
@@ -718,7 +754,11 @@ void BS2C_CompileTempJmpElse2(BS2CC_CompileContext *ctx,
 				if(!strcmp(op, "===") || !strcmp(op, "!=="))
 					{ BS2C_EmitOpcode(ctx, BSVM2_OP_CMP2A); }
 				else
-					{ BS2C_EmitOpcode(ctx, BSVM2_OP_CMPA); }
+				{
+					if(BS2C_TypePointerP(ctx, cty))
+						BS2C_EmitOpcode(ctx, BSVM2_OP_HPTR);
+					BS2C_EmitOpcode(ctx, BSVM2_OP_CMPA);
+				}
 				BS2C_EmitOpcode(ctx, o);
 				BS2C_EmitTempJAddr(ctx, tf);
 				BS2C_CompileExprPopType2(ctx);

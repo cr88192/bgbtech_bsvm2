@@ -347,6 +347,38 @@ byte *BS2I_ReadSVLI(byte *cs, s64 *rv)
 	return(cs);
 }
 
+/** Read FVLI from buffer */
+byte *BS2I_ReadFVLI(byte *cs, double *rv)
+{
+	double f;
+	u32 vi;
+	u64 lj;
+	s64 li;
+	int i, j, k, e, sg;
+
+	cs=BS2I_ReadSVLI(cs, &li);
+	e=li;
+	cs=BS2I_ReadSVLI(cs, &li);
+
+	sg=0;
+	if(li<0)
+		{ li=-li; sg=1; }
+
+	while(!(li>>32))
+		{ li=(li<<16); e-=16; }
+	while(!(li>>44))
+		{ li=(li<<8); e-=8; }
+	while(!(li>>52))
+		{ li=(li<<1); e--; }
+
+	e=e+1023;
+	lj=(li&0x000FFFFFFFFFFFFFULL)|(((u64)e)<<52)|(((u64)sg)<<63);
+	f=*(double *)(&lj);
+
+	*rv=f;
+	return(cs);
+}
+
 /** Decode opcode VLI from buffer */
 byte *BS2I_ReadOpcodeNumber(byte *cs, int *rv)
 {
@@ -519,7 +551,7 @@ int BS2I_ImageDecodeGlobalFunc(
 	u32 dtag, byte *data, byte *edata)
 {
 	int tgitab[256];
-	byte *cs, *cs1, *cse, *csn;
+	byte *cs, *cs0, *cs1, *cse, *csn;
 	char *s;
 	s64 v;
 	u32 tag;
@@ -529,6 +561,7 @@ int BS2I_ImageDecodeGlobalFunc(
 	cs=data; cse=edata;
 	while(cs<cse)
 	{
+		cs0=cs;
 		cs=BS2I_ReadTag2(cs, &tag, &len);
 		csn=cs+len;
 		
@@ -814,7 +847,8 @@ int BS2I_ImageDecodeGlobalVar(
 	BSVM2_ImageGlobal *vi;
 	byte *cs, *cs1, *cse, *csn;
 	char *s;
-	s64 v;
+	double vinitf;
+	s64 v, vinit;
 	u32 tag;
 	int len, ngi;
 	int i, j, k;
@@ -823,6 +857,7 @@ int BS2I_ImageDecodeGlobalVar(
 //	printf("BS2I_ImageDecodeGlobalVar A\n", tag);
 //#endif
 
+	vinit=0;
 	cs=data; cse=edata;
 	while(cs<cse)
 	{
@@ -868,6 +903,12 @@ int BS2I_ImageDecodeGlobalVar(
 			{
 				gbl->flagstr=img->strtab+v;
 				gbl->flags=BS2I_FlagsFromFlagstr(img, gbl->flagstr);
+				continue;
+			}
+
+			if(tag==BS2CC_I1CC_VARINIT)
+			{
+				vinit=v;
 				continue;
 			}
 
@@ -934,6 +975,15 @@ int BS2I_ImageDecodeGlobalVar(
 			gbl->nifgix=ngi;
 			for(i=0; i<ngi; i++)
 				{ gbl->ifgix[i]=tgitab[i]; }
+
+			cs=csn;
+			continue;
+		}
+
+		if(tag==BS2CC_I1CC_VARINIT)
+		{
+			cs1=cs;
+			cs1=BS2I_ReadFVLI(cs1, &vinitf);
 
 			cs=csn;
 			continue;
@@ -1070,7 +1120,62 @@ int BS2I_ImageDecodeGlobalVar(
 	{
 		gbl->brty=BSVM2_NatCall_GetSigOpZ(gbl->sig);
 		gbl->gvalue=(BSVM2_Value *)(gbl->baty+16);
-		
+
+		switch(gbl->brty)
+		{
+		case BSVM2_OPZ_INT:
+		case BSVM2_OPZ_UINT:
+		case BSVM2_OPZ_UBYTE:
+		case BSVM2_OPZ_SBYTE:
+		case BSVM2_OPZ_USHORT:
+		case BSVM2_OPZ_SHORT:
+			gbl->gvalue->i=vinit; break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+		case BSVM2_OPZ_NLONG:
+		case BSVM2_OPZ_UNLONG:
+			gbl->gvalue->l=vinit; break;
+		case BSVM2_OPZ_FLOAT:
+			gbl->gvalue->f=vinitf; break;
+		case BSVM2_OPZ_DOUBLE:
+			gbl->gvalue->d=vinitf; break;
+		case BSVM2_OPZ_ADDRESS:
+			gbl->gvalue->a=BS2I_ImageDecodeTagIndexAddr(img, vinit);
+			break;
+		default:
+			break;
+		}
+
+#if 0
+		switch(*gbl->sig)
+		{
+		case 'a': case 'b': case 'c': case 'h':
+		case 'i': case 'j': case 'k': case 'w':
+		case 's': case 't':
+			gbl->gvalue->i=varinit; break;
+		case 'l': case 'm': case 'x': case 'y':
+			gbl->gvalue->l=varinit; break;
+		case 'f':	gbl->gvalue->f=varinitf; break;
+		case 'd':	gbl->gvalue->d=varinitf; break;
+		case 'P': case 'Q':
+		case 'L': case 'X':
+		case 'A':
+			gbl->gvalue->a=BS2I_ImageDecodeTagIndexAddr(img, varinit);
+			break;
+		case 'C':
+			switch(s[1])
+			{
+			case 's': case 't':
+				gbl->gvalue->a=BS2I_ImageDecodeTagIndexAddr(img, varinit);
+				break;
+			default:
+				break;
+			}
+		default:
+			break;
+		}
+#endif
+
 		if(gbl->flags&BS2CC_TYFL_DYNAMIC)
 		{
 			gbl->nargs=bs2i_img_dynvseqid++;
@@ -1085,6 +1190,199 @@ int BS2I_ImageDecodeGlobalVar(
 	}
 
 	return(0);
+}
+
+dtVal BS2I_ImageDecodeTagIndexAddr(
+	BSVM2_CodeImage *img, int gix)
+{
+	BSVM2_ImageGlobal *vi;
+	dtVal v;
+	char *s;
+	int i, j;
+	
+	i=gix;
+	if(!(i&3))
+	{
+		if(!i)return(DTV_NULL);
+	
+		vi=BS2I_ImageGetGlobal(img, i>>2);
+		if(!vi)return(DTV_NULL);
+		
+		j=vi->tag;
+		if(	((j>=BS2CC_ITCC_A0) && (j<=BS2CC_ITCC_A9)) ||
+			((j>=BS2CC_ITCC_Aa) && (j<=BS2CC_ITCC_Az)) )
+				{ return(vi->gvalue->a); }
+		
+		return(dtvWrapPtr(vi));
+	}
+	
+	j=i>>4;
+	switch(i&15)
+	{
+	case BSVM2_OPZY_STRU8:
+		s=img->strtab+j;
+		v=BGBDT_TagStr_String(s);
+		break;
+	case BSVM2_OPZY_STRU16:
+		s=img->strtab+j;
+		v=BGBDT_TagStr_String16u8(s);
+		break;
+	case BSVM2_OPZY_STRASC:
+		s=img->strtab+j;
+		v=BGBDT_TagStr_StringAsc(s);
+		break;
+
+	case BSVM2_OPZY_STRSYM:
+		s=img->strtab+j;
+		v=BGBDT_TagStr_Symbol(s);
+		break;
+	case BSVM2_OPZY_STRKEY:
+		s=img->strtab+j;
+		v=BGBDT_TagStr_Keyword(s);
+		break;
+
+	case BSVM2_OPZY_INT:
+		j=bsvm2_interp_decsignfoldi(j);
+		v=dtvWrapInt(j);
+		break;
+	case BSVM2_OPZY_LONG:
+		j=bsvm2_interp_decsignfoldi(j);
+		v=dtvWrapLong(j);
+		break;
+	case BSVM2_OPZY_UINT:
+		v=dtvWrapUInt(j);
+		break;
+	case BSVM2_OPZY_FLOAT:
+	case BSVM2_OPZY_DOUBLE:
+		j=bsvm2_interp_decsignfoldi(j);
+		v=dtvWrapDouble(j*(1.0/4096));
+		break;
+	default:
+		v=DTV_UNDEFINED;
+		break;
+	}
+	return(v);
+}
+
+int BS2I_ImageDecodeGlobalArray(
+	BSVM2_CodeImage *img, BSVM2_ImageGlobal *gbl,
+	u32 dtag, byte *data, byte *edata)
+{
+	byte *cs, *ct;
+	dtVal na;
+	u32 uj, uk;
+	u64 uli;
+	s64 li;
+	double f;
+	int z, isv, l, str;
+	int i, j, k;
+
+	z=-1; isv=0;
+	if((dtag>=BS2CC_ITCC_A0) && (dtag<=BS2CC_ITCC_A9))
+		z=dtag-BS2CC_ITCC_A0;
+	if((dtag>=BS2CC_ITCC_Aa) && (dtag<=BS2CC_ITCC_Af))
+		z=10+(dtag-BS2CC_ITCC_Aa);
+	if((dtag>=BS2CC_ITCC_Ag) && (dtag<=BS2CC_ITCC_Av))
+		{ z=dtag-BS2CC_ITCC_Ag; isv=1; }
+	
+	cs=data;
+	if(isv)
+	{
+		cs=BS2I_ReadUVLI(cs, &uli);
+		l=uli;
+		na=dtvNewArray(l, z);
+		ct=dtvArrayGetIndexAddrB1(na, 0);
+
+		for(i=0; i<l; i++)
+		{
+			switch(z)
+			{
+			case BSVM2_OPZ_INT:		case BSVM2_OPZ_LONG:
+			case BSVM2_OPZ_SBYTE:	case BSVM2_OPZ_SHORT:
+				cs=BS2I_ReadSVLI(cs, &li);
+				uli=li;
+				j=li;
+				break;
+			case BSVM2_OPZ_UINT:	case BSVM2_OPZ_ULONG:
+			case BSVM2_OPZ_UBYTE:	case BSVM2_OPZ_USHORT:
+			case BSVM2_OPZ_ADDRESS:
+				cs=BS2I_ReadUVLI(cs, &uli);
+				li=uli;
+				j=uli;
+				break;
+			case BSVM2_OPZ_FLOAT:	case BSVM2_OPZ_DOUBLE:
+				cs=BS2I_ReadFVLI(cs, &f);
+				break;
+			}
+
+			switch(z)
+			{
+			case BSVM2_OPZ_UBYTE:
+			case BSVM2_OPZ_SBYTE:
+				*ct++=j; break;
+			case BSVM2_OPZ_USHORT:
+			case BSVM2_OPZ_SHORT:
+				*(u16 *)ct=j; ct+=2; break;
+			case BSVM2_OPZ_INT:
+			case BSVM2_OPZ_UINT:
+				*(u32 *)ct=j; ct+=4; break;
+			case BSVM2_OPZ_LONG:
+			case BSVM2_OPZ_ULONG:
+				*(u64 *)ct=uli; ct+=8; break;
+
+			case BSVM2_OPZ_FLOAT:
+				*(f32 *)ct=j; ct+=4; break;
+			case BSVM2_OPZ_DOUBLE:
+				*(f64 *)ct=f; ct+=8; break;
+			
+			case BSVM2_OPZ_ADDRESS:
+				*(dtVal *)ct=BS2I_ImageDecodeTagIndexAddr(img, j);
+				ct+=sizeof(dtVal); break;
+			}
+		}
+	}else
+	{
+		str=BS2C_Image_BaseTypePackSize(z);
+		l=(edata-data)/str;
+
+		na=dtvNewArray(l, z);
+		ct=dtvArrayGetIndexAddrB1(na, 0);
+		
+		for(i=0; i<l; i++)
+		{
+			switch(z)
+			{
+			case BSVM2_OPZ_UBYTE:
+			case BSVM2_OPZ_SBYTE:
+				*ct++=*cs++; break;
+			case BSVM2_OPZ_USHORT:
+			case BSVM2_OPZ_SHORT:
+				j=(cs[0]<<8)|cs[1]; *(u16 *)ct=j;
+				ct+=2; cs+=2; break;
+			case BSVM2_OPZ_INT:
+			case BSVM2_OPZ_UINT:
+			case BSVM2_OPZ_FLOAT:
+				j=(cs[0]<<24)|(cs[1]<<16)|(cs[2]<<8)|cs[3];
+				*(u32 *)ct=j;
+				ct+=4; cs+=4; break;
+			case BSVM2_OPZ_LONG:
+			case BSVM2_OPZ_ULONG:
+			case BSVM2_OPZ_DOUBLE:
+				uj=(cs[0]<<24)|(cs[1]<<16)|(cs[2]<<8)|cs[3];
+				uk=(cs[4]<<24)|(cs[5]<<16)|(cs[6]<<8)|cs[7];
+				uli=(((u64)uj)<<32)|uk;
+				*(u64 *)ct=uli; ct+=8; cs+=8; break;
+			
+			case BSVM2_OPZ_ADDRESS:
+				j=(cs[0]<<24)|(cs[1]<<16)|(cs[2]<<8)|cs[3];
+				*(dtVal *)ct=BS2I_ImageDecodeTagIndexAddr(img, j);
+				ct+=sizeof(dtVal); cs+=4; break;
+			}
+		}
+	}
+
+	gbl->gvalue=(BSVM2_Value *)(gbl->baty+16);
+	gbl->gvalue->a=na;
 }
 
 /** Decode the information about a given global. */
@@ -1130,6 +1428,11 @@ int BS2I_ImageDecodeGlobal(
 		{ return(BS2I_ImageDecodeGlobalVar(img, gbl, tag, cs, cse)); }
 	if(tag==BS2CC_ITCC_IF)
 		{ return(BS2I_ImageDecodeGlobalVar(img, gbl, tag, cs, cse)); }
+
+	if((tag>=BS2CC_ITCC_A0) && (tag<=BS2CC_ITCC_A9))
+		{ return(BS2I_ImageDecodeGlobalArray(img, gbl, tag, cs, cse)); }
+	if((tag>=BS2CC_ITCC_Aa) && (tag<=BS2CC_ITCC_Az))
+		{ return(BS2I_ImageDecodeGlobalArray(img, gbl, tag, cs, cse)); }
 
 	BS2I_ImageCheckUnknownTag(img, tag);
 	return(-1);
@@ -1510,6 +1813,8 @@ BS2VM_API BSVM2_CodeImage *BS2I_DecodeImageBuffer(byte *ibuf, int isz)
 	
 	if(img->pvbm)
 	{
+		memset(tb, 0, (img->ngbls+7)/8);
+	
 		cs=img->pvbm; cse=img->epvbm;
 		n=0;
 		while((cs<cse) && ((n*8)<img->ngbls))

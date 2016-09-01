@@ -407,6 +407,140 @@ BSVM2_Trace *BSVM2_TrRun_Next8(BSVM2_Frame *frm, BSVM2_Trace *tr)
 	return(tr->jnext);
 }
 
+#if 1
+BSVM2_Trace *BSVM2_TrRun_NextN0(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN1(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN2(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN3(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN4(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN5(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN6(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+
+BSVM2_Trace *BSVM2_TrRun_NextN7(BSVM2_Frame *frm, BSVM2_Trace *tr)
+{
+	BSVM2_Opcode **ops, **opse;
+	
+	ops=tr->ops; opse=ops+tr->n_ops;
+	while((ops+8)<=opse)
+	{	(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;
+		(*ops)->Run(frm, *ops); ops++;	(*ops)->Run(frm, *ops); ops++;	}
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops); ops++;
+	(*ops)->Run(frm, *ops);
+	return(tr->jnext);
+}
+#endif
+
 BSVM2_Trace *BSVM2_Interp_DecodeBlockSetupTraceDfl(
 	BSVM2_CodeBlock *cblk, BSVM2_Opcode **ops, int n_ops,
 	BSVM2_TailOpcode *top, int flag)
@@ -424,11 +558,14 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockSetupTraceDfl(
 	tr=BSVM2_Interp_AllocTrace(cblk);
 	tr->trfl=flag;
 
+#if 0
 	if((n_ops>8) && !top)
 	{
 		top=BSVM2_Interp_AllocTailOpcode(cblk);
-		top->Run=BSVM2_TrOp_Default;
+//		top->Run=BSVM2_TrOp_Default;
+		top->Run=BSVM2_TrOp_JMP;
 	}
+#endif
 
 	if(n_ops>6)
 	{
@@ -452,18 +589,34 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockSetupTraceDfl(
 		tr->Run=BSVM2_TrRun_ThrowN;
 	}else if(n_ops>8)
 	{
-		switch(n_ops&7)
+		if(flag&1)
 		{
-		case 0: tr->Run=BSVM2_TrRun_DefN0; break;
-		case 1: tr->Run=BSVM2_TrRun_DefN1; break;
-		case 2: tr->Run=BSVM2_TrRun_DefN2; break;
-		case 3: tr->Run=BSVM2_TrRun_DefN3; break;
-		case 4: tr->Run=BSVM2_TrRun_DefN4; break;
-		case 5: tr->Run=BSVM2_TrRun_DefN5; break;
-		case 6: tr->Run=BSVM2_TrRun_DefN6; break;
-		case 7: tr->Run=BSVM2_TrRun_DefN7; break;
-//		case 8: tr->Run=BSVM2_TrRun_DefN8; break;
-		default: tr->Run=BSVM2_TrRun_DefN; break;
+			switch(n_ops&7)
+			{
+			case 0: tr->Run=BSVM2_TrRun_NextN0; break;
+			case 1: tr->Run=BSVM2_TrRun_NextN1; break;
+			case 2: tr->Run=BSVM2_TrRun_NextN2; break;
+			case 3: tr->Run=BSVM2_TrRun_NextN3; break;
+			case 4: tr->Run=BSVM2_TrRun_NextN4; break;
+			case 5: tr->Run=BSVM2_TrRun_NextN5; break;
+			case 6: tr->Run=BSVM2_TrRun_NextN6; break;
+			case 7: tr->Run=BSVM2_TrRun_NextN7; break;
+			default: break;
+			}
+		}else
+		{
+			switch(n_ops&7)
+			{
+			case 0: tr->Run=BSVM2_TrRun_DefN0; break;
+			case 1: tr->Run=BSVM2_TrRun_DefN1; break;
+			case 2: tr->Run=BSVM2_TrRun_DefN2; break;
+			case 3: tr->Run=BSVM2_TrRun_DefN3; break;
+			case 4: tr->Run=BSVM2_TrRun_DefN4; break;
+			case 5: tr->Run=BSVM2_TrRun_DefN5; break;
+			case 6: tr->Run=BSVM2_TrRun_DefN6; break;
+			case 7: tr->Run=BSVM2_TrRun_DefN7; break;
+//			default: tr->Run=BSVM2_TrRun_DefN; break;
+			}
 		}
 	}else if(flag&1)
 	{
