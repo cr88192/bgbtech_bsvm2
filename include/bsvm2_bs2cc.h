@@ -255,6 +255,8 @@ typedef struct BS2CC_TypeOverflow_s BS2CC_TypeOverflow;
 typedef struct BS2CC_CcFrame_s BS2CC_CcFrame;
 typedef struct BS2CC_PkgFrame_s BS2CC_PkgFrame;
 
+typedef struct BS2CC_PpDef_s BS2CC_PpDef;
+
 /** Represents a variable of function declaration. */
 struct BS2CC_VarInfo_s
 {
@@ -388,6 +390,14 @@ BS2CC_VarInfo *vars;		///< package declarations
 BS2CC_PkgFrame *imps[256];	///< package imports
 int nimps;					///< number of package imports
 int gid;					///< global ID for package
+};
+
+struct BS2CC_PpDef_s {
+BS2CC_PpDef *next;
+char *name;
+char *value;
+char **args;
+char *t_args[8];
 };
 
 /** Context holding main compiler state */

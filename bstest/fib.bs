@@ -390,7 +390,7 @@ package bstest {
 			
 			tst_tryex();
 
-//			tst_decjpg();
+			tst_decjpg();
 		}
 	}
 }

@@ -36,27 +36,27 @@ Core Types:
 
 Sub-Types:
 *  Int
-**    byte/sbyte/ubyte
-**    short/ushort
-**    int/uint
-**    char (16 bit, in storage)
-**    char8 (8 bit)
+**	byte/sbyte/ubyte
+**	short/ushort
+**	int/uint
+**	char (16 bit, in storage)
+**	char8 (8 bit)
 *  Long
-**    long/ulong (64 bit)
-**    nlong/unlong (32 or 64 bit, non-core storage)
+**	long/ulong (64 bit)
+**	nlong/unlong (32 or 64 bit, non-core storage)
 *  Float
-**    float
-**    hfloat (16-bit in storage)
+**	float
+**	hfloat (16-bit in storage)
 *  Double
-**    double
+**	double
 *  Address
-**    object
-**    array
-**    pointer
-**    variant
-**    string
-**    reference
-**    ...
+**	object
+**	array
+**	pointer
+**	variant
+**	string
+**	reference
+**	...
 
 Implementation may treat arrays and pointers as siblings, both existing nominally as an offset relative to a base object. This base object will nominally be an array.
 
@@ -762,6 +762,9 @@ Instructions
 ** The alias is used as a shorthand for multibyte opcodes.
 ** The table is optionally built by the compiler, and exists per-block.
 
+
+=== Two Byte Range (0x100) ===
+
 * E1 00, ADDAA			//Variant Add
 * E1 01, SUBAA			//Variant Subtract
 * E1 02, MULAA			//Variant Multiply
@@ -1182,7 +1185,7 @@ More Array ops:
 ** Gives index of continuation variable.
 ** Continuation may not be used after ENDLEC.
 
-* E1 F6 Ix Ax, ENDLEC2			// ( => E )
+* E1 F6 Ix Ax, ENDLEC2		// ( => E )
 ** End let_escape block.
 ** Gives index of continuation variable.
 ** Pushes continuation or exception.
@@ -1193,6 +1196,26 @@ More Array ops:
 ** (CTRLF)
 ** Rethrow exception object.
 ** Is no-op if exception is null.
+
+
+=== Two Byte Range (0x200) ===
+
+E2 00 Zi, LDDINCZLP			//P; s=*(p++); ( => s )
+E2 01 Zi, STDINCZLP			//P; *(p++)=s; ( s => )
+E2 02 Zi, LDDDECZLP			//P; s=*(--p); ( => s )
+E2 03 Zi, STDDECZLP			//P; *(--p)=s; ( s => )
+E2 04 Zi, INCZLP			//P; p++; ( => )
+E2 05 Zi, DECZLP			//P; p++; ( => )
+E2 06 Zi, LINCZLP			//P; s=p++; ( s => )
+E2 07 Zi, LDECZLP			//P; s=p++; ( s => )
+E2 08 Zi, LDDINCZLA			//A; s=*(a++); ( => s )
+E2 09 Zi, STDINCZLA			//A; *(a++)=s; ( s => )
+E2 0A Zi, LDDDECZLA			//A; s=*(--a); ( => s )
+E2 0B Zi, STDDECZLA			//A; *(--a)=s; ( s => )
+E2 0C Zi, INCZLA			//A; a++; ( => )
+E2 0D Zi, DECZLA			//A; a++; ( => )
+E2 0E Zi, LINCZLA			//A; s=a++; ( s => )
+E2 0F Zi, LDECZLA			//A; s=a++; ( s => )
 
 
 === Vector Block (0x400) ===
@@ -1365,59 +1388,59 @@ These operations will also be considered an extension feature.
 *  6, SHL (Shift Left)
 *  7, SAR (Arithmetic Shift Right)
 
-* E5 00 Zi Jx,    ADD_LLL D, S, T
-* E5 01 Zi Jx,    SUB_LLL D, S, T
-* E5 02 Zi Jx,    MUL_LLL D, S, T
-* E5 03 Zi Jx,    AND_LLL D, S, T
-* E5 04 Zi Jx,     OR_LLL D, S, T
-* E5 05 Zi Jx,    XOR_LLL D, S, T
-* E5 06 Zi Jx,    SHL_LLL D, S, T
-* E5 07 Zi Jx,    SAR_LLL D, S, T
-* E5 08 Zi Kx,    ADD_LLC D, S, C
-* E5 09 Zi Kx,    SUB_LLC D, S, C
-* E5 0A Zi Kx,    MUL_LLC D, S, C
-* E5 0B Zi Kx,    AND_LLC D, S, C
-* E5 0C Zi Kx,     OR_LLC D, S, C
-* E5 0D Zi Kx,    XOR_LLC D, S, C
-* E5 0E Zi Kx,    SHL_LLC D, S, C
-* E5 0F Zi Kx,    SAR_LLC D, S, C
-* E5 10 Zo Jx,    BINOP_L2L D, T	//D=D op T
-* E5 11 Zo Kx,    BINOP_L2C D, C	//D=D op C
-* E5 12 Zo Jx,    BINOP_SLL S, T	//d=S op T ( => d )
-* E5 13 Zo Kx,    BINOP_SLC S, C	//d=S op C ( => d )
-* E5 14 Zo Jx,    BINOP_LSL D, T	//D=s op T ( s => )
-* E5 15 Zo Kx,    BINOP_LSC D, C	//D=s op C ( s => )
-* E5 16 Zo Jx,    CMPOP_LL S, T		//d=S cmp T ( => d )
-* E5 17 Zo Kx,    CMPOP_LC S, C		//d=S cmp C ( => d )
+* E5 00 Zi Jx,	ADD_LLL D, S, T
+* E5 01 Zi Jx,	SUB_LLL D, S, T
+* E5 02 Zi Jx,	MUL_LLL D, S, T
+* E5 03 Zi Jx,	AND_LLL D, S, T
+* E5 04 Zi Jx,	 OR_LLL D, S, T
+* E5 05 Zi Jx,	XOR_LLL D, S, T
+* E5 06 Zi Jx,	SHL_LLL D, S, T
+* E5 07 Zi Jx,	SAR_LLL D, S, T
+* E5 08 Zi Kx,	ADD_LLC D, S, C
+* E5 09 Zi Kx,	SUB_LLC D, S, C
+* E5 0A Zi Kx,	MUL_LLC D, S, C
+* E5 0B Zi Kx,	AND_LLC D, S, C
+* E5 0C Zi Kx,	 OR_LLC D, S, C
+* E5 0D Zi Kx,	XOR_LLC D, S, C
+* E5 0E Zi Kx,	SHL_LLC D, S, C
+* E5 0F Zi Kx,	SAR_LLC D, S, C
+* E5 10 Zo Jx,	BINOP_L2L D, T	//D=D op T
+* E5 11 Zo Kx,	BINOP_L2C D, C	//D=D op C
+* E5 12 Zo Jx,	BINOP_SLL S, T	//d=S op T ( => d )
+* E5 13 Zo Kx,	BINOP_SLC S, C	//d=S op C ( => d )
+* E5 14 Zo Jx,	BINOP_LSL D, T	//D=s op T ( s => )
+* E5 15 Zo Kx,	BINOP_LSC D, C	//D=s op C ( s => )
+* E5 16 Zo Jx,	CMPOP_LL S, T		//d=S cmp T ( => d )
+* E5 17 Zo Kx,	CMPOP_LC S, C		//d=S cmp C ( => d )
 
 * E5 18 Zo Jx Ax, JCMP_LL S, T, A	//Jump-Compare Locals
 * E5 19 Zo Kx Ax, JCMP_LC S, C, A	//Jump-Compare Local/Const
 
-* E5 1A Jx,       SWAP2I A, B		//
-* E5 1B Jx,       SWAP2L A, B		//
-* E5 1C Jx,       SWAP2F A, B		//
-* E5 1D Jx,       SWAP2D A, B		//
-* E5 1E Jx,       SWAP2A A, B		//
+* E5 1A Jx,	   SWAP2I A, B		//
+* E5 1B Jx,	   SWAP2L A, B		//
+* E5 1C Jx,	   SWAP2F A, B		//
+* E5 1D Jx,	   SWAP2D A, B		//
+* E5 1E Jx,	   SWAP2A A, B		//
 ** Swap values from two arbitrary stack locations.
 ** Stack locations are given as absolutes (not stack relative)
 
-* E5 1F Jx,       DUP2A A, B		//
-* E5 20 Jx,       DUP2I A, B		//
-* E5 21 Jx,       DUP2L A, B		//
-* E5 22 Jx,       DUP2F A, B		//
-* E5 23 Jx,       DUP2D A, B		//
+* E5 1F Jx,	   DUP2A A, B		//
+* E5 20 Jx,	   DUP2I A, B		//
+* E5 21 Jx,	   DUP2L A, B		//
+* E5 22 Jx,	   DUP2F A, B		//
+* E5 23 Jx,	   DUP2D A, B		//
 ** Push value from arbitrary location to top of stack.
 
-* E5 24 Jx,       POP2I A, B		//
-* E5 25 Jx,       POP2L A, B		//
-* E5 26 Jx,       POP2F A, B		//
-* E5 27 Jx,       POP2D A, B		//
-* E5 28 Jx,       POP2A A, B		//
+* E5 24 Jx,	   POP2I A, B		//
+* E5 25 Jx,	   POP2L A, B		//
+* E5 26 Jx,	   POP2F A, B		//
+* E5 27 Jx,	   POP2D A, B		//
+* E5 28 Jx,	   POP2A A, B		//
 ** Pop value from top of stack to arbitrary location.
 
-* E5 29 Jx,       MVS2I A, B		//
-* E5 2A Jx,       MVS2L A, B		//
-* E5 2B Jx,       MVS2F A, B		//
-* E5 2C Jx,       MVS2D A, B		//
-* E5 2D Jx,       MVS2A A, B		//
+* E5 29 Jx,	   MVS2I A, B		//
+* E5 2A Jx,	   MVS2L A, B		//
+* E5 2B Jx,	   MVS2F A, B		//
+* E5 2C Jx,	   MVS2D A, B		//
+* E5 2D Jx,	   MVS2A A, B		//
 ** Move values between arbitrary stack locations.
