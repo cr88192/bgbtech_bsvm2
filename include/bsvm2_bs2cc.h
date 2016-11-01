@@ -400,6 +400,10 @@ char **args;
 char *t_args[8];
 };
 
+#define BS2CC_SRCLANG_BS2	1		///< size of temp global array
+#define BS2CC_SRCLANG_C		2		///< size of temp global array
+#define BS2CC_SRCLANG_CPP	3		///< size of temp global array
+
 /** Context holding main compiler state */
 struct BS2CC_CompileContext_s
 {
@@ -460,6 +464,7 @@ int ncwparm;		///< number of warning/error parameters
 
 char *srcfn;		///< source file name
 int srcln;			///< source line number
+int srclang;		///< source language
 
 BGBDT_MM_ParsePrintInfo *dbgprn;	///< debug message print context
 
@@ -469,5 +474,7 @@ char *strct;		///< strings table position
 
 BS2CC_VarInfo *lst_vari;	///< list of all VarInfo in context
 BS2CC_CcFrame *lst_ccfrm;	///< list of all CcFrame in context
+
+BS2CC_PpDef *ppdef[256];	///< preprocessor defs
 };
 

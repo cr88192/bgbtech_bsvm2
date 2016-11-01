@@ -94,6 +94,14 @@ static_inline void dtcSetA(dtcObject obj, dtcField fi, dtVal v)
 static_inline void *dtcGetPtr(dtcObject obj, dtcField fi)
 	{ return(fi->GetPtr(obj, fi)); }
 
+static_inline int dtcFieldOffsetOf(dtcField fi)
+{
+	if(fi->slotty==BGBDTC_STY_FIELD)
+		{ return(fi->offs); }
+	return(-1);
+}
+
+
 static_inline s32 dtcVaGetI(dtVal obj, dtcField fi)
 	{ return(fi->GetI(dtvUnwrapPtr(obj), fi)); }
 static_inline s64 dtcVaGetL(dtVal obj, dtcField fi)

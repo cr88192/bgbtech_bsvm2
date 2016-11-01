@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "bs2p_stmt.c"
 #include "bs2p_token.c"
 
+#include "bs2p_preproc.c"
+
 #include "bs2c_compile.c"
 #include "bs2c_conv.c"
 #include "bs2c_disasm.c"

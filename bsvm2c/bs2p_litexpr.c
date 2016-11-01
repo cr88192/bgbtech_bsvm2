@@ -462,7 +462,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		return(BS2P_ParseWrapString(ctx, t0+1));
 	}
 
-	if((*t0=='X') && !strcmp(t0, "X#"))
+	if((*t0=='X') && !strcmp(t0, "X#") && BS2P_LangIsBS2(ctx))
 	{
 		if(t1 && (*t1=='I'))
 		{
@@ -477,7 +477,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		}
 	}
 
-	if((*t0=='X') && !strcmp(t0, "X#:"))
+	if((*t0=='X') && !strcmp(t0, "X#:") && BS2P_LangIsBS2(ctx))
 	{
 		if(t1 && (*t1=='I'))
 		{
@@ -492,7 +492,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		}
 	}
 
-	if((*t0=='X') && !strcmp(t0, "X\"\"\""))
+	if((*t0=='X') && !strcmp(t0, "X\"\"\"") && BS2P_LangIsBS2(ctx))
 	{
 		BS2P_NextToken(ctx);
 		return(BS2P_ParseStringTriple(ctx));
@@ -522,7 +522,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 	
 	if(*t0=='I')
 	{
-		if(!strcmp(t0, "Inew"))
+		if(!strcmp(t0, "Inew") && BS2P_LangIsBS2(ctx))
 		{
 			BS2P_NextToken(ctx);
 
@@ -551,7 +551,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 			return(n0);
 		}
 
-		if(!strcmp(t0, "Ifunction"))
+		if(!strcmp(t0, "Ifunction") && BS2P_LangIsBS2(ctx))
 		{
 			BS2P_NextToken(ctx);
 			t0=BS2P_PeekToken(ctx, 0);
@@ -647,7 +647,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		return(n0);
 	}
 
-	if(!strcmp(t0, "X{"))
+	if(!strcmp(t0, "X{") && BS2P_LangIsBS2(ctx))
 	{
 		BS2P_NextToken(ctx);
 
@@ -670,7 +670,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		return(n0);
 	}
 
-	if(!strcmp(t0, "X["))
+	if(!strcmp(t0, "X[") && BS2P_LangIsBS2(ctx))
 	{
 		BS2P_NextToken(ctx);
 		n0=BS2P_ParseExprList(ctx);
@@ -715,7 +715,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		return(n0);
 	}
 
-	if(!strcmp(t0, "X#["))
+	if(!strcmp(t0, "X#[") && BS2P_LangIsBS2(ctx))
 	{
 		BS2P_NextToken(ctx);
 		n0=BS2P_ParseExprList(ctx);

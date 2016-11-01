@@ -1475,6 +1475,11 @@ void *BLNK_LookupLabel(char *name)
 	void *p, *q;
 	int i;
 
+	if(strlen(name)>=256)
+	{
+		*(int *)-1=-1;
+	}
+
 	BLNK_InitLink();
 
 	if(BLNK_LookupQuickHash(name, &p))
@@ -1675,19 +1680,33 @@ int BLNK_CheckPtrBigSpace(void *ptr)
 BASM_API void BLNK_AssignSym(char *name, void *ptr)
 {
 	char buf[256];
-	void *p;
+	void *p, *q;
+
+	q=BLNK_FetchSym(name);
 
 	sprintf(buf, "__proxy_%s", name);
 //	p=BLNK_LookupLabel(buf);
 	p=BLNK_FetchSym(buf);
-	if(p) { *(void **)p=ptr; return; }
+	if(p)
+	{
+		if(ptr==q)
+			return;
+		*(void **)p=ptr;
+		return;
+	}
 
 #ifdef WIN32
 	//if windows and a func is a dll import, patch this instead
 	sprintf(buf, "__imp_%s", name);
 //	p=BLNK_LookupLabel(buf);
 	p=BLNK_FetchSym(buf);
-	if(p) { *(void **)p=ptr; return; }
+	if(p)
+	{
+		if(ptr==q)
+			return;
+		*(void **)p=ptr;
+		return;
+	}
 #endif
 
 //	p=BLNK_LookupLabel(name);
@@ -1733,8 +1752,10 @@ BASM_API void BLNK_AssignSym(char *name, void *ptr)
 BASM_API void BLNK_AddProxyPtr(char *name, void *ptr)
 {
 	char tb[256];
-	byte *text, *p;
+	byte *text, *p, *q;
 	int i, j, k;
+
+	q=BLNK_FetchSym(name);
 
 #ifdef WIN32
 	sprintf(tb, "__imp_%s", name);
@@ -1742,6 +1763,9 @@ BASM_API void BLNK_AddProxyPtr(char *name, void *ptr)
 	p=BLNK_FetchSym(tb);
 	if(p)
 	{
+		if(q==ptr)
+			return;
+
 		*(void **)p=ptr;
 		return;
 	}
@@ -1751,6 +1775,9 @@ BASM_API void BLNK_AddProxyPtr(char *name, void *ptr)
 	p=BLNK_FetchSym(tb);
 	if(p)
 	{
+		if(q==ptr)
+			return;
+
 		*(void **)p=ptr;
 		return;
 	}

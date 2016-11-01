@@ -556,7 +556,7 @@ BS2VM_API dtVal BSVM2_Interp_SetGlobalDy(BSVM2_ImageGlobal *vi, dtVal v)
 /** Run the context for a given number of iterations. */
 BS2VM_API int BSVM2_Interp_RunContext(BSVM2_Context *ctx, int lim)
 {
-	BSVM2_Trace *tr;
+	BSVM2_Trace *tr, *ltr, *ltr2;
 	int l;
 	
 	if(lim<0)
@@ -564,7 +564,11 @@ BS2VM_API int BSVM2_Interp_RunContext(BSVM2_Context *ctx, int lim)
 		tr=ctx->trace;
 //		while(tr && !(ctx->status))
 		while(tr)
-			{ tr=tr->Run(ctx->frame, tr); }
+		{
+//			ltr2=ltr; ltr=tr;
+//			tr->runcnt++;
+			tr=tr->Run(ctx->frame, tr);
+		}
 		if(tr)
 			{ ctx->trace=tr; }
 		return(ctx->status);

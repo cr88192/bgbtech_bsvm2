@@ -659,52 +659,60 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockSetupTraceDfl(
 
 
 
-BSVM2_Trace *BSVM2_TrOp_Default(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_Default(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JMP(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JMP(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	return(op->jmptrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JEQ(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JEQ(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(!frm->stack[op->t0].i)
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JNE(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JNE(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(frm->stack[op->t0].i)
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JLT(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JLT(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(frm->stack[op->t0].i<0)
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JGT(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JGT(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(frm->stack[op->t0].i>0)
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JLE(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JLE(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(frm->stack[op->t0].i<=0)
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JGE(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JGE(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(frm->stack[op->t0].i>=0)
 		return(op->jmptrace);
@@ -712,209 +720,255 @@ BSVM2_Trace *BSVM2_TrOp_JGE(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 }
 
 
-BSVM2_Trace *BSVM2_TrOp_JEQNULL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JEQNULL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(dtvNullP(frm->stack[op->t0].a))
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JNENULL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JNENULL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(!dtvNullP(frm->stack[op->t0].a))
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JEQNULLL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JEQNULLL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(dtvNullP(frm->local[op->i0].a))
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JNENULLL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JNENULLL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	if(!dtvNullP(frm->local[op->i0].a))
 		return(op->jmptrace);
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_EQI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_EQI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i==frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_NEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_NEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i!=frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i<frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i>frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i<=frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i>=frm->stack[op->t1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui<frm->stack[op->t1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui>frm->stack[op->t1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui<=frm->stack[op->t1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui>=frm->stack[op->t1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_EQL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_EQL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l==frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_NEL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_NEL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l!=frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l<frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l>frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l<=frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].l>=frm->stack[op->t1].l)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTUL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTUL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ul<frm->stack[op->t1].ul)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTUL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTUL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ul>frm->stack[op->t1].ul)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEUL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEUL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ul<=frm->stack[op->t1].ul)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEUL(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEUL(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ul>=frm->stack[op->t1].ul)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_EQF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_EQF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f==frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_NEF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_NEF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f!=frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f<frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f>frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f<=frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEF(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEF(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].f>=frm->stack[op->t1].f)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_EQD(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_EQD(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d==frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_NED(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_NED(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d!=frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTD(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTD(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d<frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTD(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTD(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d>frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LED(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LED(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d<=frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GED(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GED(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].d>=frm->stack[op->t1].d)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
 
 #if 1
-BSVM2_Trace *BSVM2_TrOp_JCMP_EQIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_EQIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i==op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_NEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_NEIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i!=op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i<op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i>op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i<=op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].i>=op->v.i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
-BSVM2_Trace *BSVM2_TrOp_JCMP_LTUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LTUIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui<op->v.ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GTUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GTUIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui>op->v.ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_LEUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_LEUIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui<=op->v.ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMP_GEUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMP_GEUIC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->stack[op->t0].ui>=op->v.ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
@@ -923,50 +977,60 @@ BSVM2_Trace *BSVM2_TrOp_JCMP_GEUIC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 
 
 
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_EQI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_EQI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i==frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_NEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_NEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i!=frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_LTI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_LTI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i<frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_GTI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_GTI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i>frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_LEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_LEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i<=frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_GEI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_GEI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].i>=frm->local[op->i1].i)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_LTUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_LTUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].ui<frm->local[op->i1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_GTUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_GTUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].ui>frm->local[op->i1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_LEUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_LEUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].ui<=frm->local[op->i1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
-BSVM2_Trace *BSVM2_TrOp_JCMPLL_GEUI(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_JCMPLL_GEUI(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {	if(frm->local[op->i0].ui>=frm->local[op->i1].ui)
 		return(op->jmptrace);
 	return(op->nexttrace);	}
 
 
-BSVM2_Trace *BSVM2_TrOp_RETI(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETI(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -982,7 +1046,7 @@ BSVM2_Trace *BSVM2_TrOp_RETI(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -995,7 +1059,7 @@ BSVM2_Trace *BSVM2_TrOp_RETL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETF(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETF(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1008,7 +1072,7 @@ BSVM2_Trace *BSVM2_TrOp_RETF(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETD(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETD(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1021,7 +1085,7 @@ BSVM2_Trace *BSVM2_TrOp_RETD(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETA(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETA(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1034,7 +1098,7 @@ BSVM2_Trace *BSVM2_TrOp_RETA(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETV(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETV(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1047,7 +1111,7 @@ BSVM2_Trace *BSVM2_TrOp_RETV(
 }
 
 
-BSVM2_Trace *BSVM2_TrOp_RETIC(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETIC(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1063,7 +1127,7 @@ BSVM2_Trace *BSVM2_TrOp_RETIC(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETLC(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETLC(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1079,7 +1143,7 @@ BSVM2_Trace *BSVM2_TrOp_RETLC(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETFC(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETFC(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1095,7 +1159,7 @@ BSVM2_Trace *BSVM2_TrOp_RETFC(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETDC(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETDC(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1111,7 +1175,7 @@ BSVM2_Trace *BSVM2_TrOp_RETDC(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETAC(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETAC(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1127,7 +1191,7 @@ BSVM2_Trace *BSVM2_TrOp_RETAC(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETIL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETIL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1143,7 +1207,7 @@ BSVM2_Trace *BSVM2_TrOp_RETIL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETLL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETLL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1156,7 +1220,7 @@ BSVM2_Trace *BSVM2_TrOp_RETLL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETFL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETFL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1169,7 +1233,7 @@ BSVM2_Trace *BSVM2_TrOp_RETFL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETDL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETDL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1182,7 +1246,7 @@ BSVM2_Trace *BSVM2_TrOp_RETDL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETAL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETAL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1195,17 +1259,19 @@ BSVM2_Trace *BSVM2_TrOp_RETAL(
 	return(frmb->rtrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_CALLG(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CALLG(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
 	BSVM2_Frame *frmb;
 	BSVM2_ImageGlobal *vi;
 	BSVM2_Trace *tr;
-	int i;
+	BSVM2_Value *va, *vb;
+	int i, j, k;
 	
 	ctx=frm->ctx;
 	vi=op->v.p;
+	vi->runcnt++;
 	
 	frmb=BSVM2_Interp_AllocFrame(ctx);
 
@@ -1222,6 +1288,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLG(
 	frm->rcsrv=op->t1;
 	ctx->frame=frmb;
 
+#if 0
 	if(vi->nargs>1)
 	{
 		for(i=0; i<vi->nargs; i++)
@@ -1234,13 +1301,60 @@ BSVM2_Trace *BSVM2_TrOp_CALLG(
 		frmb->local[vi->cblk->bargs]=
 			frm->stack[op->t1];
 	}
+#endif
+
+#if 1
+	if(vi->nargs>1)
+	{
+		j=vi->cblk->bargs; k=op->t1;
+//		va=frmb->local+j;
+//		vb=frm->stack+k;
+		switch(vi->nargs)
+		{
+#if 0
+		case 8:	va[7]=vb[7];
+		case 7:	va[6]=vb[6];
+		case 6:	va[5]=vb[5];
+		case 5:	va[4]=vb[4];
+		case 4:	va[3]=vb[3];
+		case 3:	va[2]=vb[2];
+		case 2:	va[1]=vb[1];
+		case 1:	va[0]=vb[0];
+#endif
+
+#if 1
+		case 8:	frmb->local[j+7]=frm->stack[k+7];
+		case 7:	frmb->local[j+6]=frm->stack[k+6];
+		case 6:	frmb->local[j+5]=frm->stack[k+5];
+		case 5:	frmb->local[j+4]=frm->stack[k+4];
+		case 4:	frmb->local[j+3]=frm->stack[k+3];
+		case 3:	frmb->local[j+2]=frm->stack[k+2];
+		case 2:	frmb->local[j+1]=frm->stack[k+1];
+		case 1:	frmb->local[j  ]=frm->stack[k  ];
+#endif
+		case 0:
+			break;
+		default:
+			for(i=0; i<vi->nargs; i++)
+			{
+				frmb->local[vi->cblk->bargs+i]=
+					frm->stack[op->t1+i];
+			}
+			break;
+		}
+	}else if(vi->nargs)
+	{
+		frmb->local[vi->cblk->bargs]=
+			frm->stack[op->t1];
+	}
+#endif
 
 	tr=BS2I_ImageGetFuncTrace(vi);
 	return(tr);
 }
 
 
-BSVM2_Trace *BSVM2_TrOp_CALLV(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CALLV(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1256,6 +1370,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLV(
 	obj=frm->stack[(op->t1)-1].a;
 	fcn=dtcVaGetA(obj, vi->objinf);
 	fvi=dtvUnwrapPtr(fcn);
+	fvi->runcnt++;
 	
 	frmb=BSVM2_Interp_AllocFrame(ctx);
 
@@ -1283,7 +1398,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLV(
 	return(tr);
 }
 
-BSVM2_Trace *BSVM2_TrOp_CALLTH(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CALLTH(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1299,6 +1414,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLTH(
 	obj=frm->self;
 	fcn=dtcVaGetA(obj, vi->objinf);
 	fvi=dtvUnwrapPtr(fcn);
+	fvi->runcnt++;
 	
 	frmb=BSVM2_Interp_AllocFrame(ctx);
 
@@ -1326,7 +1442,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLTH(
 	return(tr);
 }
 
-BSVM2_Trace *BSVM2_TrOp_CALLA(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CALLA(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1351,6 +1467,8 @@ BSVM2_Trace *BSVM2_TrOp_CALLA(
 		lfcn=NULL;
 		fvi=dtvUnwrapPtrF(fcn);
 	}
+
+	fvi->runcnt++;
 
 	frmb=BSVM2_Interp_AllocFrame(ctx);
 
@@ -1385,7 +1503,7 @@ BSVM2_Trace *BSVM2_TrOp_CALLA(
 	return(tr);
 }
 
-BSVM2_Trace *BSVM2_TrOp_CALLL(
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CALLL(
 	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Context *ctx;
@@ -1410,6 +1528,8 @@ BSVM2_Trace *BSVM2_TrOp_CALLL(
 		lfcn=NULL;
 		fvi=dtvUnwrapPtrF(fcn);
 	}
+
+	fvi->runcnt++;
 
 	frmb=BSVM2_Interp_AllocFrame(ctx);
 
@@ -1503,7 +1623,8 @@ BSVM2_Trace *BSVM2_TrOp_ThrowI(BSVM2_Frame *frm,
 	return(NULL);
 }
 
-BSVM2_Trace *BSVM2_TrOp_THROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_THROW(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	dtVal ex;
 	
@@ -1511,7 +1632,8 @@ BSVM2_Trace *BSVM2_TrOp_THROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(BSVM2_TrOp_ThrowI(frm, op, ex));
 }
 
-BSVM2_Trace *BSVM2_TrOp_RETHROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_RETHROW(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	dtVal ex;
 	
@@ -1521,7 +1643,8 @@ BSVM2_Trace *BSVM2_TrOp_RETHROW(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(BSVM2_TrOp_ThrowI(frm, op, ex));
 }
 
-BSVM2_Trace *BSVM2_TrOp_BEGTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_BEGTRY(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	int i;
 	
@@ -1531,7 +1654,8 @@ BSVM2_Trace *BSVM2_TrOp_BEGTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_ENDTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_ENDTRY(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	dtVal ex;
 	ex=frm->ctx->thrownex;
@@ -1543,7 +1667,8 @@ BSVM2_Trace *BSVM2_TrOp_ENDTRY(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_CATCH(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_CATCH(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -1565,7 +1690,8 @@ BSVM2_Trace *BSVM2_TrOp_CATCH(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->jmptrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_BEGLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_BEGLEC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	s32 v;
 	int i;
@@ -1579,7 +1705,8 @@ BSVM2_Trace *BSVM2_TrOp_BEGLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_ENDLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_ENDLEC(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	dtVal ex;
 	ex=frm->ctx->thrownex;
@@ -1591,7 +1718,8 @@ BSVM2_Trace *BSVM2_TrOp_ENDLEC(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 	return(op->nexttrace);
 }
 
-BSVM2_Trace *BSVM2_TrOp_ENDLEC2(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_ENDLEC2(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	dtVal ex;
 	ex=frm->ctx->thrownex;

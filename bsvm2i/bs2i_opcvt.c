@@ -108,26 +108,26 @@ void BSVM2_Op_CVTUS2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 void BSVM2_Op_CVTUI2L(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].l=frm->stack[op->t0].ui; }
 
-void BSVM2_Op_CVTI2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTI2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=dtvWrapInt(frm->stack[op->t0].i); }
-void BSVM2_Op_CVTL2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTL2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=dtvWrapLong(frm->stack[op->t0].l); }
-void BSVM2_Op_CVTF2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTF2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=dtvWrapFloat(frm->stack[op->t0].f); }
-void BSVM2_Op_CVTD2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTD2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].a=dtvWrapDouble(frm->stack[op->t0].d); }
 
-void BSVM2_Op_CVTAA2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvUnwrapInt(frm->stack[op->t0].a); }
-void BSVM2_Op_CVTAA2L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2L(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].l=dtvUnwrapLong(frm->stack[op->t0].a); }
-void BSVM2_Op_CVTAA2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].f=dtvUnwrapFloat(frm->stack[op->t0].a); }
-void BSVM2_Op_CVTAA2D(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2D(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].d=dtvUnwrapDouble(frm->stack[op->t0].a); }
 
 
-void BSVM2_Op_CVTAA2ST(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2ST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char tb[4096];
 	dtVal v;
@@ -136,7 +136,7 @@ void BSVM2_Op_CVTAA2ST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=BGBDT_TagStr_String(tb);
 }
 
-void BSVM2_Op_CVTST2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTST2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char *s;
 	dtVal v;
@@ -147,7 +147,7 @@ void BSVM2_Op_CVTST2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=v;
 }
 
-void BSVM2_Op_CATST(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CATST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char *s0, *s1, *s2;
 	dtVal v0, v1;
@@ -259,7 +259,7 @@ int bsvm2_op_stricmp(byte *s0, byte *s1)
 	return(0);
 }
 
-void BSVM2_Op_CMPST(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CMPST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char *s0, *s1, *s2;
 	dtVal v0, v1;
@@ -271,7 +271,7 @@ void BSVM2_Op_CMPST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].i=bsvm2_op_strcmp((byte *)s0, (byte *)s1);
 }
 
-void BSVM2_Op_CMPSST(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CMPSST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char *s0, *s1, *s2;
 	dtVal v0, v1;
@@ -283,7 +283,7 @@ void BSVM2_Op_CMPSST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].i=bsvm2_op_strcmp((byte *)s0, (byte *)s1);
 }
 
-void BSVM2_Op_CMPUST(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CMPUST(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	char *s0, *s1, *s2;
 	dtVal v0, v1;

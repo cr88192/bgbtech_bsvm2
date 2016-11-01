@@ -23,6 +23,7 @@ export BS2VM_SRCS=\
 	$(BSVM2_BASE)bsvm2c/bs2p_litexpr.c \
 	$(BSVM2_BASE)bsvm2c/bs2p_stmt.c \
 	$(BSVM2_BASE)bsvm2c/bs2p_token.c \
+	$(BSVM2_BASE)bsvm2c/bs2p_preproc.c \
 	\
 	$(BSVM2_BASE)bsvm2c/bs2c_compile.c \
 	$(BSVM2_BASE)bsvm2c/bs2c_conv.c \
@@ -58,6 +59,7 @@ export BS2VM_SRCS=\
 	$(BSVM2_BASE)bsvm2i/bs2i_tailop.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_topinit.c \
 	\
+	$(BSVM2_BASE)bsvm2i/bs2j_rvalut.c \
 	$(BSVM2_BASE)bsvm2i/bs2j_tr_x86.c \
 	$(BSVM2_BASE)bsvm2i/bs2j_tr_x64.c \
 

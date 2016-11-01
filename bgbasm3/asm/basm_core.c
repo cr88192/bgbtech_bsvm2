@@ -359,9 +359,9 @@ BASM_API void BASM_Align(BASM_Context *ctx, int i)
 		j=ctx->ip-ctx->text;
 		k=j; if(j%i)j+=i-(j%i);
 
-		if(j>=ctx->text_sz)
+		if((j+3)>=ctx->text_sz)
 		{
-			while(j>=ctx->text_sz)
+			while((j+3)>=ctx->text_sz)
 				ctx->text_sz+=ctx->text_sz>>1;
 			ctx->text=(byte *)realloc(ctx->text, ctx->text_sz);
 //			ctx->ip=ctx->text+j;
@@ -434,7 +434,7 @@ BASM_API void BASM_OutByte(BASM_Context *ctx, int i)
 	if(ctx->fl&4)
 	{
 		j=ctx->dp-ctx->data;
-		if(j>=ctx->data_sz)
+		if((j+3)>=ctx->data_sz)
 		{
 			ctx->data_sz+=ctx->data_sz>>1;
 			ctx->data=(byte *)realloc(ctx->data, ctx->data_sz);
@@ -445,7 +445,7 @@ BASM_API void BASM_OutByte(BASM_Context *ctx, int i)
 	}else
 	{
 		j=ctx->ip-ctx->text;
-		if(j>=ctx->text_sz)
+		if((j+3)>=ctx->text_sz)
 		{
 			ctx->text_sz+=ctx->text_sz>>1;
 			ctx->text=(byte *)realloc(ctx->text, ctx->text_sz);
@@ -3056,7 +3056,8 @@ BASM_API void BASM_EmitLabelPos(BASM_Context *ctx, char *name, int pos)
 	ctx->label_pos[i]=pos;
 }
 
-BASM_API void BASM_EmitGotoPos(BASM_Context *ctx, char *name, int ty, int pos)
+BASM_API void BASM_EmitGotoPos(BASM_Context *ctx,
+	char *name, int ty, int pos)
 {
 	int i, j;
 

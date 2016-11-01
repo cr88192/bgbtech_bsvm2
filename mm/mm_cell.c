@@ -207,8 +207,9 @@ int BGBDT_MM_LookupSObjChunkCellPtr(byte *ptr, int *rcell)
 		chk=&(bgbdt_mm_sobjchk[i]);
 		if((ptr>=chk->data) && (ptr<chk->edata))
 		{
-			j=(ptr-chk->data)>>chk->shcell;
-			if(*rcell)
+//			j=(ptr-chk->data)>>chk->shcell;
+			j=(ptr-chk->data)>>BGBDT_MM_SOBJ_CELSHL;
+//			if(*rcell)
 				*rcell=j;
 			return(i);
 		}
@@ -227,8 +228,9 @@ int BGBDT_MM_LookupMObjChunkCellPtr(byte *ptr, int *rcell)
 		chk=&(bgbdt_mm_mobjchk[i]);
 		if((ptr>=chk->data) && (ptr<chk->edata))
 		{
-			j=(ptr-chk->data)>>chk->shcell;
-			if(*rcell)
+//			j=(ptr-chk->data)>>chk->shcell;
+			j=(ptr-chk->data)>>BGBDT_MM_MOBJ_CELSHL;
+//			if(*rcell)
 				*rcell=j;
 			return(i);
 		}
@@ -586,6 +588,8 @@ BS2VM_API void *BGBDT_MM_GetPtrForObjId(int objid)
 		return(ptr);
 	}
 	
+	return(NULL);
+	
 #if 0
 	t=objid&3;
 	if((t==0) || (t==2))
@@ -669,6 +673,8 @@ BS2VM_API void *BGBDT_MM_GetDataPtrForObjId(int objid)
 		ptr=BGBDT_MM_GetLObjPtrForIndex(ci);
 		return(ptr+sizeof(BGBDT_MM_ObjHead));
 	}
+	
+	return(NULL);
 
 //	ptr=BGBDT_MM_GetPtrForObjId(objid);
 //	if(!ptr)return(NULL);

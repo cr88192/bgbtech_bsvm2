@@ -2,7 +2,7 @@
 Decimal 128
 
 Low 110 bits:
-	11x 10 bits (DPD), representing 33 decimal digits
+	11x 10 bits (Mod1k), representing 33 decimal digits
 High 16 bits:
 	MSB=Sign
 	15 bits=exponent (in powers of 10)

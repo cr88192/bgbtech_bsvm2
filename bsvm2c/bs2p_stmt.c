@@ -45,6 +45,23 @@ void BS2P_ErrSyntaxError(BS2CC_CompileContext *ctx)
 	BS2P_ParseError(ctx, BS2CC_ERRN_ERRSYNTAX);
 }
 
+int BS2P_LangIsBS2(BS2CC_CompileContext *ctx)
+{
+	if(!ctx->srclang)
+		return(1);
+	if(ctx->srclang==BS2CC_SRCLANG_BS2)
+		return(1);
+	return(0);
+}
+
+int BS2P_LangIsC(BS2CC_CompileContext *ctx)
+{
+	if(ctx->srclang==BS2CC_SRCLANG_C)
+		return(1);
+	if(ctx->srclang==BS2CC_SRCLANG_CPP)
+		return(1);
+	return(0);
+}
 
 dtVal BS2P_ParseInnerStatement(BS2CC_CompileContext *ctx)
 {

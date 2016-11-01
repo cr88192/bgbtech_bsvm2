@@ -50,5 +50,6 @@ THE SOFTWARE.
 #include "bs2i_tailop.c"
 #include "bs2i_topinit.c"
 
+#include "bs2j_rvalut.c"
 #include "bs2j_tr_x86.c"
 #include "bs2j_tr_x64.c"

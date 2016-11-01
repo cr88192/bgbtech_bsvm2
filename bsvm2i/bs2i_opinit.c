@@ -515,11 +515,13 @@ void BSVM2_Interp_DecodeOpGx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 		vi=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=vi;
 		op->i1=vi->brty;
+		op->z=vi->brty;
 	}else
 	{
 		p=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=p;
 		op->i1=BSVM2_OPZ_CONST;
+		op->z=BSVM2_OPZ_CONST;
 	}
 }
 
@@ -537,11 +539,13 @@ void BSVM2_Interp_DecodeOpIxGx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 		vi=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=vi;
 		op->i1=vi->brty;
+		op->z=vi->brty;
 	}else
 	{
 		p=BSVM2_Interp_DecodeOpAddrPtr(cblk, ix);
 		op->v.p=p;
 		op->i1=BSVM2_OPZ_CONST;
+		op->z=BSVM2_OPZ_CONST;
 	}
 }
 
@@ -581,6 +585,8 @@ void BSVM2_Interp_DecodeOpJx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	BSVM2_Interp_DecodeOpUJxI(cblk, &i, &j);
 	op->i0=i;
 	op->i1=j;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
 }
 
 void BSVM2_Interp_DecodeOpLx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
@@ -591,6 +597,9 @@ void BSVM2_Interp_DecodeOpLx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->i0=i;
 	op->i1=j;
 	op->i2=k;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
+	op->opfl|=BSVM2_OPFL_USED_I2;
 }
 
 void BSVM2_Interp_DecodeOpJxCx(BSVM2_CodeBlock *cblk,
@@ -607,6 +616,9 @@ void BSVM2_Interp_DecodeOpJx_SLL(BSVM2_CodeBlock *cblk,
 	op->i2=op->i1;
 	op->i1=op->i0;
 	op->i0=(cblk->stkpos++)+cblk->largs;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
+	op->opfl|=BSVM2_OPFL_USED_I2;
 }
 
 void BSVM2_Interp_DecodeOpJx_LSL(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
@@ -615,6 +627,9 @@ void BSVM2_Interp_DecodeOpJx_LSL(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->i2=op->i1;
 	op->i1=(--cblk->stkpos)+cblk->largs;
 //	op->i1=op->i0;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
+	op->opfl|=BSVM2_OPFL_USED_I2;
 }
 
 void BSVM2_Interp_DecodeOpKx_SLC(BSVM2_CodeBlock *cblk,
@@ -623,6 +638,8 @@ void BSVM2_Interp_DecodeOpKx_SLC(BSVM2_CodeBlock *cblk,
 	BSVM2_Interp_DecodeOpKx(cblk, op, zty);
 	op->i1=op->i0;
 	op->i0=(cblk->stkpos++)+cblk->largs;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
 }
 
 void BSVM2_Interp_DecodeOpKx_LSC(BSVM2_CodeBlock *cblk,
@@ -630,6 +647,8 @@ void BSVM2_Interp_DecodeOpKx_LSC(BSVM2_CodeBlock *cblk,
 {
 	BSVM2_Interp_DecodeOpKx(cblk, op, zty);
 	op->i1=(--cblk->stkpos)+cblk->largs;
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
 }
 
 void BSVM2_Interp_DecodeOpKx(BSVM2_CodeBlock *cblk,
@@ -640,6 +659,8 @@ void BSVM2_Interp_DecodeOpKx(BSVM2_CodeBlock *cblk,
 
 	BSVM2_Interp_DecodeOpUKx(cblk, &j, &li);
 	op->i0=j;
+	op->z=zty;
+	op->opfl|=BSVM2_OPFL_USED_I0;
 
 	switch(zty)
 	{
@@ -840,6 +861,22 @@ void BSVM2_Interp_DecodeOpZn(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->z=op->i1;
 }
 
+void BSVM2_Interp_DecodeOpZnIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
+{
+	s64 li, lj;
+	int i, j;
+
+	li=BSVM2_Interp_DecodeOpUCxL(cblk);
+	op->i2=li&15;
+	lj=li>>4;
+	op->i0=lj;
+	op->i1=BSVM2_Interp_DecodeOpUCxI(cblk);
+	op->z=op->i2;
+
+//	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
+}
+
 void BSVM2_Interp_DecodeOpZiIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 {
 	s64 li, lj;
@@ -851,6 +888,9 @@ void BSVM2_Interp_DecodeOpZiIx(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	op->i0=lj;
 	op->i1=BSVM2_Interp_DecodeOpUCxI(cblk);
 	op->z=op->i2;
+
+	op->opfl|=BSVM2_OPFL_USED_I0;
+	op->opfl|=BSVM2_OPFL_USED_I1;
 }
 
 void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
@@ -863,6 +903,7 @@ void BSVM2_Interp_DecodeOpZiCi(BSVM2_CodeBlock *cblk, BSVM2_Opcode *op)
 	lj=li>>4;
 	op->i0=lj;
 	op->z=op->i2;
+	op->opfl|=BSVM2_OPFL_USED_I0;
 //	BSVM2_Interp_DecodeOpCx(cblk, op, )
 	lk=BSVM2_Interp_DecodeOpSCxL(cblk);
 //	lk=bsvm2_interp_decsignfoldl(lk);
@@ -959,6 +1000,9 @@ void BSVM2_Interp_SetupOpBin(BSVM2_CodeBlock *cblk,
 	cblk->stkpos--;
 	op->t0=cblk->stkpos-1;
 	op->t1=cblk->stkpos;
+
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpUn(BSVM2_CodeBlock *cblk,
@@ -967,6 +1011,7 @@ void BSVM2_Interp_SetupOpUn(BSVM2_CodeBlock *cblk,
 {
 	op->Run=run;
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpUnL(BSVM2_CodeBlock *cblk,
@@ -975,6 +1020,7 @@ void BSVM2_Interp_SetupOpUnL(BSVM2_CodeBlock *cblk,
 {
 	op->Run=run;
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 	BSVM2_Interp_DecodeOpIx(cblk, op);
 }
 
@@ -985,6 +1031,7 @@ void BSVM2_Interp_SetupOpUstL(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	cblk->stkpos--;
 	op->t0=cblk->stkpos;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 	BSVM2_Interp_DecodeOpIx(cblk, op);
 }
 
@@ -995,6 +1042,8 @@ void BSVM2_Interp_SetupOpUnP(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	op->t1=cblk->stkpos-1;
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+//	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpUnPGx(BSVM2_CodeBlock *cblk,
@@ -1005,6 +1054,8 @@ void BSVM2_Interp_SetupOpUnPGx(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	op->t1=cblk->stkpos-1;
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpUat(BSVM2_CodeBlock *cblk,
@@ -1045,6 +1096,8 @@ void BSVM2_Interp_SetupOpUat2(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	op->t0=cblk->stkpos-1;
 	op->t1=cblk->stkpos-2;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpPopUn(BSVM2_CodeBlock *cblk,
@@ -1053,6 +1106,7 @@ void BSVM2_Interp_SetupOpPopUn(BSVM2_CodeBlock *cblk,
 {
 	op->Run=run;
 	op->t0=--cblk->stkpos;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpPopBin(BSVM2_CodeBlock *cblk,
@@ -1062,6 +1116,8 @@ void BSVM2_Interp_SetupOpPopBin(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	op->t1=--cblk->stkpos;
 	op->t0=--cblk->stkpos;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpPopTrin(BSVM2_CodeBlock *cblk,
@@ -1072,6 +1128,9 @@ void BSVM2_Interp_SetupOpPopTrin(BSVM2_CodeBlock *cblk,
 	op->t2=--cblk->stkpos;
 	op->t1=--cblk->stkpos;
 	op->t0=--cblk->stkpos;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
+	op->opfl|=BSVM2_OPFL_USED_T2;
 }
 
 void BSVM2_Interp_SetupOpBinC2(BSVM2_CodeBlock *cblk,
@@ -1081,6 +1140,7 @@ void BSVM2_Interp_SetupOpBinC2(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	BSVM2_Interp_DecodeOpCx(cblk, op, ztyc);
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpBinC(BSVM2_CodeBlock *cblk,
@@ -1112,6 +1172,7 @@ void BSVM2_Interp_SetupOpBinCiSa(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	BSVM2_Interp_DecodeOpCx(cblk, op, BSVM2_OPZ_INT);
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 
 	if(op->v.i<0)
 	{
@@ -1127,6 +1188,7 @@ void BSVM2_Interp_SetupOpBinL(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	BSVM2_Interp_DecodeOpIx(cblk, op);
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpBinLC(BSVM2_CodeBlock *cblk,
@@ -1136,6 +1198,7 @@ void BSVM2_Interp_SetupOpBinLC(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	BSVM2_Interp_DecodeOpKx(cblk, op, zty);
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpBinLL(BSVM2_CodeBlock *cblk,
@@ -1145,6 +1208,7 @@ void BSVM2_Interp_SetupOpBinLL(BSVM2_CodeBlock *cblk,
 	op->Run=run;
 	BSVM2_Interp_DecodeOpJx(cblk, op);
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
 }
 
 void BSVM2_Interp_SetupOpBinC2P(BSVM2_CodeBlock *cblk,
@@ -1155,6 +1219,8 @@ void BSVM2_Interp_SetupOpBinC2P(BSVM2_CodeBlock *cblk,
 	BSVM2_Interp_DecodeOpCx(cblk, op, ztyc);
 	op->t1=cblk->stkpos-1;
 	op->t0=cblk->stkpos++;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 
@@ -1166,6 +1232,8 @@ void BSVM2_Interp_SetupOpTrinC2(BSVM2_CodeBlock *cblk,
 	BSVM2_Interp_DecodeOpCx(cblk, op, ztyc);
 	op->t1=--cblk->stkpos;
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpTrinCiSa(BSVM2_CodeBlock *cblk,
@@ -1177,6 +1245,8 @@ void BSVM2_Interp_SetupOpTrinCiSa(BSVM2_CodeBlock *cblk,
 	BSVM2_Interp_DecodeOpCx(cblk, op, BSVM2_OPZ_INT);
 	op->t1=--cblk->stkpos;
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 	
 	if(op->v.i<0)
 	{
@@ -1207,6 +1277,8 @@ void BSVM2_Interp_SetupOpPopTrinC(BSVM2_CodeBlock *cblk,
 	BSVM2_Interp_DecodeOpCx(cblk, op, ztyc);
 	op->t1=--cblk->stkpos;
 	op->t0=--cblk->stkpos;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
 }
 
 void BSVM2_Interp_SetupOpPopTrinCI(BSVM2_CodeBlock *cblk,
@@ -1226,6 +1298,9 @@ void BSVM2_Interp_SetupOpTrin(BSVM2_CodeBlock *cblk,
 	op->t2=cblk->stkpos--;
 	op->t1=cblk->stkpos--;
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
+	op->opfl|=BSVM2_OPFL_USED_T2;
 }
 
 void BSVM2_Interp_SetupOpQuad(BSVM2_CodeBlock *cblk,
@@ -1238,6 +1313,10 @@ void BSVM2_Interp_SetupOpQuad(BSVM2_CodeBlock *cblk,
 	op->t2=cblk->stkpos--;
 	op->t1=cblk->stkpos--;
 	op->t0=cblk->stkpos-1;
+	op->opfl|=BSVM2_OPFL_USED_T0;
+	op->opfl|=BSVM2_OPFL_USED_T1;
+	op->opfl|=BSVM2_OPFL_USED_T2;
+	op->opfl|=BSVM2_OPFL_USED_T3;
 }
 
 

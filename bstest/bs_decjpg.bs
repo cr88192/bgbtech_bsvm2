@@ -251,7 +251,8 @@ public void memcpy(*byte dst, *byte src, int sz)
 	*byte cs, ct, cse;
 	
 	cs=src; cse=cs+sz; ct=dst;
-/*	while((cs+16)<=cse)
+// /*
+	while((cs+16)<=cse)
 	{
 		*(*long)ct=*(*long)cs;
 		*(*long)(ct+8)=*(*long)(cs+8);
@@ -261,7 +262,8 @@ public void memcpy(*byte dst, *byte src, int sz)
 	{
 		*(*int)ct=*(*int)cs;
 		ct+=4; cs+=4;
-	} */
+	}
+// */
 
 	while(cs<cse)
 		{ *ct++=*cs++; }
@@ -502,13 +504,13 @@ public int PDJHUFF_ReadNBits(PDJPG_Context ctx, int n)
 				ctx.huff_pos, ctx.huff_cs-ctx.huff_css);
 		} */
 
-	while(ctx.huff_pos>=8)
-	{
-		ctx.huff_win=(ctx.huff_win<<8)|PDJHUFF_NextByte(ctx);
-		ctx.huff_pos-=8;
-	}
+//	while(ctx.huff_pos>=8)
+//	{
+//		ctx.huff_win=(ctx.huff_win<<8)|PDJHUFF_NextByte(ctx);
+//		ctx.huff_pos-=8;
+//	}
 
-/*
+// /*
 	if(ctx.huff_pos>=8)
 	{
 		ctx.huff_win=(ctx.huff_win<<8)|PDJHUFF_NextByte(ctx);
@@ -519,7 +521,7 @@ public int PDJHUFF_ReadNBits(PDJPG_Context ctx, int n)
 			ctx.huff_pos-=8;
 		}
 	}
-*/
+// */
 
 	return(i);
 }
@@ -662,8 +664,13 @@ public int PDJHUFF_DecodeBlock(PDJPG_Context ctx,
 
 //	printf("Tab DC=%d AC=%d\n", dctab, actab);
 
-	for(i=1; i<64; i++)
-		buf[i]=0;
+//	for(i=1; i<64; i++)
+//		buf[i]=0;
+
+	buf[1]=0; buf[2]=0; buf[3]=0;
+	for(i=4; i<64; i+=4)
+	{	buf[i+0]=0;	buf[i+1]=0;
+		buf[i+2]=0;	buf[i+3]=0;	}
 
 	qtab=ctx.jpg_qt+qid*64;
 
@@ -746,10 +753,46 @@ public void PDJPG_CopyOutBlock8B(
 		cs=ibuf+i*8;
 		ct=obuf+(y+i)*xs+x;
 
-		ct[0]=clamp255(cs[0]);	ct[1]=clamp255(cs[1]);
-		ct[2]=clamp255(cs[2]);	ct[3]=clamp255(cs[3]);
-		ct[4]=clamp255(cs[4]);	ct[5]=clamp255(cs[5]);
-		ct[6]=clamp255(cs[6]);	ct[7]=clamp255(cs[7]);
+		j=cs[0]|cs[1]|cs[2]|cs[3]|cs[4]|cs[5]|cs[6]|cs[7];
+
+		if(j>>8)
+//		if(1)
+		{
+// /*
+			i0=cs[0];	i1=cs[1];	i2=cs[2];	i3=cs[3];
+			i4=cs[4];	i5=cs[5];	i6=cs[6];	i7=cs[7];
+			if(i0<0)i0=0;	if(i1<0)i1=0;
+			if(i2<0)i2=0;	if(i3<0)i3=0;
+			if(i4<0)i4=0;	if(i5<0)i5=0;
+			if(i6<0)i6=0;	if(i7<0)i7=0;
+			if(i0>255)i0=255;	if(i1>255)i1=255;
+			if(i2>255)i2=255;	if(i3>255)i3=255;
+			if(i4>255)i4=255;	if(i5>255)i5=255;
+			if(i6>255)i6=255;	if(i7>255)i7=255;
+			ct[0]=i0;	ct[1]=i1;	ct[2]=i2;	ct[3]=i3;
+			ct[4]=i4;	ct[5]=i5;	ct[6]=i6;	ct[7]=i7;
+// */
+
+//			i0=cs[0]|cs[1];	i1=(0-(i0>>8))>>8; i0=~(i0>>31);
+//			i2=cs[2]|cs[3];	i3=(0-(i2>>8))>>8; i2=~(i2>>31);
+//			i4=cs[4]|cs[5];	i5=(0-(i4>>8))>>8; i4=~(i4>>31);
+//			i6=cs[6]|cs[7];	i7=(0-(i6>>8))>>8; i6=~(i6>>31);
+//			ct[0]=(cs[0]|i1)&i0;	ct[1]=(cs[1]|i1)&i0;
+//			ct[2]=(cs[2]|i3)&i2;	ct[3]=(cs[3]|i3)&i2;
+//			ct[4]=(cs[4]|i5)&i4;	ct[5]=(cs[5]|i5)&i4;
+//			ct[6]=(cs[6]|i7)&i6;	ct[7]=(cs[7]|i7)&i6;
+			
+//			ct[0]=clamp255(cs[0]);	ct[1]=clamp255(cs[1]);
+//			ct[2]=clamp255(cs[2]);	ct[3]=clamp255(cs[3]);
+//			ct[4]=clamp255(cs[4]);	ct[5]=clamp255(cs[5]);
+//			ct[6]=clamp255(cs[6]);	ct[7]=clamp255(cs[7]);
+		}else
+		{
+			ct[0]=(cs[0]);	ct[1]=(cs[1]);
+			ct[2]=(cs[2]);	ct[3]=(cs[3]);
+			ct[4]=(cs[4]);	ct[5]=(cs[5]);
+			ct[6]=(cs[6]);	ct[7]=(cs[7]);
+		}
 	}
 }
 
@@ -768,10 +811,13 @@ public int PDJPG_MarkerSOS(PDJPG_Context ctx, *byte buf)
 	int[4] siystr;
 	
 	*byte s;
+	int t0, t1, t2;
 	int i, j, k, l, i1, j1, k1, l1;
 	int w, h, n, ns, rt;
 
 	printf("PDJPG_MarkerSOS: A\n");
+
+	t0=clock();
 
 	l=(buf[0]<<8)|buf[1];
 	printf("ns %d\n", buf[2]);
@@ -889,6 +935,7 @@ public int PDJPG_MarkerSOS(PDJPG_Context ctx, *byte buf)
 
 	printf("PDJPG_MarkerSOS: C\n");
 
+//	t0=clock();
 	if(ctx.jpg_nc==1)
 	{
 		printf("PDJPG_MarkerSOS: Mono\n");
@@ -1005,7 +1052,8 @@ public int PDJPG_MarkerSOS(PDJPG_Context ctx, *byte buf)
 		}
 	}
 
-	printf("PDJPG_MarkerSOS: Img Dec\n");
+	t1=clock();
+	printf("PDJPG_MarkerSOS: Img Dec Dt=%d\n", t1-t0);
 
 	if(rt<0)
 	{
@@ -1340,15 +1388,21 @@ public int PDJPG_GetImageRGBA(PDJPG_Context ctx,
 	*byte ybuf, ubuf, vbuf;
 	*byte csy0, csy1, csu, csv;
 	*byte ct0, ct1;
+	int t0, t1, t2;
 	int cy0, cy1, cy2, cy3;
+	int cr0, cr1, cr2, cr3;
+	int cg0, cg1, cg2, cg3;
+	int cb0, cb1, cb2, cb3;
 	int cu, cv;
 	int lru, lrv;
 	int x, y, y1, xs1, ys1;
 	int n0, n1;
+	int i, j, k;
 	
 	if(ctx.jpg_is420)
 	{
 		printf("PDJPG_GetImageRGBA: Is 420\n");
+		t0=clock();
 	
 		ybuf=ctx.jpg_sibuf[0];
 		ubuf=ctx.jpg_sibuf[1];
@@ -1373,6 +1427,98 @@ public int PDJPG_GetImageRGBA(PDJPG_Context ctx,
 				cu=*csu++;	cv=*csv++;
 				lru=cu-128; lrv=cv-128;
 				
+				cr0=cy0+lrv;	cg0=cy0;	cb0=cy0+lru;
+				cr1=cy1+lrv;	cg1=cy1;	cb1=cy1+lru;
+				cr2=cy2+lrv;	cg2=cy2;	cb2=cy2+lru;
+				cr3=cy3+lrv;	cg3=cy3;	cb3=cy3+lru;
+
+// /*
+				k=cr0|cr1|cr2|cr3;
+				if(k>>8)
+				{	if(cr0<  0)cr0=  0;		if(cr1<  0)cr1=  0;
+					if(cr2<  0)cr2=  0;		if(cr3<  0)cr3=  0;
+					if(cr0>255)cr0=255;		if(cr1>255)cr1=255;
+					if(cr2>255)cr2=255;		if(cr3>255)cr3=255;		}
+				k=cg0|cg1|cg2|cg3;
+				if(k>>8)
+				{	if(cg0<  0)cg0=  0;		if(cg1<  0)cg1=  0;
+					if(cg2<  0)cg2=  0;		if(cg3<  0)cg3=  0;
+					if(cg0>255)cg0=255;		if(cg1>255)cg1=255;
+					if(cg2>255)cg2=255;		if(cg3>255)cg3=255;		}
+
+				k=cb0|cb1|cb2|cb3;
+				if(k>>8)
+				{	if(cb0<  0)cb0=  0;		if(cb1<  0)cb1=  0;
+					if(cb2<  0)cb2=  0;		if(cb3<  0)cb3=  0;
+					if(cb0>255)cb0=255;		if(cb1>255)cb1=255;
+					if(cb2>255)cb2=255;		if(cb3>255)cb3=255;		}
+
+				ct0[0]=cr0;	ct0[1]=cg0;	ct0[2]=cb0;	ct0[3]=255;
+				ct0[4]=cr1;	ct0[5]=cg1;	ct0[6]=cb1;	ct0[7]=255;
+				ct1[0]=cr2;	ct1[1]=cg2;	ct1[2]=cb2;	ct1[3]=255;
+				ct1[4]=cr3;	ct1[5]=cg3;	ct1[6]=cb3;	ct1[7]=255;
+// */
+
+/*
+				k=cr0|cr1|cr2|cr3;
+				if(k>>8)
+				{
+					j=~(k>>31);
+					cr0=255&j;	cr1=255&j;
+					cr2=255&j;	cr3=255&j;
+				}
+
+				k=cg0|cg1|cg2|cg3;
+				if(k>>8)
+				{
+					j=~(k>>31);
+					cg0=255&j;	cg1=255&j;
+					cg2=255&j;	cg3=255&j;
+				}
+
+				k=cb0|cb1|cb2|cb3;
+				if(k>>8)
+				{
+					j=~(k>>31);
+					cb0=255&j;	cb1=255&j;
+					cb2=255&j;	cb3=255&j;
+				}
+
+				ct0[0]=cr0;	ct0[1]=cg0;	ct0[2]=cb0;	ct0[3]=255;
+				ct0[4]=cr1;	ct0[5]=cg1;	ct0[6]=cb1;	ct0[7]=255;
+				ct1[0]=cr2;	ct1[1]=cg2;	ct1[2]=cb2;	ct1[3]=255;
+				ct1[4]=cr3;	ct1[5]=cg3;	ct1[6]=cb3;	ct1[7]=255;
+*/
+
+/*
+				if((cr0|cr1|cr2|cr3)>>8)
+				{	cr0=clamp255(cr0);	cr1=clamp255(cr1);
+					cr2=clamp255(cr2);	cr3=clamp255(cr3);	}
+				if((cg0|cg1|cg2|cg3)>>8)
+				{	cg0=clamp255(cg0);	cg1=clamp255(cg1);
+					cg2=clamp255(cg2);	cg3=clamp255(cg3);	}
+				if((cb0|cb1|cb2|cb3)>>8)
+				{	cb0=clamp255(cb0);	cb1=clamp255(cb1);
+					cb2=clamp255(cb2);	cb3=clamp255(cb3);	}
+				
+				ct0[0]=cr0;	ct0[1]=cg0;	ct0[2]=cb0;	ct0[3]=255;
+				ct0[4]=cr1;	ct0[5]=cg1;	ct0[6]=cb1;	ct0[7]=255;
+				ct1[0]=cr2;	ct1[1]=cg2;	ct1[2]=cb2;	ct1[3]=255;
+				ct1[4]=cr3;	ct1[5]=cg3;	ct1[6]=cb3;	ct1[7]=255;
+*/
+
+/*
+				ct0[0]=clamp255(cr0);	ct0[1]=clamp255(cg0);
+				ct0[2]=clamp255(cb0);	ct0[3]=255;
+				ct0[4]=clamp255(cr1);	ct0[5]=clamp255(cg1);
+				ct0[6]=clamp255(cb1);	ct0[7]=255;
+				ct1[0]=clamp255(cr2);	ct1[1]=clamp255(cg2);
+				ct1[2]=clamp255(cb2);	ct1[3]=255;
+				ct1[4]=clamp255(cr3);	ct1[5]=clamp255(cg3);
+				ct1[6]=clamp255(cb3);	ct1[7]=255;
+*/
+
+/*
 				ct0[0]=clamp255(cy0+lrv);	ct0[1]=clamp255(cy0    );
 				ct0[2]=clamp255(cy0+lru);	ct0[3]=255;
 				ct0[4]=clamp255(cy1+lrv);	ct0[5]=clamp255(cy1    );
@@ -1382,11 +1528,15 @@ public int PDJPG_GetImageRGBA(PDJPG_Context ctx,
 				ct1[2]=clamp255(cy2+lru);	ct1[3]=255;
 				ct1[4]=clamp255(cy3+lrv);	ct1[5]=clamp255(cy3    );
 				ct1[6]=clamp255(cy3+lru);	ct1[7]=255;
-				
+*/
+
 				ct0+=8;
 				ct1+=8;
 			}
 		}
+
+		t1=clock();
+		printf("\tDt=%d\n", t1-t0);
 		
 		return(0);
 	}

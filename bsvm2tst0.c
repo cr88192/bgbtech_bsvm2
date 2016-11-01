@@ -177,5 +177,6 @@ int main()
 #endif
 
 	BS2J_DumpMissCounts();
+	BS2J_DumpUseCounts();
 
 }

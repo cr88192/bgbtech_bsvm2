@@ -21,38 +21,38 @@ THE SOFTWARE.
 */
 
 
-void BSVM2_Op_MKV2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_MKV2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].ui=frm->stack[op->t0].i;
 	frm->stack[op->t0].uj=frm->stack[op->t1].i;
 }
 
-void BSVM2_Op_MKV2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_MKV2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].fx=frm->stack[op->t0].f;
 	frm->stack[op->t0].fy=frm->stack[op->t1].f;
 }
 
-void BSVM2_Op_CVTVI2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTVI2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 //	frm->stack[op->t0].ui=frm->stack[op->t0].i;
 //	frm->stack[op->t0].uj=frm->stack[op->t1].i;
 }
 
-void BSVM2_Op_CVTVF2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTVF2AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].a=dtvWrapVec2f(
 		frm->stack[op->t0].f,
 		frm->stack[op->t1].f);
 }
 
-void BSVM2_Op_CVTAA2VI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2VI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 //	frm->stack[op->t0].ui=frm->stack[op->t0].i;
 //	frm->stack[op->t0].uj=frm->stack[op->t1].i;
 }
 
-void BSVM2_Op_CVTAA2VF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_CVTAA2VF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	float fv[2];
 	dtvUnwrapVec2fv(frm->stack[op->t0].a, fv);
@@ -60,34 +60,34 @@ void BSVM2_Op_CVTAA2VF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].fy=fv[1];
 }
 
-void BSVM2_Op_BINOPX_ADD_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_ADD_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx+=frm->stack[op->t1].fx;
 	frm->stack[op->t0].fy+=frm->stack[op->t1].fy;	}
-void BSVM2_Op_BINOPX_SUB_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_SUB_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx-=frm->stack[op->t1].fx;
 	frm->stack[op->t0].fy-=frm->stack[op->t1].fy;	}
-void BSVM2_Op_BINOPX_MUL_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_MUL_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx*=frm->stack[op->t1].fx;
 	frm->stack[op->t0].fy*=frm->stack[op->t1].fy;	}
-void BSVM2_Op_BINOPX_DIV_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_DIV_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx/=frm->stack[op->t1].fx;
 	frm->stack[op->t0].fy/=frm->stack[op->t1].fy;	}
 
-void BSVM2_Op_BINOPX_DOT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_DOT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].f=
 		(frm->stack[op->t0].fx*frm->stack[op->t1].fx)+
 		(frm->stack[op->t0].fy*frm->stack[op->t1].fy);
 }
 
-void BSVM2_Op_BINOPX_CROSS_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_CROSS_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].f=
 		(frm->stack[op->t0].fx*frm->stack[op->t1].fy)-
 		(frm->stack[op->t0].fy*frm->stack[op->t1].fx);
 }
 
-void BSVM2_Op_BINOPX_CMUL_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_CMUL_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	float fa, fb, fc, fd;
 	float f, g;
@@ -101,7 +101,7 @@ void BSVM2_Op_BINOPX_CMUL_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].fy=g;
 }
 
-void BSVM2_Op_BINOPX_CDIV_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_BINOPX_CDIV_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	float fa, fb, fc, fd;
 	float f, g, h;
@@ -122,41 +122,41 @@ float bsvm2_opf_ssqrtf(float x)
 	return((x>=0)?sqrt(x):(-sqrt(-x)));
 }
 
-void BSVM2_Op_UNOPX_NEG_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_NEG_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx=-frm->stack[op->t0].fx;
 	frm->stack[op->t0].fy=-frm->stack[op->t0].fy;	}
-void BSVM2_Op_UNOPX_RCP_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_RCP_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx=1.0/frm->stack[op->t0].fx;
 	frm->stack[op->t0].fy=1.0/frm->stack[op->t0].fy;	}
-void BSVM2_Op_UNOPX_SQRT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_SQRT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx=bsvm2_opf_ssqrtf(frm->stack[op->t0].fx);
 	frm->stack[op->t0].fy=bsvm2_opf_ssqrtf(frm->stack[op->t0].fy);	}
-void BSVM2_Op_UNOPX_RSQRT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_RSQRT_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	frm->stack[op->t0].fx=bsvm2_opf_ssqrtf(1.0/frm->stack[op->t0].fx);
 	frm->stack[op->t0].fy=bsvm2_opf_ssqrtf(1.0/frm->stack[op->t0].fy);	}
 
-void BSVM2_Op_UNOPX_LEN_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_LEN_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].f=sqrt(
 		(frm->stack[op->t0].fx*frm->stack[op->t0].fx)+
 		(frm->stack[op->t0].fy*frm->stack[op->t0].fy));
 }
 
-void BSVM2_Op_UNOPX_LEN2_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_UNOPX_LEN2_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].f=
 		(frm->stack[op->t0].fx*frm->stack[op->t0].fx)+
 		(frm->stack[op->t0].fy*frm->stack[op->t0].fy);
 }
 
-void BSVM2_Op_LDV2IA_V2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDV2IA_V2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=frm->stack[op->t0].i; }
-void BSVM2_Op_LDV2IB_V2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDV2IB_V2I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=frm->stack[op->t0].j; }
 
-void BSVM2_Op_LDV2FA_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDV2FA_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].f=frm->stack[op->t0].fx; }
-void BSVM2_Op_LDV2FB_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDV2FB_V2F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].f=frm->stack[op->t0].fy; }
 
 BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(

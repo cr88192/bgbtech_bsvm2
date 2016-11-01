@@ -1383,6 +1383,7 @@ int BS2I_ImageDecodeGlobalArray(
 
 	gbl->gvalue=(BSVM2_Value *)(gbl->baty+16);
 	gbl->gvalue->a=na;
+	return(0);
 }
 
 /** Decode the information about a given global. */

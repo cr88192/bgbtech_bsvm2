@@ -249,7 +249,7 @@ BASM_API void BASM_OutOpGeneric1(BASM_Context *ctx, int op, int w,char *lbl, int
 BASM_API void BASM_OutOpGeneric2(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1);
 BASM_API void BASM_OutOpGeneric3(BASM_Context *ctx, int op, int w,char *lbl0, int breg0, int ireg0, int sc0, long long disp0, char *lbl1, int breg1, int ireg1, int sc1, long long disp1, char *lbl2, int breg2, int ireg2, int sc2, long long disp2);
 BASM_API void BASM_EmitLabelPos(BASM_Context *ctx, char *name, int pos);
-BASM_API void BASM_EmitGotoPos(BASM_Context *ctx, char *name, int ty, int pos);
+BASM_API void BASM_EmitGotoPos(BASM_Context *ctx,char *name, int ty, int pos);
 BASM_API void BASM_EmitLabel(BASM_Context *ctx, char *name);
 BASM_API void BASM_EmitGoto(BASM_Context *ctx, char *name, int ty);
 BASM_API void BASM_EmitConst(BASM_Context *ctx, char *name, long long val);

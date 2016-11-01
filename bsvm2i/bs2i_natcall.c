@@ -374,7 +374,8 @@ void BSVM2_NatCall_Call_N(void *fcn, int nc,
 	}
 }
 
-BSVM2_Trace *BSVM2_TrOp_NatCallG0(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_NatCallG0(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_NatCall_Call_N(op->v.p, op->i1,
 		frm->stack+op->t0, frm->stack+op->t1);
@@ -697,7 +698,8 @@ int BSVM2_NatCall_GetSigIndexG1(char *sig,
 	return(i);
 }
 
-BSVM2_Trace *BSVM2_TrOp_NatCallG1(BSVM2_Frame *frm, BSVM2_TailOpcode *op)
+BS2VM_API BSVM2_Trace *BSVM2_TrOp_NatCallG1(
+	BSVM2_Frame *frm, BSVM2_TailOpcode *op)
 {
 	BSVM2_Value argt[64];
 	BSVM2_ImageGlobal *vi;

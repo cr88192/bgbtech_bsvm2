@@ -312,7 +312,14 @@ Operation Type (Z)
 *	D, UNLong	/ Const-Integer-Double (Zx)
 ** 		Constant NLong/UNLong loaded as Long/ULong
 *   E, X128
-*	F, Resv
+*	F, Escape
+
+Escaped Type:
+* If escaped, a VLI coded-type follows, with low bits as a tag.
+* LSB=x0: Ext-Core type.
+* LSB=01: Global Index
+* LSB=11: Reserved
+
 
 Ix: Variable Index
 *  00-7F, Variable 00-7F
@@ -669,11 +676,6 @@ Instructions
 * 86 Zi, LDDRLX				//Load Deref Lexical
 * 87 Zi, STDRLX				//Store Deref Lexical
 
-* / 86 Zn, DCLX				//Declare Lexical Variables
-* / 87 Zn, DELX				//Delete Lexical Variables
-** (Drop) Manage lexical environment.
-** (Drop) In this VM, the lexical environment will behave as a stack of variables with relative indices.
-
 * 88 Gx, NEWOBJ				//Create object instance.
 * 89 Zn, NEWARR				//Create array instance.
 ** n>0: n encodes array size.
@@ -686,14 +688,10 @@ Instructions
 ** Indicates that the following operation is a raw-pointer operation.
 ** May not be used with bounds checking.
 
-* / 8C, MOVOBJ				//Copy object contents ( A B => )
 * / 8D, MOVARR				//Copy array contents ( A B => )
 
-* / 8E, INCREF				//Increment object reference count ( A => A )
-* / 8F, DECREF				//Decrement object reference count ( A => A )
-** Adjust reference counts.
-** If reference counting is used, it is managed explicitly by the language.
-** Similar applies to the handling of value types.
+* 8E Gj, LDOSL				//Load Instance Variable Local, ( => A )
+* 8F Gj, STOSL				//Store Instance Variable Local ( V => )
 
 * 90, CVTI2L				//Convert Int->Long
 * 91, CVTI2F				//Convert Int->Float
@@ -948,8 +946,8 @@ Instructions
 ** 0=Array Length, 1=Array Offset, ...
 ** Gets a built-in integer property from an address-type value.
 
-* E1 6C Gj, LDOSL				//Load Instance Variable Local, ( => A )
-* E1 6D Gj, STOSL				//Store Instance Variable Local ( V => )
+* / E1 6C Gj, LDOSL				//Load Instance Variable Local, ( => A )
+* / E1 6D Gj, STOSL				//Store Instance Variable Local ( V => )
 
 * E1 6E, CALLAA				//Dynamic Call ( Args Func => Ret )
 * / E1 6F Ix, CALLLAA			//Dynamic Call Local ( I; Args => Ret )

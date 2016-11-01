@@ -267,6 +267,9 @@
 
 #define BSVM2_OP_HPTR		0x8C	//Hint Pointer
 
+#define BSVM2_OP_LDOSL		0x8E	//Load object field from local
+#define BSVM2_OP_STOSL		0x8F	//Store object field from local
+
 // #define BSVM2_OP_MOVOBJ		0x8C	//Copy object contents ( A B => )
 // #define BSVM2_OP_MOVARR		0x8D	//Copy array contents ( A B => )
 // #define BSVM2_OP_INCREF		0x8E	//Increment object reference count
@@ -429,8 +432,8 @@
 #define BSVM2_OP_DTNISTYPE	0x0169	//Trap if address not type
 #define BSVM2_OP_DZNISTYPE	0x016A	//Null if address not type
 #define BSVM2_OP_AGETI		0x016B	//Check if address is type
-#define BSVM2_OP_LDOSL		0x016C	//Load object field from local
-#define BSVM2_OP_STOSL		0x016D	//Store object field from local
+// #define BSVM2_OP_LDOSL		0x016C	//Load object field from local
+// #define BSVM2_OP_STOSL		0x016D	//Store object field from local
 #define BSVM2_OP_CALLAA		0x016E	//Dynamic Call
 
 #define BSVM2_OP_DIVI		0x0170	//
@@ -504,7 +507,7 @@
 #define BSVM2_OP_LDDRPL		0x01B2	//Load Deref Pointer Local
 #define BSVM2_OP_STDRPL		0x01B3	//Store Deref Pointer Local
 
-#define BSVM2_OP_DIFFPTR	0x01B4	//Store Deref Pointer Local
+#define BSVM2_OP_DIFFPTR	0x01B4	//Difference between pointers.
 #define BSVM2_OP_BSWAP		0x01B5	//Byte Swap
 #define BSVM2_OP_LDDRBSW	0x01B6	//Load Deref Byte Swap
 #define BSVM2_OP_STDRBSW	0x01B7	//Store Deref Byte Swap
@@ -579,6 +582,23 @@
 #define BSVM2_OP_ENDLEC		0x01F5	//
 #define BSVM2_OP_ENDLEC2	0x01F6	//
 #define BSVM2_OP_RETHROW	0x01F7	//
+
+#define BSVM2_OP_LDDINCZLP	0x0200	//P; s=*(p++); ( => s )
+#define BSVM2_OP_STDINCZLP	0x0201	//P; *(p++)=s; ( s => )
+#define BSVM2_OP_LDDDECZLP	0x0202	//P; s=*(--p); ( => s )
+#define BSVM2_OP_STDDECZLP	0x0203	//P; *(--p)=s; ( s => )
+#define BSVM2_OP_INCZLP		0x0204	//P; p++; ( => )
+#define BSVM2_OP_DECZLP		0x0205	//P; p++; ( => )
+#define BSVM2_OP_LINCZLP	0x0206	//P; s=p++; ( s => )
+#define BSVM2_OP_LDECZLP	0x0207	//P; s=p++; ( s => )
+#define BSVM2_OP_LDDINCZLA	0x0208	//A; s=*(a++); ( => s )
+#define BSVM2_OP_STDINCZLA	0x0209	//A; *(a++)=s; ( s => )
+#define BSVM2_OP_LDDDECZLA	0x020A	//A; s=*(--a); ( => s )
+#define BSVM2_OP_STDDECZLA	0x020B	//A; *(--a)=s; ( s => )
+#define BSVM2_OP_INCZLA		0x020C	//A; a++; ( => )
+#define BSVM2_OP_DECZLA		0x020D	//A; a++; ( => )
+#define BSVM2_OP_LINCZLA	0x020E	//A; s=a++; ( s => )
+#define BSVM2_OP_LDECZLA	0x020F	//A; s=a++; ( s => )
 
 
 #define BSVM2_OP_MKX4I		0x0400
@@ -679,6 +699,7 @@
 #define BSVM2_TRFL_OPSINESI		0x0000000000004000	//ops in ESI
 #define BSVM2_TRFL_STKINEBX		0x0000000000008000	//VM stack in EBX
 #define BSVM2_TRFL_LCLINESI		0x0000000000010000	//locals in ESI
+#define BSVM2_TRFL_NOFRAME		0x0000000000020000	//skipped setup frame
 
 #define BSVM2_TRFL_SAVEDR12		0x0000000100000000	//saved R12
 #define BSVM2_TRFL_SAVEDR13		0x0000000200000000	//saved R13
@@ -696,6 +717,14 @@
 #define BSVM2_TRFL_SAVEDX13		0x0000200000000000	//saved XMM13
 #define BSVM2_TRFL_SAVEDX14		0x0000400000000000	//saved XMM14
 #define BSVM2_TRFL_SAVEDX15		0x0000800000000000	//saved XMM15
+
+#define BSVM2_OPFL_USED_I0		0x0000000000000100	//uses reg I0 (local)
+#define BSVM2_OPFL_USED_I1		0x0000000000000200	//uses reg I1 (local)
+#define BSVM2_OPFL_USED_I2		0x0000000000000400	//uses reg I2 (local)
+#define BSVM2_OPFL_USED_T0		0x0000000000000800	//uses reg T0 (stack)
+#define BSVM2_OPFL_USED_T1		0x0000000000001000	//uses reg T1 (stack)
+#define BSVM2_OPFL_USED_T2		0x0000000000002000	//uses reg T2 (stack)
+#define BSVM2_OPFL_USED_T3		0x0000000000004000	//uses reg T3 (stack)
 
 #define BSVM2_EXS_NONE			0x00000		//no error status
 #define BSVM2_EXS_NULLEX		0x00001		//NullPointerException
@@ -766,41 +795,67 @@ struct { u64 ula, ulb; };
 struct { f64 dx, dy; };
 };
 
+/** VM Opcode, Everything before Run is serialized in JIT */
 struct BSVM2_Opcode_s {
-void (*Run)(BSVM2_Frame *frm, BSVM2_Opcode *op);
 short i0, i1, i2;
 short t0, t1, t2;
+BSVM2_Value v;
+
+void (*Run)(BSVM2_Frame *frm, BSVM2_Opcode *op);
 short opn, opn2;
 byte z, o;
 int opfl;
-BSVM2_Value v;
 };
 
+/** VM Opcode, Everything before Run is serialized in JIT */
 struct BSVM2_TailOpcode_s {
-BSVM2_Trace *(*Run)(BSVM2_Frame *frm,
-	BSVM2_TailOpcode *op);
-BSVM2_Trace *nexttrace;
-BSVM2_Trace *jmptrace;
-byte *jcs;
 short i0, i1;
 short t0, t1;
+BSVM2_Value v;
+BSVM2_Trace *nexttrace;
+BSVM2_Trace *jmptrace;
+
+BSVM2_Trace *(*Run)(BSVM2_Frame *frm,
+	BSVM2_TailOpcode *op);
+byte *jcs;
 short opn, opn2;
 byte z, o;
-BSVM2_Value v;
+};
+
+/** Temporary data used only during JIT */
+typedef struct BSVM2_JitTraceTemp_s BSVM2_JitTraceTemp;
+struct BSVM2_JitTraceTemp_s {
+short lclstat_cnt[256];		//how many times it is used
+short lclstat_idx[256];		//ID number of reg/var
+short lclstat_beg[256];		//position first seen
+short lclstat_end[256];		//position last seen
+short lclstat_chn[256];		//chain (by register)
+sbyte lclstat_reg[256];		//assigned register
+short reg_lclstat[16];		//first span for chain
+short reg_lclmap[16];		//register mapped local
+int reg_dirty;
+int n_lclstat;
+int opix;
 };
 
 struct BSVM2_Trace_s {
-BSVM2_Opcode **ops;
-BSVM2_TailOpcode *top;
 BSVM2_Trace *(*Run)(BSVM2_Frame *frm,
 	BSVM2_Trace *tr);
+BSVM2_TailOpcode *top;
 BSVM2_Trace *jnext;		//next trace to jump to
 BSVM2_CodeBlock *cblk;	//code block
+s64 runcnt;				//execution count
+s64 rsv[3];
+
+BSVM2_Opcode **ops;
 byte *cs;				//bytecode addr for trace
 byte *jcs;				//bytecode addr for jump
+char *gensym;			//trace gensym
+char *gensym_fn;		//trace gensym (function)
 void *t_ops[6];
 int n_ops;
 u64 trfl;
+BSVM2_JitTraceTemp *jitmp;	//JIT temp data
 };
 
 struct BSVM2_Frame_s {
@@ -877,6 +932,7 @@ u32 tag;				//TLV type tag
 s64 nameh;				//name hash
 s64 qnameh;				//qname hash
 u64 flags;				//variable flags (decoded from string)
+s64 runcnt;				//execution count
 
 BSVM2_Trace *ctrace;	//call trace
 byte brty;				//base return type (functions)

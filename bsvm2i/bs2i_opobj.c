@@ -21,138 +21,138 @@ THE SOFTWARE.
 */
 
 
-void BSVM2_Op_LDOSI_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSI_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t0].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	frm->stack[op->t0].i=dtcVaGetI(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSL_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSL_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t0].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	frm->stack[op->t0].l=dtcVaGetL(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSF_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSF_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t0].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	frm->stack[op->t0].f=dtcVaGetF(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSD_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSD_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t0].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	frm->stack[op->t0].d=dtcVaGetD(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSA_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSA_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t0].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	frm->stack[op->t0].a=dtcVaGetA(
 		frm->stack[op->t0].a, vi->objinf);		}
 
-void BSVM2_Op_STOSI_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSI_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t1].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	dtcVaSetI(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].i);	}
-void BSVM2_Op_STOSL_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSL_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t1].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	dtcVaSetL(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].l);	}
-void BSVM2_Op_STOSF_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSF_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t1].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	dtcVaSetF(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].f);	}
-void BSVM2_Op_STOSD_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSD_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t1].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	dtcVaSetD(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].d);	}
-void BSVM2_Op_STOSA_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSA_TN(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	if(dtvNullP(frm->stack[op->t1].a))
 		{ frm->ctx->status=BSVM2_EXS_NULLEX; return; }
 	dtcVaSetA(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].a);	}
 
-void BSVM2_Op_LDOSI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].i=dtcVaGetI(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].l=dtcVaGetL(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].f=dtcVaGetF(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].d=dtcVaGetD(
 		frm->stack[op->t0].a, vi->objinf);		}
-void BSVM2_Op_LDOSA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].a=dtcVaGetA(
 		frm->stack[op->t0].a, vi->objinf);		}
 
-void BSVM2_Op_STOSI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetI(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].i);	}
-void BSVM2_Op_STOSL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetL(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].l);	}
-void BSVM2_Op_STOSF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetF(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].f);	}
-void BSVM2_Op_STOSD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetD(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].d);	}
-void BSVM2_Op_STOSA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetA(frm->stack[op->t1].a, vi->objinf, frm->stack[op->t0].a);	}
 
-void BSVM2_Op_LDOSLI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].i=dtcVaGetI(
 		frm->local[op->i0].a, vi->objinf);		}
-void BSVM2_Op_LDOSLL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].l=dtcVaGetL(
 		frm->local[op->i0].a, vi->objinf);		}
-void BSVM2_Op_LDOSLF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].f=dtcVaGetF(
 		frm->local[op->i0].a, vi->objinf);		}
-void BSVM2_Op_LDOSLD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].d=dtcVaGetD(
 		frm->local[op->i0].a, vi->objinf);		}
-void BSVM2_Op_LDOSLA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].a=dtcVaGetA(
 		frm->local[op->i0].a, vi->objinf);		}
 
-void BSVM2_Op_STOSLI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetI(frm->local[op->i0].a, vi->objinf, frm->stack[op->t0].i);	}
-void BSVM2_Op_STOSLL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetL(frm->local[op->i0].a, vi->objinf, frm->stack[op->t0].l);	}
-void BSVM2_Op_STOSLF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetF(frm->local[op->i0].a, vi->objinf, frm->stack[op->t0].f);	}
-void BSVM2_Op_STOSLD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetD(frm->local[op->i0].a, vi->objinf, frm->stack[op->t0].d);	}
-void BSVM2_Op_STOSLA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetA(frm->local[op->i0].a, vi->objinf, frm->stack[op->t0].a);	}
 
-void BSVM2_Op_NEWOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_NEWOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -161,7 +161,7 @@ void BSVM2_Op_NEWOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=dtvWrapPtr(p);
 }
 
-void BSVM2_Op_DELOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DELOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a;
 	void *p;
@@ -172,7 +172,7 @@ void BSVM2_Op_DELOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		dtmFree(p);
 }
 
-void BSVM2_Op_ISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -190,7 +190,7 @@ void BSVM2_Op_ISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].i=0;
 }
 
-void BSVM2_Op_DZNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DZNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -209,7 +209,7 @@ void BSVM2_Op_DZNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_NULL;
 }
 
-void BSVM2_Op_DTNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DTNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -230,7 +230,7 @@ void BSVM2_Op_DTNISTYPE(BSVM2_Frame *frm, BSVM2_Opcode *op)
 //	frm->stack[op->t0].a=DTV_NULL;
 }
 
-void BSVM2_Op_DTRAPNULL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DTRAPNULL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal v;
 	v=frm->stack[op->t0].a;
@@ -238,7 +238,7 @@ void BSVM2_Op_DTRAPNULL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		frm->ctx->status=BSVM2_EXS_NULLEX;
 }
 
-void BSVM2_Op_LTRAPNULL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LTRAPNULL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal v;
 	v=frm->local[op->i0].a;
@@ -329,7 +329,7 @@ int BSVM2_OpInt_IsTypeA(dtVal v, char *s)
 	return(r);
 }
 
-void BSVM2_Op_DZNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DZNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal v;
 	char *s;
@@ -342,7 +342,7 @@ void BSVM2_Op_DZNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		frm->stack[op->t0].a=DTV_NULL;
 }
 
-void BSVM2_Op_DTNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DTNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal v;
 	char *s;
@@ -355,7 +355,7 @@ void BSVM2_Op_DTNISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		frm->ctx->status=BSVM2_EXS_CASTEX;
 }
 
-void BSVM2_Op_ISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal v;
 	char *s;
@@ -370,24 +370,24 @@ void BSVM2_Op_ISTYPE_AA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 //void BSVM2_Op_ISTYPE_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 //	{ frm->stack[op->t0].i=dtvIsSmallIntP(frm->stack[op->t0].a); }
 
-void BSVM2_Op_ISTYPE_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_I(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixIntP(frm->stack[op->t0].a); }
-void BSVM2_Op_ISTYPE_UI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_UI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixUIntP(frm->stack[op->t0].a); }
 
-void BSVM2_Op_ISTYPE_L(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_L(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixLongP(frm->stack[op->t0].a); }
-void BSVM2_Op_ISTYPE_UL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_UL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixLongP(frm->stack[op->t0].a); }
 
-void BSVM2_Op_ISTYPE_F(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_F(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixFloatP(frm->stack[op->t0].a); }
-void BSVM2_Op_ISTYPE_D(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_D(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsFixDoubleP(frm->stack[op->t0].a); }
 
-void BSVM2_Op_ISTYPE_B(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_B(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsBoolP(frm->stack[op->t0].a); }
-void BSVM2_Op_ISTYPE_C(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_ISTYPE_C(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	{ frm->stack[op->t0].i=dtvIsCharP(frm->stack[op->t0].a); }
 
 //void BSVM2_Op_ISTYPE_STR(BSVM2_Frame *frm, BSVM2_Opcode *op)
@@ -411,7 +411,7 @@ void BSVM2_OpInit_IsTypeS(BSVM2_CodeBlock *cblk,
 	}
 }
 
-void BSVM2_Op_IFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_IFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -421,7 +421,7 @@ void BSVM2_Op_IFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->local[op->i0].a=dtvWrapPtr(p);
 }
 
-void BSVM2_Op_DFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a;
 	void *p;
@@ -432,7 +432,7 @@ void BSVM2_Op_DFXOBJ(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		dtmFree(p);
 }
 
-void BSVM2_Op_IFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_IFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	void *p;
@@ -458,7 +458,7 @@ void BSVM2_Op_IFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->local[op->i0]=frm->ctx->dynenv[vi->nargs];
 }
 
-void BSVM2_Op_DFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	dtVal a;
@@ -468,40 +468,40 @@ void BSVM2_Op_DFXDYV(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->ctx->dynenv[vi->nargs]=frm->local[op->i0];
 }
 
-void BSVM2_Op_LDTHISI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].i=dtcVaGetI(frm->self, vi->objinf);		}
-void BSVM2_Op_LDTHISL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].l=dtcVaGetL(frm->self, vi->objinf);		}
-void BSVM2_Op_LDTHISF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].f=dtcVaGetF(frm->self, vi->objinf);		}
-void BSVM2_Op_LDTHISD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].d=dtcVaGetD(frm->self, vi->objinf);		}
-void BSVM2_Op_LDTHISA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	frm->stack[op->t0].a=dtcVaGetA(frm->self, vi->objinf);		}
 
-void BSVM2_Op_STTHISI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetI(frm->self, vi->objinf, frm->stack[op->t0].i);	}
-void BSVM2_Op_STTHISL(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISL(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetL(frm->self, vi->objinf, frm->stack[op->t0].l);	}
-void BSVM2_Op_STTHISF(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISF(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetF(frm->self, vi->objinf, frm->stack[op->t0].f);	}
-void BSVM2_Op_STTHISD(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISD(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetD(frm->self, vi->objinf, frm->stack[op->t0].d);	}
-void BSVM2_Op_STTHISA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {	BSVM2_ImageGlobal *vi;	vi=op->v.p;
 	dtcVaSetA(frm->self, vi->objinf, frm->stack[op->t0].a);	}
 
 
-void BSVM2_Op_LDOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	BSVM2_ValX128 *a;
@@ -517,7 +517,7 @@ void BSVM2_Op_LDOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].p=a;
 }
 
-void BSVM2_Op_STOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	BSVM2_ValX128 *a;
@@ -533,7 +533,7 @@ void BSVM2_Op_STOSX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	BSVM2_FrameFreeX128(frm, a);
 }
 
-void BSVM2_Op_LDTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	BSVM2_ValX128 *a;
@@ -546,7 +546,7 @@ void BSVM2_Op_LDTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].p=a;
 }
 
-void BSVM2_Op_STTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	BSVM2_ValX128 *a;
@@ -559,12 +559,12 @@ void BSVM2_Op_STTHISX(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	BSVM2_FrameFreeX128(frm, a);
 }
 
-void BSVM2_Op_NEWDYO(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_NEWDYO(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].a=BGBDT_MapObj_AllocObjv();
 }
 
-void BSVM2_Op_SBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_SBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	vi=op->v.p;
@@ -574,7 +574,7 @@ void BSVM2_Op_SBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		frm->stack[op->t0].a);
 }
 
-void BSVM2_Op_DSBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DSBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_ImageGlobal *vi;
 	vi=op->v.p;
@@ -584,21 +584,21 @@ void BSVM2_Op_DSBOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
 		frm->stack[op->t1].a);
 }
 
-void BSVM2_Op_DSTOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DSTOS(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_Op_DSBOS(frm, op);
 }
 
-void BSVM2_Op_DUPAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DUPAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	frm->stack[op->t0].a=frm->stack[op->t1].a;
 }
 
-void BSVM2_Op_DROPAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DROPAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 }
 
-void BSVM2_Op_LDOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a, obj, idx;
 	char *fn;
@@ -623,7 +623,7 @@ void BSVM2_Op_LDOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_STOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal obj, idx, val;
 	char *fn;
@@ -649,7 +649,7 @@ void BSVM2_Op_STOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_SBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_SBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal obj;
 	obj=frm->stack[op->t1].a;
@@ -662,7 +662,7 @@ void BSVM2_Op_SBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	}
 }
 
-void BSVM2_Op_DSBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DSBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal obj;
 	obj=frm->stack[op->t0].a;
@@ -675,12 +675,12 @@ void BSVM2_Op_DSBOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	}
 }
 
-void BSVM2_Op_DSTOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_DSTOSAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	BSVM2_Op_DSBOSAA(frm, op);
 }
 
-void BSVM2_Op_LDOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a, obj, idx;
 	char *fn;
@@ -698,7 +698,7 @@ void BSVM2_Op_LDOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_STOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a, obj, idx, val;
 	char *fn;
@@ -717,7 +717,7 @@ void BSVM2_Op_STOSLAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_LDIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a, obj, idx;
 	char *fn;
@@ -752,7 +752,7 @@ void BSVM2_Op_LDIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_STIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal obj, idx, val;
 	char *fn;
@@ -786,7 +786,7 @@ void BSVM2_Op_STIXAA(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	}
 }
 
-void BSVM2_Op_LDIXAI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_LDIXAI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	dtVal a;
 	void *p;
@@ -803,7 +803,7 @@ void BSVM2_Op_LDIXAI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 	frm->stack[op->t0].a=DTV_UNDEFINED;
 }
 
-void BSVM2_Op_STIXAI(BSVM2_Frame *frm, BSVM2_Opcode *op)
+BS2VM_API void BSVM2_Op_STIXAI(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {
 	if(dtvIsArrayP(frm->stack[op->t1].a))
 	{

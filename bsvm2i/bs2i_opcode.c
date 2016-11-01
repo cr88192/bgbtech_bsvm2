@@ -641,7 +641,7 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 #if 1
 	case BSVM2_OP_IFXARR:
 //		BSVM2_Interp_DecodeOpZn(cblk, op);
-		BSVM2_Interp_DecodeOpZiIx(cblk, op);
+		BSVM2_Interp_DecodeOpZnIx(cblk, op);
 		
 		if(op->i0==0)
 		{
@@ -745,7 +745,7 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		break;
 
 	case BSVM2_OP_DFXARR:
-		BSVM2_Interp_DecodeOpZiIx(cblk, op);
+		BSVM2_Interp_DecodeOpZnIx(cblk, op);
 		BSVM2_Interp_SetupOpUat(cblk, op, BSVM2_Op_DFXARR);
 		break;
 #endif
@@ -2529,7 +2529,7 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		break;
 
 	case BSVM2_OP_DROPAA:
-		BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_NOP);
+		BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_DROPAA);
 		break;
 	
 	case BSVM2_OP_ADDIC:
@@ -3016,6 +3016,173 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			BSVM2_Op_DFXDYV);
 		break;
 
+#if 1
+	case BSVM2_OP_LDDINCZLP:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i1)
+		{
+		case BSVM2_OPZ_INT:	
+		case BSVM2_OPZ_UINT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDINCZLP_I);
+			break;
+		case BSVM2_OPZ_SBYTE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDINCZLP_SB);
+			break;
+		case BSVM2_OPZ_UBYTE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDINCZLP_UB);
+			break;
+		case BSVM2_OPZ_SHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDINCZLP_SS);
+			break;
+		case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDINCZLP_US);
+			break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_LONG, BSVM2_Op_LDDINCZLP_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_LDDINCZLP_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_LDDINCZLP_D);
+			break;
+		case BSVM2_OPZ_ADDR:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_LDDINCZLP_A);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+	case BSVM2_OP_STDINCZLP:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i1)
+		{
+		case BSVM2_OPZ_INT:	
+		case BSVM2_OPZ_UINT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_I);
+			break;
+		case BSVM2_OPZ_SBYTE:
+		case BSVM2_OPZ_UBYTE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_B);
+			break;
+		case BSVM2_OPZ_SHORT:
+		case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_S);
+			break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_D);
+			break;
+		case BSVM2_OPZ_ADDR:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDINCZLP_A);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+#endif
+
+#if 1
+	case BSVM2_OP_LDDDECZLP:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i1)
+		{
+		case BSVM2_OPZ_INT:	
+		case BSVM2_OPZ_UINT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDDECZLP_I);
+			break;
+		case BSVM2_OPZ_SBYTE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDDECZLP_SB);
+			break;
+		case BSVM2_OPZ_UBYTE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDDECZLP_UB);
+			break;
+		case BSVM2_OPZ_SHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDDECZLP_SS);
+			break;
+		case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_LDDDECZLP_US);
+			break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_LONG, BSVM2_Op_LDDDECZLP_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_LDDDECZLP_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_LDDDECZLP_D);
+			break;
+		case BSVM2_OPZ_ADDR:
+			BSVM2_Interp_SetupOpUnP(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_LDDDECZLP_A);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+	case BSVM2_OP_STDDECZLP:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i1)
+		{
+		case BSVM2_OPZ_INT:	
+		case BSVM2_OPZ_UINT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_I);
+			break;
+		case BSVM2_OPZ_SBYTE:
+		case BSVM2_OPZ_UBYTE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_B);
+			break;
+		case BSVM2_OPZ_SHORT:
+		case BSVM2_OPZ_USHORT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_S);
+			break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_L);
+			break;
+		case BSVM2_OPZ_FLOAT:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_F);
+			break;
+		case BSVM2_OPZ_DOUBLE:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_D);
+			break;
+		case BSVM2_OPZ_ADDR:
+			BSVM2_Interp_SetupOpPopUn(cblk, op, BSVM2_Op_STDDECZLP_A);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+#endif
 
 	case BSVM2_OP_MATHUFN:
 		BSVM2_Interp_DecodeOpZn(cblk, op);

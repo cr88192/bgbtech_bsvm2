@@ -20,7 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-
 BSVM2_Opcode *BSVM2_Interp_AllocOpcode(BSVM2_CodeBlock *cblk)
 {
 	BSVM2_Opcode *tmp;
@@ -209,7 +208,7 @@ int BSVM2_Interp_DecodeBlockNoexOp(BSVM2_CodeBlock *cblk, int opn)
 BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 {
 	BSVM2_Trace *trsa[1024];
-	BSVM2_Opcode *opsa[64];
+	BSVM2_Opcode *opsa[256];
 //	int alias[32];
 	
 	BSVM2_Opcode *op;
@@ -294,7 +293,8 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 		}
 		
 		op=BSVM2_Interp_DecodeOpcode(cblk, opn);
-		if(op && (nopsa<63))
+//		if(op && (nopsa<63))
+		if(op && (nopsa<255))
 		{
 			opsa[nopsa++]=op;
 			continue;
@@ -378,12 +378,19 @@ BSVM2_Trace *BSVM2_Interp_DecodeBlockTraces(BSVM2_CodeBlock *cblk)
 	
 	for(i=0; i<ntrsa; i++)
 	{
-#ifdef BS2I_USE_BASM
-		BS2J_CheckSetupJitTrace(trsa[i]);
-#endif
-
 		cblk->trace[i]=trsa[i];
 	}
+
+#ifdef BS2I_USE_BASM
+	for(i=0; i<ntrsa; i++)
+		{ BS2J_CheckPreSetupJitTrace(trsa[i]); }
+	BS2J_BeginJitTraces(cblk);
+	for(i=0; i<ntrsa; i++)
+		{ BS2J_CheckSetupJitTrace(trsa[i]); }
+	BS2J_EndJitTraces(cblk);
+	for(i=0; i<ntrsa; i++)
+		{ BS2J_CheckPostSetupJitTrace(trsa[i]); }
+#endif
 
 	if(cblk->stkpos!=0)
 	{

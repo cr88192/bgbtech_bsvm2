@@ -835,6 +835,7 @@ int BS2C_Image_FlattenInitMapTagVal(
 	}
 
 	BSVM2_DBGTRAP
+	return(0);
 }
 
 int BS2C_Image_BaseTypePackSize(int bty)
@@ -1020,6 +1021,7 @@ byte *BS2C_Image_FlattenGlobalInfo_InitArr(
 	}
 
 	BSVM2_DBGTRAP
+	return(NULL);
 }
 
 byte *BS2C_Image_FlattenGlobalInfo(

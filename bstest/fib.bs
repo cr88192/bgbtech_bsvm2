@@ -221,7 +221,7 @@ package bstest {
 			byte[] rgba;
 			byte[] buf;
 			*byte cs;
-			int t0, t1, t2;
+			int t0, t1, t2, t3;
 			int sz, xs, ys;
 			int i, j, k, n;
 
@@ -248,17 +248,18 @@ package bstest {
 			PDJPG_GetImageRGBA(ctx, rgba, xs, ys);
 			PDJPG_StoreTGA("fibtst0.tga", rgba, xs, ys);
 
- /*
-			t0=clock(); t1=clock(); t2=t0+30000; n=0;
+/*
+			t0=clock(); t1=clock(); t2=t0+30000; n=0; t3=t0;
 			while(t1<t2)
 			{
+				t3=t1;
 				PDJPG_DecodeBasic(ctx, buf, sz, &xs, &ys);
 				n++;
-				printf("Dt=%d Cnt=%d\r", t1-t0, n);
 				t1=clock();
+				printf("Dt=%d Cnt=%d LDt=%d\r", t1-t0, n, t1-t3);
 			}
 			printf("\n");
- */
+*/
 		}
 	
 		public static void main(string[] argv)
@@ -327,11 +328,11 @@ package bstest {
 			fobj.z=5;
 			
 			printf("FObj ");
-			printf("%d ", fobj.x);
-			printf("%d ", fobj.y);
-			printf("%f\n", fobj.z);
+			printf("%d(=3) ", fobj.x);
+			printf("%d(=4) ", fobj.y);
+			printf("%f(=5.0)\n", fobj.z);
 
-			printf("FObj Method %f\n", fobj.method0());
+			printf("FObj Method %f(=12.0)\n", fobj.method0());
 
 			delete fobj;
 
@@ -339,11 +340,13 @@ package bstest {
 			v1=#[4, 5];
 			v2=v0+v1;
 
+			printf("v2=(%f %f) (=6 8)\n", v2.x, v2.y);
+
 			w0=#[1, 0, 0];
 			w1=#[0, 1, 0];
 			w2=w0%w1;
 			
-			printf("w2=(%f %f %f)\n", w2.x, w2.y, w2.z);
+			printf("w2=(%f %f %f) (=0 0 1)\n", w2.x, w2.y, w2.z);
 			
 			if(i && j)
 			{

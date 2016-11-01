@@ -310,6 +310,9 @@ char *name;
 
 {"8C",        "HPTR"},
 
+{"8EGj",      "LDOSL"},
+{"8FGj",      "STOSL"},
+
 // {"8C",        "MOVOBJ"},
 // {"8D",        "MOVARR"},
 // {"8E",        "INCREF"},
@@ -478,8 +481,8 @@ char *name;
 {"E169Gx",    "DTNISTYPE"},
 {"E16AGx",    "DZNISTYPE"},
 {"E16BZn",    "AGETI"},
-{"E16CGj",    "LDOSL"},
-{"E16DGj",    "STOSL"},
+// {"E16CGj",    "LDOSL"},
+// {"E16DGj",    "STOSL"},
 {"E16E",      "CALLAA"},
 
 // {"E160Zo",      "BINOP"},
@@ -645,6 +648,25 @@ char *name;
 {"E1F6IxAx",  "ENDLEC2"},
 {"E1F7",      "RETHROW"},
 
+
+/* Vector Block (0x200) */
+
+{"E200Zi",    "LDDINCZLP"},
+{"E201Zi",    "STDINCZLP"},
+{"E202Zi",    "LDDDECZLP"},
+{"E203Zi",    "STDDECZLP"},
+{"E204Zi",    "INCZLP"},
+{"E205Zi",    "DECZLP"},
+{"E206Zi",    "LINCZLP"},
+{"E207Zi",    "LDECZLP"},
+{"E208Zi",    "LDDINCZLA"},
+{"E209Zi",    "STDINCZLA"},
+{"E20AZi",    "LDDDECZLA"},
+{"E20BZi",    "STDDECZLA"},
+{"E20CZi",    "INCZLA"},
+{"E20DZi",    "DECZLA"},
+{"E20EZi",    "LINCZLA"},
+{"E20FZi",    "LDECZLA"},
 
 
 /* Vector Block (0x400) */

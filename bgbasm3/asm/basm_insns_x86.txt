@@ -672,6 +672,7 @@ movzxb
 movzxw
 		X0FB7/r		r32,rm16		aleph
 		X0FB7/r		r64,rm32
+movzxd	X0FB7/r		r64,rm32
 
 mul
 		XF6/4			rm8			aleph

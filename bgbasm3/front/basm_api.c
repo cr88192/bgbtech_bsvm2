@@ -670,10 +670,10 @@ BASM_API void BASM_ResetCtx(BASM_Context *ctx)
 
 	if(!ctx->text)
 	{
-		ctx->text=(byte *)malloc(1<<12);
-		ctx->data=(byte *)malloc(1<<12);
-		ctx->text_sz=1<<12;
-		ctx->data_sz=1<<12;
+		ctx->text=(byte *)malloc(1<<16);
+		ctx->data=(byte *)malloc(1<<16);
+		ctx->text_sz=1<<16;
+		ctx->data_sz=1<<16;
 	}
 
 	ctx->ip=ctx->text;
@@ -792,6 +792,7 @@ BASM_API int basm_jitlog_puts(char *str)
 
 	fputs(str, basm_jitlog_fd);
 	fflush(basm_jitlog_fd);
+	return(0);
 }
 
 BASM_API int basm_jitlog_printf(char *str, ...)
@@ -803,13 +804,14 @@ BASM_API int basm_jitlog_printf(char *str, ...)
 		basm_jitlog_fd=fopen("bgbasm_jitlog.txt", "wt");
 
 	if(!buf)
-		buf=malloc(1<<16);
+		buf=malloc(1<<18);
 	
 	va_start(lst, str);
-	vsprintf(buf, str, lst);
+	vsnprintf(buf, 1<<18, str, lst);
 	va_end(lst);
 	
 	basm_jitlog_puts(buf);
+	return(0);
 }
 
 BASM_API void *BASM_EndAssembly()
@@ -1209,10 +1211,10 @@ BASM_API void BASM_ThreadLocalInit()
 //		basm_asm->ip=basm_text;
 //		basm_asm->dp=basm_data;
 
-		basm_asm->text=(byte *)malloc(1<<12);
-		basm_asm->data=(byte *)malloc(1<<12);
-		basm_asm->text_sz=1<<12;
-		basm_asm->data_sz=1<<12;
+		basm_asm->text=(byte *)malloc(1<<16);
+		basm_asm->data=(byte *)malloc(1<<16);
+		basm_asm->text_sz=1<<16;
+		basm_asm->data_sz=1<<16;
 
 		basm_asm->ip=basm_asm->text;
 		basm_asm->dp=basm_asm->data;

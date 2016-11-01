@@ -94,6 +94,7 @@ BS2VM_API int BGBDT_TagArr_FreeArray(dtVal objv)
 		dtmFree(arr->data);
 		dtmFree(arr);
 	}
+	return(0);
 }
 
 int BGBDT_TagArr_IsArrayP(dtVal objv)
