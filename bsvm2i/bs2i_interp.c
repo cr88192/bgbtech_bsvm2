@@ -29,6 +29,31 @@ THE SOFTWARE.
 BSVM2_Context *bsvm2_interp_freectx;
 
 BSVM2_Context *bsvm2_interp_freepoolctx;
+byte bsvm2_interp_nojit;
+
+BS2VM_API int BSVM2_Interp_SetEnable(int parm)
+{
+	switch(parm)
+	{
+	case 0x1000:
+		bsvm2_interp_nojit=0; break;
+	default:
+		break;
+	}
+	return(0);
+}
+
+BS2VM_API int BSVM2_Interp_SetDisable(int parm)
+{
+	switch(parm)
+	{
+	case 0x1000:
+		bsvm2_interp_nojit=1; break;
+	default:
+		break;
+	}
+	return(0);
+}
 
 BS2VM_API int bsvm2_natfib(int x)
 {
@@ -482,6 +507,15 @@ BS2VM_API dtVal BSVM2_Interp_GetGlobalA(BSVM2_ImageGlobal *vi)
 	return(gv->a);
 }
 
+/** Get the value of an address global. */
+BS2VM_API void *BSVM2_Interp_GetGlobalP(BSVM2_ImageGlobal *vi)
+{
+	BSVM2_Value *gv;
+	gv=BSVM2_Interp_GetGlobalValue(vi);
+	if(!gv)return(NULL);
+	return(gv->p);
+}
+
 /** Set the value of an int global. */
 BS2VM_API int BSVM2_Interp_SetGlobalI(BSVM2_ImageGlobal *vi, s32 v)
 {
@@ -529,6 +563,42 @@ BS2VM_API int BSVM2_Interp_SetGlobalA(BSVM2_ImageGlobal *vi, dtVal v)
 	gv=BSVM2_Interp_GetGlobalValue(vi);
 	if(!gv)return(-1);
 	gv->a=v;
+	return(0);
+}
+
+/** Set the value of an address global. */
+BS2VM_API int BSVM2_Interp_SetGlobal3Xfv(BSVM2_ImageGlobal *vi, double *val)
+{
+	BSVM2_Value *gv;
+	gv=BSVM2_Interp_GetGlobalValue(vi);
+	if(!gv)return(-1);
+//	gv->a=v;
+	if(!gv->p)
+	{
+		gv->p=dtmAlloc("bsvm2_x128_t", 16);
+	}
+
+	BSVM2_Pack3DvTo3Xf(gv->p, val);
+	return(0);
+}
+
+/** Set the value of an address global. */
+BS2VM_API int BSVM2_Interp_SetGlobal4fv(BSVM2_ImageGlobal *vi, float *val)
+{
+	BSVM2_Value *gv;
+	gv=BSVM2_Interp_GetGlobalValue(vi);
+	if(!gv)return(-1);
+//	gv->a=v;
+	if(!gv->p)
+	{
+		gv->p=dtmAlloc("bsvm2_x128_t", 16);
+	}
+
+	((float *)gv->p)[0]=val[0];
+	((float *)gv->p)[1]=val[1];
+	((float *)gv->p)[2]=val[2];
+	((float *)gv->p)[3]=val[3];
+//	BSVM2_Pack3DvTo3Xf(gv->p, val);
 	return(0);
 }
 
@@ -583,4 +653,26 @@ BS2VM_API int BSVM2_Interp_RunContext(BSVM2_Context *ctx, int lim)
 	if((l<=0) && !ctx->status)
 		return(BSVM2_EXS_RUNLIMIT);
 	return(ctx->status);
+}
+
+int BSVM2_Interp_RunDoWork(BGBDT_WorkItem *item)
+{
+	int i;
+
+	i=BSVM2_Interp_RunContext(item->data, 16384);
+	if(i==BSVM2_EXS_RUNLIMIT)
+		return(1);
+	
+	return(0);
+}
+
+BS2VM_API BGBDT_WorkItem *BSVM2_Interp_RunContextWork(BSVM2_Context *ctx)
+{
+	BGBDT_WorkItem *tmp;
+	
+	tmp=BGBDT_Work_AllocItem();
+	tmp->data=ctx;
+	tmp->DoWork=BSVM2_Interp_RunDoWork;
+	BGBDT_Work_SubmitItem(tmp);
+	return(tmp);
 }

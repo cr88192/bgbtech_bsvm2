@@ -205,6 +205,9 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(
 			BSVM2_Interp_SetupOpBin(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_CDIV_V2F);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
 		break;
 
@@ -239,6 +242,9 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(
 		case BSVM2_OPRV_CMUL2:
 			BSVM2_Interp_SetupOpBin(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_CMUL_V3F);
+			break;
+		default:
+			BSVM2_DBGTRAP;
 			break;
 		}
 		break;
@@ -285,6 +291,47 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(
 		case BSVM2_OPRV_CDIV2:
 			BSVM2_Interp_SetupOpBin(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_CDIV2_V4F);
+			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
+		}
+		break;
+
+	case BSVM2_OPVZ_V3XF:
+		switch(o)
+		{
+		case BSVM2_OPRV_ADD:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_ADD_V3XF);
+			break;
+		case BSVM2_OPRV_SUB:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_SUB_V3XF);
+			break;
+		case BSVM2_OPRV_MUL:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_MUL_V3XF);
+			break;
+		case BSVM2_OPRV_DIV:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_DIV_V3XF);
+			break;
+		case BSVM2_OPRV_DOT:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_BINOPX_DOT_V3XF);
+			break;
+		case BSVM2_OPRV_CROSS:
+			BSVM2_Interp_SetupOpBin(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_CROSS_V3XF);
+			break;
+//		case BSVM2_OPRV_CMUL:
+//		case BSVM2_OPRV_CMUL2:
+//			BSVM2_Interp_SetupOpBin(cblk, op,
+//				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_CMUL_V3XF);
+//			break;
+		default:
+			BSVM2_DBGTRAP;
 			break;
 		}
 		break;
@@ -337,6 +384,9 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(
 			BSVM2_Interp_SetupOpBin(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_MOD_XI128);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
 		break;
 
@@ -360,7 +410,14 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeBinOpX(
 			BSVM2_Interp_SetupOpBin(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_BINOPX_DIV_XF128);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
+		break;
+
+	default:
+		BSVM2_DBGTRAP;
 		break;
 	}
 	return(op);
@@ -402,6 +459,108 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeUnOpX(
 			BSVM2_Interp_SetupOpUn(cblk, op,
 				BSVM2_OPZ_FLOAT, BSVM2_Op_UNOPX_LEN2_V2F);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
+		}
+		break;
+
+	case BSVM2_OPVZ_V3F:
+		switch(o)
+		{
+		case BSVM2_OPUV_NEG:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_NEG_X3F);
+			break;
+		case BSVM2_OPUV_RCP:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RCP_X3F);
+			break;
+		case BSVM2_OPUV_SQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_SQRT_X3F);
+			break;
+		case BSVM2_OPUV_RSQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RSQRT_X3F);
+			break;
+		case BSVM2_OPUV_LEN:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_UNOPX_LEN_X3F);
+			break;
+		case BSVM2_OPUV_LEN2:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_UNOPX_LEN2_X3F);
+			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
+		}
+		break;
+
+	case BSVM2_OPVZ_V4F:
+		switch(o)
+		{
+		case BSVM2_OPUV_NEG:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_NEG_X4F);
+			break;
+		case BSVM2_OPUV_RCP:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RCP_X4F);
+			break;
+		case BSVM2_OPUV_SQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_SQRT_X4F);
+			break;
+		case BSVM2_OPUV_RSQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RSQRT_X4F);
+			break;
+		case BSVM2_OPUV_LEN:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_UNOPX_LEN_X4F);
+			break;
+		case BSVM2_OPUV_LEN2:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_FLOAT, BSVM2_Op_UNOPX_LEN2_X4F);
+			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
+		}
+		break;
+
+	case BSVM2_OPVZ_V3XF:
+		switch(o)
+		{
+		case BSVM2_OPUV_NEG:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_NEG_X3XF);
+			break;
+		case BSVM2_OPUV_RCP:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RCP_X3XF);
+			break;
+		case BSVM2_OPUV_SQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_SQRT_X3XF);
+			break;
+		case BSVM2_OPUV_RSQRT:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_UNOPX_RSQRT_X3XF);
+			break;
+		case BSVM2_OPUV_LEN:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_UNOPX_LEN_X3XF);
+			break;
+		case BSVM2_OPUV_LEN2:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_DOUBLE, BSVM2_Op_UNOPX_LEN2_X3XF);
+			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
 		break;
 
@@ -417,6 +576,9 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeUnOpX(
 			BSVM2_Interp_SetupOpUn(cblk, op,
 				BSVM2_OPZ_FLOAT, BSVM2_Op_BINOPX_NOT_XI128);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
 		break;
 
@@ -427,7 +589,13 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeUnOpX(
 			BSVM2_Interp_SetupOpUn(cblk, op,
 				BSVM2_OPZ_FLOAT, BSVM2_Op_BINOPX_NEG_XF128);
 			break;
+		default:
+			BSVM2_DBGTRAP;
+			break;
 		}
+		break;
+	default:
+		BSVM2_DBGTRAP;
 		break;
 	}
 	return(op);
@@ -456,6 +624,10 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeVectorOpcode(
 	case BSVM2_OP_MKX2D:
 		BSVM2_Interp_SetupOpBin(cblk, op,
 			BSVM2_OPZ_ADDR, BSVM2_Op_MKX2D);
+		break;
+	case BSVM2_OP_MKX3D:
+		BSVM2_Interp_SetupOpTrin(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_MKX3D);
 		break;
 
 	case BSVM2_OP_DUPX:
@@ -591,6 +763,26 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeVectorOpcode(
 		BSVM2_Interp_SetupOpUn(cblk, op,
 			BSVM2_OPZ_ADDR, BSVM2_Op_CVTAA2VF);
 		break;
+
+	case BSVM2_OP_CVTX3F2AA:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTX3F2AA);
+		break;
+	case BSVM2_OP_CVTX4F2AA:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTX4F2AA);
+		break;
+	case BSVM2_OP_CVTXQF2AA:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTXQF2AA);
+		break;
+
+//	case BSVM2_OP_CVTAA2X3F:
+	case BSVM2_OP_CVTAA2X4F:
+//	case BSVM2_OP_CVTAA2XQF:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTAA2X3F);
+		break;
 		
 	case BSVM2_OP_LDV2IA:
 		BSVM2_Interp_SetupOpUn(cblk, op,
@@ -657,6 +849,28 @@ BSVM2_Opcode *BSVM2_OpVec_DecodeVectorOpcode(
 	case BSVM2_OP_LDX4FD:
 		BSVM2_Interp_SetupOpUn(cblk, op,
 			BSVM2_OPZ_FLOAT, BSVM2_Op_LDX4FD_X4F);
+		break;
+
+	case BSVM2_OP_LDX3DA:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_DOUBLE, BSVM2_Op_LDX3DA_X3D);
+		break;
+	case BSVM2_OP_LDX3DB:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_DOUBLE, BSVM2_Op_LDX3DB_X3D);
+		break;
+	case BSVM2_OP_LDX3DC:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_DOUBLE, BSVM2_Op_LDX3DC_X3D);
+		break;
+
+	case BSVM2_OP_CVTX3F2X3D:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTX3F2X3D);
+		break;
+	case BSVM2_OP_CVTX3D2X3F:
+		BSVM2_Interp_SetupOpUn(cblk, op,
+			BSVM2_OPZ_ADDR, BSVM2_Op_CVTX3D2X3F);
 		break;
 
 	default:

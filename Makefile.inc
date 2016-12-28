@@ -13,6 +13,7 @@ export BS2VM_SRCS=\
 	$(BSVM2_BASE)mm/mm_typesig.c \
 	$(BSVM2_BASE)mm/mm_util.c \
 	$(BSVM2_BASE)mm/mm_vfs.c \
+	$(BSVM2_BASE)mm/mm_worker.c \
 	$(BSVM2_BASE)mm/mm_xi128.c \
 	$(BSVM2_BASE)mm/mm_xf128.c \
 	$(BSVM2_BASE)mm/mm_xd128.c \
@@ -55,6 +56,7 @@ export BS2VM_SRCS=\
 	$(BSVM2_BASE)bsvm2i/bs2i_opvars.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_opvec2.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_opvec3.c \
+	$(BSVM2_BASE)bsvm2i/bs2i_opvec3x.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_opvxi.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_tailop.c \
 	$(BSVM2_BASE)bsvm2i/bs2i_topinit.c \

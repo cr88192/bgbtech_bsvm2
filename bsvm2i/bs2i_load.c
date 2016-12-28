@@ -1014,6 +1014,11 @@ int BS2I_ImageDecodeGlobalVar(
 		clsi=BGBDTC_GetClassSqGix(img->seqid, gbl->gix);
 		gbl->objinf=clsi;
 		
+		if(!clsi)
+		{
+			BSVM2_DBGTRAP
+		}
+		
 		BGBDTC_BeginLayoutClass(clsi);
 		
 		if(dtag==BS2CC_ITCC_CL)
@@ -1068,6 +1073,11 @@ int BS2I_ImageDecodeGlobalVar(
 				clsvi=BGBDTC_GetClassSlotIndex(clsi, i);
 				vi=BS2I_ImageGetGlobal(img, gbl->figix[i]);
 				vi->objinf=clsvi;
+
+				if(!clsvi)
+				{
+					BSVM2_DBGTRAP
+				}
 
 //#ifdef linux
 //				printf("IDGV B\n");
@@ -1141,6 +1151,9 @@ int BS2I_ImageDecodeGlobalVar(
 			gbl->gvalue->d=vinitf; break;
 		case BSVM2_OPZ_ADDRESS:
 			gbl->gvalue->a=BS2I_ImageDecodeTagIndexAddr(img, vinit);
+			break;
+		case BSVM2_OPZ_X128:
+			gbl->gvalue->p=gbl->baty;
 			break;
 		default:
 			break;
@@ -1652,6 +1665,17 @@ BS2VM_API BSVM2_Trace *BS2I_ImageGetFuncTrace(
 	BSVM2_ImageGlobal *vi)
 {
 	BSVM2_Trace *tr;
+
+	if(vi->cblk && vi->cblk->jitdly)
+	{
+		vi->cblk->jitdly--;
+		if(!vi->cblk->jitdly)
+		{
+			tr=BSVM2_Interp_TryJitBlock(vi->cblk);
+			vi->ctrace=tr;
+			return(tr);
+		}
+	}
 
 	if(vi->ctrace)
 		return(vi->ctrace);
