@@ -3,9 +3,13 @@ BS2VM_API u64 BSVM2_Double2XFloat(double v)
 	u64 lv, lv1;
 	int e1;
 	lv=*(u64 *)(&v);
-	e1=(((lv>>52)&2047)-1023)+127;
-	if(e1<0)e1=0;
-	if(e1>255)e1=255;
+//	e1=(((lv>>52)&2047)-1023)+127;
+	e1=((lv>>52)&2047)-896;
+	if(e1>>8)
+	{
+		if(e1<0)e1=0;
+		if(e1>255)e1=255;
+	}
 	lv1=((lv&0x8000000000000000ULL)   )|
 		(((u64)e1)<<55)|
 		((lv&0x000FFFFFFFFFFFFFULL)<<3);
@@ -17,25 +21,55 @@ BS2VM_API double BSVM2_XFloat2Double(u64 lv)
 	u64 lv1;
 	int e1;
 	
-	e1=(((lv>>55)&255)-127)+1023;
-	lv1=((lv&0x8000000000000000ULL)   )|
-		(((u64)e1)<<52)|
-		((lv&0x007FFFFFFFFFFFFFULL)>>3);
+//	e1=(((lv>>55)&255)-127)+1023;
+//	e1=((lv>>55)&255)+896;
+//	lv1=((lv&0x8000000000000000ULL)   )|
+//		(((u64)e1)<<52)|
+//		((lv&0x007FFFFFFFFFFFFFULL)>>3);
+	lv1= ((lv&0x8000000000000000ULL)   )|
+		(((lv&0x7FFFFFFFFFFFFFFFULL)>>3)+0x3800000000000000ULL);
 	return(*(double *)(&lv1));
 }
 
+#if 0
 BS2VM_API u64 BSVM2_Double2XFloat2(u64 lv)
 {
 	u64 lv1;
 	int e1;
-	e1=(((lv>>52)&2047)-1023)+127;
-	if(e1<0)e1=0;
-	if(e1>255)e1=255;
+//	e1=(((lv>>52)&2047)-1023)+127;
+	e1=((lv>>52)&2047)-896;
+	if(e1>>8)
+	{
+		if(e1<0)e1=0;
+		if(e1>255)e1=255;
+	}
 	lv1=((lv&0x8000000000000000ULL)   )|
 		(((u64)e1)<<55)|
 		((lv&0x000FFFFFFFFFFFFFULL)<<3);
 	return(lv1);
 }
+#endif
+
+#if 1
+BS2VM_API u64 BSVM2_Double2XFloat2(u64 lv)
+{
+	const u64 n0=0x7FFFFFFFFFFFFFFFULL;
+	const u64 n1=0x3800000000000000ULL;
+	const u64 n2=0x8000000000000000ULL;
+	u64 m3;
+	u64 lv1;
+//	int e1;
+	
+	lv1=(lv&n0)-n1;
+//	lv1=lv1&(~(((s64)(lv1<<3))>>63));
+//	lv1=lv1&(~(((s64)lv1)>>63));
+//	lv2=lv1|(lv1<<1)|(lv1<<2);
+	m3=lv1|(lv1<<1); m3|=m3<<2;
+	m3=~(((s64)m3)>>63);
+	lv1=((lv1&m3)<<3)|(lv&n2);
+	return(lv1);
+}
+#endif
 
 #if 0
 BS2VM_API void BSVM2_Pack3DblTo3Xf(u32 *pv, double x, double y, double z)
@@ -71,6 +105,7 @@ BS2VM_API void BSVM2_Pack3DvTo3Xf(u32 *pv, double *px)
 	lz=((u64 *)px)[2];
 
 	if(!((u32)(lx|ly|lz)))
+//	if(0)
 	{
 		((float *)pv)[0]=px[0];
 		((float *)pv)[1]=px[1];
@@ -85,6 +120,11 @@ BS2VM_API void BSVM2_Pack3DvTo3Xf(u32 *pv, double *px)
 //	lx=BSVM2_Double2XFloat(px[0]);
 //	ly=BSVM2_Double2XFloat(px[1]);
 //	lz=BSVM2_Double2XFloat(px[2]);
+
+	lx+=0x000FFFFFU;
+	ly+=0x000FFFFFU;
+	lz+=0x001FFFFFU;
+
 	pv[0]=lx>>32;
 	pv[1]=ly>>32;
 	pv[2]=lz>>32;
@@ -96,10 +136,14 @@ BS2VM_API void BSVM2_Pack3DvTo3Xf(u32 *pv, double *px)
 //		(((lx>>21)&2047)    )|
 //		(((ly>>21)&2047)<<11)|
 //		(((lz>>22)&1023)<<22);
+//	pv[3]=
+//		((lx>>21)&0x000007FF)|
+//		((ly>>10)&0x003FF800)|
+//		((lz    )&0xFFC00000);
 	pv[3]=
-		((lx>>21)&0x000007FF)|
-		((ly>>10)&0x003FF800)|
-		((lz    )&0xFFC00000);
+		((lz>>22)&0x000003FF)|
+		((ly>>11)&0x001FFC00)|
+		((lx    )&0xFFE00000);
 }
 
 BS2VM_API void BSVM2_Pack3DblTo3Xf(u32 *pv, double x, double y, double z)
@@ -110,6 +154,7 @@ BS2VM_API void BSVM2_Pack3DblTo3Xf(u32 *pv, double x, double y, double z)
 }
 #endif
 
+#if 0
 BS2VM_API void BSVM2_Unpack3XfTo3Dv(u32 *pv, double *px)
 {
 	u64 lx, ly, lz;
@@ -132,6 +177,45 @@ BS2VM_API void BSVM2_Unpack3XfTo3Dv(u32 *pv, double *px)
 		px[2]=((float *)pv)[2];
 	}
 }
+#endif
+
+#if 1
+BS2VM_API void BSVM2_Unpack3XfTo3Dv(u32 *pv, double *px)
+{
+	const u64 m0=0x8000000000000000ULL;
+//	const u64 m1=0x7FFFFFFFFFFFFFFFULL;
+	const u64 m1=0x7FFFFFFFFFE00000ULL;
+	const u64 m2=0x3800000000000000ULL;
+	u64 lx, ly, lz;
+	u64 lx1, ly1, lz1;
+//	u64 m0, m1, m2;
+
+	if(pv[3])
+//	if(1)
+	{
+//		lx=(((u64)pv[0])<<32)|((pv[3]&0x000007FF)<<21);
+//		ly=(((u64)pv[1])<<32)|((pv[3]&0x003FF800)<<10);
+//		lz=(((u64)pv[2])<<32)|((pv[3]&0xFFC00000)    );
+//		lx=(((u64)pv[0])<<32)|((u32)(pv[3]<<21));
+//		ly=(((u64)pv[1])<<32)|((u32)(pv[3]<<10));
+//		lz=(((u64)pv[2])<<32)|((u32)(pv[3]    ));
+		lx=(((u64)pv[0])<<32)|((u32)(pv[3]    ));
+		ly=(((u64)pv[1])<<32)|((u32)(pv[3]<<11));
+		lz=(((u64)pv[2])<<32)|((u32)(pv[3]<<22));
+		lx1=(lx&m0)|(((lx&m1)>>3)+m2);
+		ly1=(ly&m0)|(((ly&m1)>>3)+m2);
+		lz1=(lz&m0)|(((lz&m1)>>3)+m2);
+		px[0]=*(double *)(&lx1);
+		px[1]=*(double *)(&ly1);
+		px[2]=*(double *)(&lz1);
+	}else
+	{
+		px[0]=((float *)pv)[0];
+		px[1]=((float *)pv)[1];
+		px[2]=((float *)pv)[2];
+	}
+}
+#endif
 
 BS2VM_API void BSVM2_Op_MKX3D(BSVM2_Frame *frm, BSVM2_Opcode *op)
 {

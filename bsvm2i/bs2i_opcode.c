@@ -1058,6 +1058,7 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			BSVM2_OPZ_ADDR, BSVM2_Op_NEWOBJ);
 		break;
 	case BSVM2_OP_DELETE:
+	case BSVM2_OP_DELNGBL:
 		BSVM2_Interp_SetupOpPopUn(cblk, op,
 			BSVM2_Op_DELOBJ);
 		break;
@@ -1136,6 +1137,42 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			BSVM2_OPZ_ADDR, BSVM2_Op_DZNISTYPE);
 		break;
 
+	case BSVM2_OP_AGETI:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i0)
+		{
+		case 0:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_AGETI_LEN);
+			break;
+		case 1:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_INT, BSVM2_Op_AGETI_OFS);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+
+	case BSVM2_OP_AGETA:
+		BSVM2_Interp_DecodeOpZn(cblk, op);
+		switch(op->i0)
+		{
+		case 0:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_CVTAA2ST);
+			break;
+		case 1:
+			BSVM2_Interp_SetupOpUn(cblk, op,
+				BSVM2_OPZ_ADDR, BSVM2_Op_CLONEAA);
+			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
+		}
+		break;
+
 	case BSVM2_OP_HTNULL:
 		opn2=BSVM2_Interp_PeekOpcodeNumber(cblk);
 //		if((opn2>=BSVM2_OP_JEQ) && (opn2<=BSVM2_OP_JGE))
@@ -1179,6 +1216,9 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 				BSVM2_Interp_SetupOpUn(cblk, op,
 					BSVM2_OPZ_ADDR, BSVM2_Op_LDOSAA);
 				break;
+			default:
+				BSVM2_DBGTRAP
+				break;
 			}
 			break;
 		case BSVM2_OP_STOS:
@@ -1217,6 +1257,9 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			case BSVM2_OPZ_CONST:
 				BSVM2_Interp_SetupOpPopBin(cblk, op,
 					BSVM2_Op_STOSAA);
+				break;
+			default:
+				BSVM2_DBGTRAP
 				break;
 			}
 			break;
@@ -1295,6 +1338,9 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 			BSVM2_Interp_SetupOpUnP(cblk, op,
 				BSVM2_OPZ_ADDR, BSVM2_Op_LDTHISX);
 			break;
+		default:
+			BSVM2_DBGTRAP
+			break;
 		}
 		break;
 	case BSVM2_OP_STTHIS:
@@ -1328,6 +1374,10 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 		case BS2CC_TYZ_VEC4F:
 			BSVM2_Interp_SetupOpPopUn(cblk, op,
 				BSVM2_Op_STTHISX);
+			break;
+
+		default:
+			BSVM2_DBGTRAP
 			break;
 		}
 		break;
@@ -3316,6 +3366,7 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 					BSVM2_OPZ_FLOAT, BSVM2_Op_ABSF);
 				break;
 			default:
+				BSVM2_DBGTRAP
 				break;
 			}
 			break;
@@ -3359,8 +3410,48 @@ BSVM2_Opcode *BSVM2_Interp_DecodeOpcode(
 					BSVM2_OPZ_FLOAT, BSVM2_Op_ABSD);
 				break;
 			default:
+				BSVM2_DBGTRAP
 				break;
 			}
+			break;
+
+		case BSVM2_OPZ_INT:
+		case BSVM2_OPZ_UINT:
+			switch(op->i0)
+			{
+			case BSVM2_OPMU_SQR:
+				BSVM2_Interp_SetupOpUn(cblk, op,
+					BSVM2_OPZ_INT, BSVM2_Op_SQRI);
+				break;
+			case BSVM2_OPMU_ABS:
+				BSVM2_Interp_SetupOpUn(cblk, op,
+					BSVM2_OPZ_INT, BSVM2_Op_ABSI);
+				break;
+			default:
+				BSVM2_DBGTRAP
+				break;
+			}
+			break;
+		case BSVM2_OPZ_LONG:
+		case BSVM2_OPZ_ULONG:
+			switch(op->i0)
+			{
+			case BSVM2_OPMU_SQR:
+				BSVM2_Interp_SetupOpUn(cblk, op,
+					BSVM2_OPZ_LONG, BSVM2_Op_SQRL);
+				break;
+			case BSVM2_OPMU_ABS:
+				BSVM2_Interp_SetupOpUn(cblk, op,
+					BSVM2_OPZ_LONG, BSVM2_Op_ABSL);
+				break;
+			default:
+				BSVM2_DBGTRAP
+				break;
+			}
+			break;
+
+		default:
+			BSVM2_DBGTRAP
 			break;
 		}
 

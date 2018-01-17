@@ -6,9 +6,8 @@ Model:
 *  Lexical
 *  ...
 
-Like JVM, Args will be locals 1-N, with local variables following args.
-
-Alternately, could have locals first, followed by args. Reason: on average locals are used more than args, so this could lead to better code density, and deals better with variable argument lists.
+Locals come first in the locals frame, followed by function arguments.
+Reason: on average locals are accessed more often than arguments, so this can lead to better code density.
 
 Stack
 All instructions at a given location will be required to have the same stack layout (depth and types) at all possible control paths. Values may be left on the stack during jumps, provided:
@@ -127,6 +126,7 @@ IOW:
 *** vec2i/vec3i/vec4i
 *** vec2l
 *** vec2f/vec3f/vec4f
+**** vec3xf
 *** vec2d
 **** dcomplex
 ** V64
@@ -212,18 +212,20 @@ Signature Characters:
 *  Co, Object (Class/Instance)
 *  Cp, MapObj (Dynamic Object)
 *  Cq, Quaternion (vec4f)
-*  Cr
+*  Cr, auto_var
 *  Cs, string
 *  Ct, symbol
 *  Cv, (IsType) null
 *  Cy, Class
-*  Cz, named vararg array
+*  Cz, named vararg array (FFI)
 
-*  Da, -
+*  Da, auto_var (alt)
 *  Db, vec3d
 *  Dc, vec4d
-*  Dd, -
-*  De, -
+*  Dd, decimal64 (resv)
+*  De, decimal128 (resv)
+*  Df, decimal32 (resv)
+*  Dz, va_list (resv)
 
 *  Pc, cstring
 
@@ -951,6 +953,11 @@ Instructions
 * E1 6B Zn, AGETI				//Address Get Property (Integer)
 ** 0=Array Length, 1=Array Offset, ...
 ** Gets a built-in integer property from an address-type value.
+** Z gives base-type for Array, or Void for Object
+
+* E1 6C Zn, AGETA				//Address Get Property (Address)
+** Gets a built-in address property from an address-type value.
+** Z gives base-type for Array, or Void for Object
 
 * / E1 6C Gj, LDOSL				//Load Instance Variable Local, ( => A )
 * / E1 6D Gj, STOSL				//Store Instance Variable Local ( V => )
@@ -968,7 +975,6 @@ Instructions
 * E1 77, UDIVL				//Unsigned Divide Long
 * E1 78, CVTUI2L			//Convert UInt to Long
 
-* / E1 78, CMIEQ				//A==0 (Same as LNTI)
 * E1 79, CMINE				//A!=0
 * E1 7A, CMILT				//A< 0
 * E1 7B, CMIGT				//A> 0
@@ -1200,6 +1206,10 @@ More Array ops:
 ** (CTRLF)
 ** Rethrow exception object.
 ** Is no-op if exception is null.
+
+* / E1 F8 Ix, DFXVA			// ( => )
+** Cleanup VarArg Argument
+** This may be used to free memory associated with a
 
 
 === Two Byte Range (0x200) ===

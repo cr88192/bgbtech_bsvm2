@@ -58,8 +58,8 @@ dtVal BS2P_ParseWrapStringL(BS2CC_CompileContext *ctx, char *str)
 		s=BS2P_ReadUtf8(s, &i);
 		if(i>=65536)
 		{
-			*t++=0xD800|(i>>10)&1023;
-			*t++=0xDC00|(i    )&1023;
+			*t++=0xD800|((i>>10)&1023);
+			*t++=0xDC00|((i    )&1023);
 			continue;
 		}
 		*t++=i;
@@ -787,6 +787,7 @@ dtVal BS2P_ParseLitExpr(BS2CC_CompileContext *ctx)
 		if(!strcmp(t0, "IJ") || !strcmp(t0, "Ij"))t2="JF";
 		if(!strcmp(t0, "IJF") || !strcmp(t0, "Ijf"))t2="JF";
 		if(!strcmp(t0, "IJD") || !strcmp(t0, "Ijd"))t2="JD";
+		if(!strcmp(t0, "IXF") || !strcmp(t0, "Ixf"))t2="XF";
 		
 		if(t2)
 			{ BS2P_NextToken(ctx); }

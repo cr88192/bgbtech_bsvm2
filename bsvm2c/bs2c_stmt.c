@@ -60,6 +60,13 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 	vi=ctx->frm->locals[ix];
 	bty=vi->bty;
 
+	if((bty==BS2CC_TYZ_AUTOVAR) && dtvTrueP(ni))
+	{
+		cty=BS2C_InferExpr(ctx, ni);
+		if(BS2C_TypeConcreteP(ctx, cty))
+			{ vi->bty=cty; bty=cty; }
+	}
+
 	if(vi->bmfl&BS2CC_TYFL_DYNAMIC)
 	{
 		ix2=BS2C_LookupFrameGlobal(ctx, name);
@@ -73,7 +80,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 			return;
 		}
 
-		if(ctx->frm->jcleanup<=0)
+		if(ctx->frm && ctx->frm->jcleanup<=0)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 		return;
 	}
@@ -104,7 +111,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 			BS2C_EmitOpcodeUCx(ctx, t0);
 		}
 
-		if(ctx->frm->jcleanup<=0)
+		if(ctx->frm && ctx->frm->jcleanup<=0)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 		return;
 	}
@@ -124,7 +131,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 //		BS2C_EmitOpcodeUZx(ctx, z, sz);
 //		BS2C_CompileStoreName(ctx, name);
 
-		if(ctx->frm->jcleanup<=0)
+		if(ctx->frm && ctx->frm->jcleanup<=0)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 
 		return;
@@ -147,7 +154,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 			return;
 		}
 
-		if(ctx->frm->jcleanup<=0)
+		if(ctx->frm && ctx->frm->jcleanup<=0)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 		return;
 	}
@@ -164,7 +171,7 @@ void BS2C_CompileStmtVar(BS2CC_CompileContext *ctx, dtVal expr)
 			return;
 		}
 
-		if(ctx->frm->jcleanup<=0)
+		if(ctx->frm && ctx->frm->jcleanup<=0)
 			ctx->frm->jcleanup=BS2C_GenTempLabel(ctx);
 		return;
 	}
